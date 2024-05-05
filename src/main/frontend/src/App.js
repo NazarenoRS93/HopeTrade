@@ -1,9 +1,12 @@
 import logo from './logo.svg';
+import completo from './Completo.png';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
+      <h1 className="header-cus"><img src={completo}  height={200}></img></h1>
+
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

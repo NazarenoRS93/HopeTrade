@@ -2,6 +2,20 @@
   text-align: center;
 }
 
+:root {
+  --color1: #e8e8e7;
+  --color2: #61b0b2; 
+  --color3: #79b18d;
+  --color4: #92b268;
+}
+
+.header-cus {
+  width: 100%;
+  position: fixed;
+  color: var(--color2);
+  background-color: var(--color1);
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
