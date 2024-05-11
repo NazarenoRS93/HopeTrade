@@ -8,6 +8,7 @@
 		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
 	<groupId>is2.g57</groupId>
 	<artifactId>hopetrade</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
@@ -17,6 +18,53 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+		<dependency>
+       <groupId>org.springframework.integration</groupId>
+       <artifactId>spring-integration-http</artifactId>
+       <version>6.2.4</version>
+    </dependency>	
+    	
+	<dependency>
+        <groupId>org.glassfish</groupId>
+        <artifactId>javax.persistence</artifactId>
+        <version>10.0-b28</version>
+    </dependency>
+		<!-- Dependencia de Spring Boot Starter -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+        <version>3.2.5</version>
+    </dependency>
+
+    <!-- Dependencia de Spring Boot Starter Test (para pruebas) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <version>3.2.5</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- Dependencia de Lombok (para reducir la verbosidad del código) -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.22</version>
+        <optional>true</optional>
+    </dependency>
+
+    <!-- Dependencia de Spring Boot Starter Data JPA (para acceso a datos) -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-jpa</artifactId>
+        <version>3.2.5</version>
+    </dependency>
+
+    <!-- Dependencia de MariaDB (Driver JDBC para MariaDB) -->
+    <dependency>
+        <groupId>org.mariadb.jdbc</groupId>
+        <artifactId>mariadb-java-client</artifactId>
+        <version>2.7.2</version>
+    </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
