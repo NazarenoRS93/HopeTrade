@@ -1,28 +1,30 @@
-import logo from './logo.svg';
-import completo from './Completo.png';
+import { Fragment, useState, useEffect } from "react";
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
+import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
+import { Grid } from '@mui/material';
+import Completo from './Completo.png';
 import './App.css';
+import { colors } from "./utils/colors";
+import { themeV5 } from "./utils/ThemeProvider";
+import UserProvider from "./context/userContext";
+import Header from "./components/Header";
+
+const theme = createTheme({ ...themeV5 });
 
 function App() {
-  return (
-    <div className="App">
-      <h1 className="header-cus"><img src={completo}  height={200}></img></h1>
-
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Fragment>
+            <ThemeProvider theme={theme}>
+                <UserProvider>
+                    <BrowserRouter basename="/HopeTrade" className="App">
+                        <Header/>
+                    </BrowserRouter>
+                </UserProvider>
+            </ThemeProvider>
+        </Fragment>
+    );
 }
 
 export default App;
