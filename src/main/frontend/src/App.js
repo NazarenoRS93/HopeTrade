@@ -18,7 +18,7 @@ function App() {
         <Fragment>
             <ThemeProvider theme={theme}>
                 <UserProvider>
-                    <BrowserRouter basename="/HopeTrade" className="App">
+                    <BrowserRouter basename="/" className="App">
                         <Header/>
                     </BrowserRouter>
                 </UserProvider>
