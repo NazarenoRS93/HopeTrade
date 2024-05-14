@@ -1,136 +1,122 @@
 package is2.g57.hopetrade.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-
-import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "usuario", uniqueConstraints = {@UniqueConstraint(columnNames = {"dni", "mail"})})
-
-public class User implements Serializable{
-
-	private static final long serialVersionUID = -7597079625316159690L;
-
+@Table(name = "usuario")
+public class User {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(length=100)
-    private String mail;
-    
-    @Column(length=100)
-    private String nombre;
-    
-    @Column(length=100)
-    private String apellido;
-    
-    @Column(length = 15, unique = true)
-    private String dni;
-    
-    @Column(length=50)
-    private String contraseña;
-    private Date fechaNacimiento;
-    private boolean activo; 
-
-    // Constructores, getters y setters
-    
-
-    public Long getId() {
-        return id;
-    }
-
-    public User(Long id, String mail, String nombre, String apellido, String dni, String contraseña,
-			Date fechaNacimiento, boolean activo) {
-		this.id = id;
-		this.mail = mail;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.dni = dni;
-		this.contraseña = contraseña;
-		this.fechaNacimiento = fechaNacimiento;
-		this.activo = activo;
-	}
-    
-    
-	public User(String mail, String nombre, String apellido, String dni, String contraseña, Date fechaNacimiento,
-			boolean activo) {
-		this.mail = mail;
-		this.nombre = nombre;
-		this.apellido = apellido;
-		this.dni = dni;
-		this.contraseña = contraseña;
-		this.fechaNacimiento = fechaNacimiento;
-		this.activo = activo;
-	}
+	@GeneratedValue(strategy = GenerationType.IDENTITY)	
+	private Long id;
 	
+	@Column(nullable = false, unique=true, length=100)
+	private String email;
+	
+	@Column(nullable = false, unique = false, length = 15)
+	private String dni;
+	
+	@Column(nullable = false, length = 50)
+	private String pass;
+	
+	@Column(nullable = false, length = 100)
+	private String nombre;
+	
+	@Column(nullable = false, length=100)
+	private String apellido;
+	
+	@Column(nullable = false)
+	private Date fecha_nacimiento;
+	private boolean activo;
+	
+	public User(Long id, String email, String dni, String pass, String nombre, String apellido, Date fecha_nacimiento) {
+		this.id = id;
+		this.email = email;
+		this.dni = dni;
+		this.pass = pass;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.fecha_nacimiento = fecha_nacimiento;
+		this.activo = true;
+	}
+
+	public User(String email, String dni, String pass, String nombre, String apellido, Date fecha_nacimiento) {
+		this.email = email;
+		this.dni = dni;
+		this.pass = pass;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.fecha_nacimiento = fecha_nacimiento;
+		this.activo = true;
+	}
 
 	public User() {
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getDni() {
+		return dni;
+	}
+
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public Date getFecha_nacimiento() {
+		return fecha_nacimiento;
+	}
+
+	public void setFecha_nacimiento(Date fecha_nacimiento) {
+		this.fecha_nacimiento = fecha_nacimiento;
+	}
+
+	public boolean isActivo() {
+		return activo;
+	}
+
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
 	public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getDni() {
-        return dni;
-    }
-
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
-
-    public String getContraseña() {
-        return contraseña;
-    }
-
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
-    }
-
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
-    }
-
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public boolean isActivo() { // Agregar el getter para activo
-        return activo;
-    }
-
-    public void setActivo(boolean activo) { // Agregar el setter para activo
-        this.activo = activo;
-    }
+		this.id = id;
+	}
+	
+	
+	
 }
