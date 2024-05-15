@@ -9,7 +9,7 @@ import is2.g57.hopetrade.entity.User;
 
 
 public interface UserRepository extends JpaRepository<User, Long>{
-	Optional<User> findById(Long id);
-	Optional<User> findByDni(String dni);
-	public Optional<User>findByMail(String mail);
+	// Optional<User> findById(Long id);
+	// Optional<User> findByDni(String dni);
+	// public Optional<User>findByMail(String mail);
 }

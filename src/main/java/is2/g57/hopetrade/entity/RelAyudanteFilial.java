@@ -2,7 +2,7 @@ package is2.g57.hopetrade.entity;
 
 import java.util.Date;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import jakarta.persistence.MapsId;
 

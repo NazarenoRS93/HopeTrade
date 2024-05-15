@@ -1,6 +1,6 @@
 package is2.g57.hopetrade.entity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ayudante")

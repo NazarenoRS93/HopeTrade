@@ -45,6 +45,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Dependencia de Spring Boot Starter Test (para que no se cierre al testear) -->
+		<dependency>          
+  			<groupId>org.springframework.boot</groupId>
+  			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
 		<!-- Dependencia de Lombok (para reducir la verbosidad del código) -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
