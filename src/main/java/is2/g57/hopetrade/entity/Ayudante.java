@@ -1,60 +1,58 @@
 package is2.g57.hopetrade.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ayudante", uniqueConstraints = {@UniqueConstraint(columnNames = {"dni", "mail"})})
-
+@Table(name = "ayudante")
 public class Ayudante {
-	private static final long serialVersionUID = -7597079625316159690L;
-	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(length = 100)
+	@Column(nullable= false, unique= true, length= 100)
 	private String email;
 	
-	@Column(length = 15)
+	@Column(nullable = false, unique = true, length=100)
 	private String dni;
 	
-	@Column(length = 50)
+	@Column(nullable = false, length = 50)
 	private String pass;
 	
-	@Column(length = 100)
+	@Column(nullable= false, length = 100)
 	private String nombre;
 	
-	@Column(length = 100)
+	@Column(nullable= false, length=100)
 	private String apellido;
 	private boolean activo;
-	private Long id_filial;
 	
-	public Ayudante(Long id, String email, String dni, String pass, String nombre, String apellido, boolean activo) {
+	public Ayudante(Long id, String email, String dni, String pass, String nombre, String apellido) {
 		this.id = id;
 		this.email = email;
 		this.dni = dni;
 		this.pass = pass;
 		this.nombre = nombre;
 		this.apellido = apellido;
-		this.activo = activo;
+		this.activo = true;
 	}
 
-	public Ayudante(String email, String dni, String pass, String nombre, String apellido, boolean activo) {
+	public Ayudante(String email, String dni, String pass, String nombre, String apellido) {
 		this.email = email;
 		this.dni = dni;
 		this.pass = pass;
 		this.nombre = nombre;
 		this.apellido = apellido;
-		this.activo = activo;
+		this.activo = true;
 	}
 
 	public Ayudante() {
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getEmail() {
@@ -104,14 +102,7 @@ public class Ayudante {
 	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
-
-	public Long getId_filial() {
-		return id_filial;
-	}
-
-	public void setId_filial(Long id_filial) {
-		this.id_filial = id_filial;
-	}
+	
 	
 	
 }

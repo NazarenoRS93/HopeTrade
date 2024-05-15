@@ -4,15 +4,17 @@ import java.util.Optional;
 
 import is2.g57.hopetrade.entity.User;
 
-public interface UserService {
 
-    public Optional<User> findUserByEmail(String email);
 
-    public Optional<User> findUserByDni(String dni);
-    
-    public Optional<User> findById(Long id);
-    
-    public User saveUser(User user);
-    
-    public void deleteById(Long id);
+
+
+
+public interface  UserService {
+
+	public void save(User user);
+	public Optional<User>findById(Long id);
+	public Optional<User>findByDni(String dni);
+	public Optional<User>findByMail(String mail);
+	public void update(Long id,String email, String nombre, String apellido);
+	public void updatePass(Long id,String pass, String newPass);
 }
