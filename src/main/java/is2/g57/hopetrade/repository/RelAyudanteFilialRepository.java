@@ -11,7 +11,7 @@ import is2.g57.hopetrade.entity.RelAyudanteFillialId;
 
 
 public interface RelAyudanteFilialRepository extends JpaRepository<RelAyudanteFilial, RelAyudanteFillialId>{
-	Optional<RelAyudanteFilial> findByIdIdAyudante(Long idAyudante);
-    Optional<RelAyudanteFilial> findByIdFilial(Long idFillial);
-    Optional<RelAyudanteFilial> findByFecha(Date fecha);
+	// Optional<RelAyudanteFilial> findByIdIdAyudante(Long idAyudante);
+    // Optional<RelAyudanteFilial> findByIdFilial(Long idFillial);
+    // Optional<RelAyudanteFilial> findByFecha(Date fecha);
 }

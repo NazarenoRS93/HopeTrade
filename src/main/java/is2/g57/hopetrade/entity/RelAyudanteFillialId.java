@@ -1,6 +1,6 @@
 package is2.g57.hopetrade.entity;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class RelAyudanteFillialId {

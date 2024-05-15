@@ -1,7 +1,7 @@
 package is2.g57.hopetrade.entity;
 
 import java.util.Date;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usuario")
