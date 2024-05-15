@@ -35,7 +35,7 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/{dni}")
+	@GetMapping("/buscar-por-dni/{dni}")
 	public ResponseEntity<User> ObtenerUsuarioPorDni(@PathVariable String dni) {
 		Optional<User> userOp = this.userService.findByDni(dni);
 		if (userOp.isPresent()) {

@@ -26,7 +26,7 @@ public class AyudanteServiceImp implements AyudanteService{
 	@Override
 	public Optional<Ayudante> findByMail(String mail) {
 		// TODO Auto-generated method stub
-		return this.ayudanteRepository.findByMail(mail);
+		return this.ayudanteRepository.findAyudanteByEmail(mail);
 	}
 
 }

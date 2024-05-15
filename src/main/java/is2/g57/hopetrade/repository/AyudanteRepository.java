@@ -9,6 +9,6 @@ import is2.g57.hopetrade.entity.Ayudante;
 
 
 public interface AyudanteRepository extends JpaRepository<Ayudante, Long> {
-	Optional<Ayudante> findById(Long id);
-	Optional<Ayudante> findByMail(String mail);
+	Optional<Ayudante> findAyudanteById(Long id);
+	Optional<Ayudante> findAyudanteByEmail(String mail);
 }

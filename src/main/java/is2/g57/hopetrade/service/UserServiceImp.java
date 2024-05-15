@@ -25,12 +25,12 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public Optional<User> findByDni(String dni) {
-		return userRepository.findByDni(dni);
+		return userRepository.findUserByDni(dni);
 	}
 
 	@Override
 	public Optional<User> findByMail(String mail) {
-		return userRepository.findByMail(mail);
+		return userRepository.findUserByEmail(mail);
 	}
 
 	@Override
