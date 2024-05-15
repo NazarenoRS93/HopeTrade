@@ -7,8 +7,10 @@ import {
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
 import LoginPage from "./containers/LoginPage";
+import SignUpPage from "./containers/SignUpPage";
+import HomePage from "./containers/HomePage";
+import PostListPage from "./containers/PostListPage";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +28,10 @@ const router = createBrowserRouter([
             {
                 path: "home",
                 element: <HomePage/>
+            },
+            {
+                path: "posts",
+                element: <PostListPage/>
             },
         ]
     },

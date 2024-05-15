@@ -3,8 +3,7 @@ import '../App.css';
 import Completo from '../Completo.png';
 import axios from "axios";
 import {UserContext} from "../context/userContext";
-import {basepath,defaultGateway} from "../utils/utilConstants";
-import {changeRoute} from "../utils/utilMethods";
+import {defaultGateway} from "../utils/utilConstants";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
@@ -12,7 +11,7 @@ import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import {colors} from "../utils/colors";
 import Item from "../utils/Item";
 import Typography from "@mui/material/Typography";
-import {Navigate, Routes} from "react-router";
+import {Link} from "react-router-dom";
 
 function Header() {
 
@@ -35,7 +34,6 @@ function Header() {
 
     return (
         <div className="header-cus">
-            <Routes>
                 <Box
                     sx={{
                         backgroundColor: colors.background,
@@ -50,21 +48,20 @@ function Header() {
                     </Item>
                     <Item sx={{ flexGrow: 1 }}/>
                     <Item>
-                        <Navigate to="/register">
+                        <Link to="/register">
                             <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary"/>}>
                                 <Typography variant="button">Registrarse</Typography>
                             </Button>
-                        </Navigate>
+                        </Link>
                     </Item>
                     <Item>
-                        <Navigate to="/login">
+                        <Link to="/login">
                             <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}>
                                 <Typography variant="button">Ingresar</Typography>
                             </Button>
-                        </Navigate>
+                        </Link>
                     </Item>
                 </Box>
-            </Routes>
         </div>
     )
 }
