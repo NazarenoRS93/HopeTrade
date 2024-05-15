@@ -1,29 +1,51 @@
-import { Fragment, useState, useEffect } from "react";
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
-import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
-import { Grid } from '@mui/material';
-import Completo from './Completo.png';
+import {Fragment} from "react";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import './App.css';
-import { colors } from "./utils/colors";
-import { themeV5 } from "./utils/ThemeProvider";
+import {themeV5} from "./utils/ThemeProvider";
 import UserProvider from "./context/userContext";
 import Header from "./components/Header";
+import LoginPage from "./containers/LoginPage";
+import {colors} from "./utils/colors";
+import Box from "@mui/material/Box";
+import Item from "./utils/Item";
+import Footer from "./components/Footer";
 
 const theme = createTheme({ ...themeV5 });
 
 function App() {
     return (
-        <Fragment>
+        <React.Fragment className="App">
             <ThemeProvider theme={theme}>
                 <UserProvider>
-                    <BrowserRouter basename="/HopeTrade" className="App">
-                        <Header/>
-                    </BrowserRouter>
+                    <Box
+                        sx={{
+                            backgroundColor: colors.background,
+                            flexDirection: "column",
+                            alignItems: "center",
+                            display: "flex",
+                            width: "100%",
+                            height: "90%"
+                        }}
+                    >
+                        <Item sx={{flexGrow: 2}}>
+                            <Header/>
+                        </Item>
+                        <Item sx={{flexGrow: 1}}>
+                            <Routes>
+                                <Route exact path={'/'} element={<LoginPage />}/>
+                                {/*
+                                    <Route exact path={'/sign'} element={<SignUpPage />}/>
+                                    <Route exact path={'/home'} element={<HomePage />}/>
+*/}
+                            </Routes>
+                        </Item>
+                        <Item>
+                            <Footer/>
+                        </Item>
+                    </Box>
                 </UserProvider>
             </ThemeProvider>
-        </Fragment>
+        </React.Fragment>
     );
 }
 

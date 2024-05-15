@@ -1,46 +1,18 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import '../App.css';
 import Completo from '../Completo.png';
 import axios from "axios";
-import Typography from "@mui/material/Typography";
 import {UserContext} from "../context/userContext";
-import {defaultGateway} from "../utils/utilConstants";
+import {basepath,defaultGateway} from "../utils/utilConstants";
+import {changeRoute} from "../utils/utilMethods";
 import Box from "@mui/material/Box";
-import PropTypes from "prop-types";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import {colors} from "../utils/colors";
-function Item(props) {
-    const { sx, ...other } = props;
-    return (
-        <Box
-            sx={{
-                p: 1,
-                m: 1,
-                borderRadius: 2,
-                fontSize: "0.875rem",
-                fontWeight: "700",
-                ...sx,
-            }}
-            {...other}
-        />
-    );
-}
-
-Item.propTypes = {
-    /**
-     * The system prop that allows defining system overrides as well as additional CSS styles.
-     */
-    sx: PropTypes.oneOfType([
-        PropTypes.arrayOf(
-            PropTypes.oneOfType([PropTypes.func, PropTypes.object, PropTypes.bool])
-        ),
-        PropTypes.func,
-        PropTypes.object,
-    ]),
-};
+import Item from "../utils/Item";
+import Typography from "@mui/material/Typography";
+import {Navigate, Routes} from "react-router";
 
 function Header() {
 
@@ -63,31 +35,38 @@ function Header() {
 
     return (
         <div className="header-cus">
-            <Box
-                sx={{
-                    backgroundColor: colors.background,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    display: "flex",
-                }}
-            >
-                <Item>
-                    <img src={Completo} width="60%" />
-                </Item>
-                <Item sx={{ flexGrow: 1 }}/>
-                <Item>
-                    <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary"/>}>
-                        Registrarse
-                    </Button>
-                </Item>
-                <Item>
-                    <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}>
-                        Ingresar
-                    </Button>
-                </Item>
-            </Box>
+            <Routes>
+                <Box
+                    sx={{
+                        backgroundColor: colors.background,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        display: "flex",
+                        width: "100%"
+                    }}
+                >
+                    <Item>
+                        <img src={Completo} width="45%" />
+                    </Item>
+                    <Item sx={{ flexGrow: 1 }}/>
+                    <Item>
+                        <Navigate to="/register">
+                            <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary"/>}>
+                                <Typography variant="button">Registrarse</Typography>
+                            </Button>
+                        </Navigate>
+                    </Item>
+                    <Item>
+                        <Navigate to="/login">
+                            <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}>
+                                <Typography variant="button">Ingresar</Typography>
+                            </Button>
+                        </Navigate>
+                    </Item>
+                </Box>
+            </Routes>
         </div>
-)
+    )
 }
 
 export default Header;
