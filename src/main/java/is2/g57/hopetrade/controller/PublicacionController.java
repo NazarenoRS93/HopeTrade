@@ -24,11 +24,15 @@ public class PublicacionController {
 	@Autowired
 	private PublicacionRepository publicacionRepository;
 	
-  @PostMapping(path="/add") // Map ONLY POST Requests
+  @PostMapping(path="/add")
   public @ResponseBody String addNewPublicacion (@RequestParam long userID, @RequestParam String titulo, @RequestParam String descripcion) {
-    // @ResponseBody means the returned String is the response, not a view name
-    // @RequestParam means it is a parameter from the GET or POST request
+    // Test titulo > 0 y titulo < 50
 
+    // Test descripcion > 0 y descripcion < 240
+
+    // Test (userID, Titulo) no existe en DB
+
+    // ok
     Publicacion p = new Publicacion();
     p.setTitulo(titulo);
     p.setDescripcion(descripcion);
@@ -48,18 +52,17 @@ public class PublicacionController {
 	}	
 
   @GetMapping("/buscar-por-user-id/{userID}")
-    public ResponseEntity<Publicacion> buscarPublicacionPorUserId(@PathVariable Long userID) {
-        Optional<Publicacion> publicacion = publicacionRepository.findPublicacionByUserID(userID);
-        return publicacion.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public @ResponseBody Iterable<Publicacion> buscarPublicacionPorUserId(@PathVariable Long userID) {
+        Iterable<Publicacion> publicacion = publicacionRepository.findAllByUserID(userID);
+        return publicacion;
     }
 
-  @GetMapping(path="/all")
+  @GetMapping(path="")
   public @ResponseBody Iterable<Publicacion> getAllPublicaciones() {
     return publicacionRepository.findAll();
   }
 
-  @GetMapping(path="/all-activas")
+  @GetMapping(path="/activas")
   public @ResponseBody Iterable<Publicacion> getAllPublicacionesActivas() {
     return publicacionRepository.findByActiveTrue();
   }
