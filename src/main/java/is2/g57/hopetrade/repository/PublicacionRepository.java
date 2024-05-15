@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import is2.g57.hopetrade.entity.Publicacion;
 
 public interface PublicacionRepository extends JpaRepository<Publicacion, Integer> {
-    Optional<Publicacion> findPublicacionByUserID(Long userID);
+    Iterable<Publicacion> findAllByUserID(Long userID);
     Iterable<Publicacion> findByActiveTrue();
+    Iterable<Publicacion> findByActiveFalse();
 }
