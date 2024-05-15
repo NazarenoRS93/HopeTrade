@@ -18,6 +18,29 @@ import java.util.Optional;
 import is2.g57.hopetrade.repository.PublicacionRepository;
 import is2.g57.hopetrade.entity.Publicacion;
 
+/*
+ Llamados http para esta tabla:
+ GET
+ All: http://localhost:8080/publicacion
+ All-Activas: http://localhost:8080/publicacion/activas
+ All-Inactivas: http://localhost:8080/publicacion/inactivas
+ Buscar por userID: http://localhost:8080/publicacion/buscar-por-user-id/{userID}
+ Buscar por ID: http://localhost:8080/publicacion/{id}
+  
+ POST
+ Add: http://localhost:8080/publicacion/add { PARAMS: userID, titulo, descripcion }
+ ^ Tambien acepta una ranciada en la direccion: http://localhost:8080/publicacion/add?userID={ID}&titulo={titulo}&descripcion={descripcion}
+
+ Pendientes:
+ Modificacion
+ Baja logica (Activo = false)
+ Eliminacion (no requerida)
+ Buscar Activas/Inactivas por userID
+
+ Logica de campos
+ Imagenes
+ */
+
 @RestController
 @RequestMapping(path="/publicacion")
 public class PublicacionController {
@@ -65,5 +88,10 @@ public class PublicacionController {
   @GetMapping(path="/activas")
   public @ResponseBody Iterable<Publicacion> getAllPublicacionesActivas() {
     return publicacionRepository.findByActiveTrue();
+  }
+
+  @GetMapping(path="/inactivas")
+  public @ResponseBody Iterable<Publicacion> getAllPublicacionesInactivas() {
+    return publicacionRepository.findByActiveFalse();
   }
 }
