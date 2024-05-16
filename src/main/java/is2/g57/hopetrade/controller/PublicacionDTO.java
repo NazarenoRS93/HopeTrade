@@ -1,9 +1,10 @@
 package is2.g57.hopetrade.controller;
 
-public class PublicacionRequest {
+public class PublicacionDTO {
+    private Long id;
     private String titulo;
     private String descripcion;
-    private long userID;
+    private Long userID;
 
     public String getTitulo() {
         return titulo;
@@ -18,10 +19,18 @@ public class PublicacionRequest {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    public long getUserID() {
+    public Long getUserID() {
         return userID;
     }
-    public void setUserID(long userID) {
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public void setUserID(Long userID) {
         this.userID = userID;
     }  
+
+    
 }
