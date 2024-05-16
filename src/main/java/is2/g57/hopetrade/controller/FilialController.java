@@ -10,49 +10,44 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import is2.g57.hopetrade.entity.Filial;
-import is2.g57.hopetrade.service.FilialService;
-
-
-
+import is2.g57.hopetrade.repository.FilialRepository;
 
 @RequestMapping("/filial")
 public class FilialController {
 
 	@Autowired
-	private FilialService filialService;
+	private FilialRepository filialRepository;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Filial> ObtenerFilialPorId(@PathVariable Long id){
-		Optional<Filial> filialOp = this.filialService.findById(id);
+	public ResponseEntity<Filial> ObtenerFilialPorId(@PathVariable Long id) {
+		Optional<Filial> filialOp = this.filialRepository.findById(id);
 		if (filialOp.isPresent()) {
 			return new ResponseEntity<>(filialOp.get(), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-	
-}
-	
+
+	}
+
 	@GetMapping("/{direccion}")
 	public ResponseEntity<Filial> ObtenerFilialPorDireccion(@PathVariable String direccion) {
-		Optional<Filial> filialOp = this.filialService.findByDireccion(direccion);
+		Optional<Filial> filialOp = this.filialRepository.findByDireccion(direccion);
 		if (filialOp.isPresent()) {
 			return new ResponseEntity<>(filialOp.get(), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping("/{filial}")
 	public ResponseEntity<?> GuardarFilial(String nombre, String direccion, String email) {
 		try {
-			Filial filial = new Filial(nombre,direccion,email);
-			this.filialService.save(filial);
+			Filial filial = new Filial(nombre, direccion, email);
+			this.filialRepository.save(filial);
 			return new ResponseEntity<>("Filial registrada", HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>("La direccion ya pertenece a otra filial", HttpStatus.BAD_REQUEST);
 		}
-		
-		
 	}
-	
-}			
+
+}

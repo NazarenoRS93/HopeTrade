@@ -4,6 +4,7 @@ package is2.g57.hopetrade.controller;
 //Define la estructura de la respuesta para el método de login, incluyendo todos los campos requeridos y los mensajes de error apropiados.
 
 public class LoginResponse {
+	
 	private String dni;
 	private Long id;
 	private Boolean active;

@@ -4,28 +4,32 @@ import java.util.Date;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuario" )
 public class User {
+	
+	private static final long serialVersionUID = -7597079625316159690L;
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
+	@Column(name = "id_usuario")
 	private Long id;
 	
-	@Column(nullable = false, unique=true, length=100)
+	@Column(name = "email", nullable = false, unique=true, length=100)
 	private String email;
 	
-	@Column(nullable = false, unique = false, length = 15)
+	@Column(name = "dni", nullable = false, unique = false, length = 15)
 	private String dni;
 	
-	@Column(nullable = false, length = 50)
+	@Column(name="pass", nullable = false, length = 50)
 	private String pass;
 	
-	@Column(nullable = false, length = 100)
+	@Column(name="nombre", nullable = false, length = 100)
 	private String nombre;
 	
-	@Column(nullable = false, length=100)
+	@Column(name="apellido", nullable = false, length=100)
 	private String apellido;
 	
-	@Column(nullable = false)
+	@Column(name="fecha_nacimiento", nullable = false)
 	private Date fecha_nacimiento;
 	private boolean activo;
 	
