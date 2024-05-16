@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import is2.g57.hopetrade.entity.Ayudante;
-import is2.g57.hopetrade.entity.Publicacion;
-import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.repository.AyudanteRepository;
 
 @RestController
