@@ -25,24 +25,26 @@ public class AyudanteController {
 
 	@Autowired
 	private AyudanteRepository ayudanteRepository;
-	
+
 	@GetMapping("/listar-ayudantes")
 	public @ResponseBody Iterable<Ayudante> getAllAyudantes() {
 		return ayudanteRepository.findAll();
 	}
-	
-	//No se si es necesario implementarlo pero no creo que este por demas, por si nos piden algo que necesite esta logica, ya lo tenemos.
+
+	// No se si es necesario implementarlo pero no creo que este por demas, por si
+	// nos piden algo que necesite esta logica, ya lo tenemos.
 	@GetMapping("/listar-ayudantes-activos")
 	public @ResponseBody Iterable<Ayudante> getAllAyudantesActivos() {
 		return ayudanteRepository.findByActivoTrue();
 	}
-	
-	//No se si es necesario implementarlo pero no creo que este por demas, por si nos piden algo que necesite esta logica, ya lo tenemos.
+
+	// No se si es necesario implementarlo pero no creo que este por demas, por si
+	// nos piden algo que necesite esta logica, ya lo tenemos.
 	@GetMapping("/listar-ayudantes-noactivos")
 	public @ResponseBody Iterable<Ayudante> getAllAyudantesNoActivos() {
 		return ayudanteRepository.findByActivoFalse();
 	}
-	
+
 	@GetMapping("/{id_ayudante}")
 	public ResponseEntity<Ayudante> ObtenerAyudantePorId(@PathVariable(value = "id_ayudante") Long Id) {
 		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findById(Id);
@@ -122,6 +124,10 @@ public class AyudanteController {
 
 	@PostMapping("/guardar")
 	public ResponseEntity<?> GuardarAyudante(@RequestBody AyudanteRequest ayudanteRequest) {
+		if (ayudanteRequest.getDni() == null || ayudanteRequest.getEmail() == null
+				|| ayudanteRequest.getNombre() == null || ayudanteRequest.getApellido() == null) {
+			return new ResponseEntity<>("Debe llenar todos los campos", HttpStatus.BAD_REQUEST);
+		}
 
 		try {
 			if (ayudanteRequest.getDni().length() > 8 || ayudanteRequest.getDni().length() < 6) {
@@ -138,31 +144,30 @@ public class AyudanteController {
 			this.ayudanteRepository.save(ayudante);
 			return new ResponseEntity<>("Ayudante registrado", HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>("El mail ya pertenece a una cuenta", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("El Dni o mail ya pertenece a una cuenta", HttpStatus.BAD_REQUEST);
 		}
 
 	}
-	
 
 	@PostMapping("/dar-baja-ayudante")
 	public ResponseEntity<?> DarDeBajaAyudante(@RequestBody AyudanteRequest ayudanteRequest) {
-	    String mail = ayudanteRequest.getEmail();
-	    Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByEmail(mail);
+		String mail = ayudanteRequest.getEmail();
+		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByEmail(mail);
 
-	    if (ayudanteOp.isPresent()) {
-	        Ayudante ayudante = ayudanteOp.get();
-	        if (ayudante.isActivo()) {
-	            ayudante.setActivo(false);
-	            this.ayudanteRepository.save(ayudante);
-	            return new ResponseEntity<>("El ayudante con dni: " + ayudante.getDni() + " y mail: " + ayudante.getEmail() + " ha sido dado de baja exitosamente.", HttpStatus.OK);
-	        } else {
-	            return new ResponseEntity<>("El ayudante con dni: " + ayudante.getDni() + " y mail: " + ayudante.getEmail() + " ya está inactivo.", HttpStatus.BAD_REQUEST);
-	        }
-	    } else {
-	        return new ResponseEntity<>("No se encontró un ayudante con el email proporcionado.", HttpStatus.NOT_FOUND);
-	    }
+		if (ayudanteOp.isPresent()) {
+			Ayudante ayudante = ayudanteOp.get();
+			if (ayudante.isActivo()) {
+				ayudante.setActivo(false);
+				this.ayudanteRepository.save(ayudante);
+				return new ResponseEntity<>("El ayudante con dni: " + ayudante.getDni() + " y mail: "
+						+ ayudante.getEmail() + " ha sido dado de baja exitosamente.", HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("El ayudante con dni: " + ayudante.getDni() + " y mail: "
+						+ ayudante.getEmail() + " ya está inactivo.", HttpStatus.BAD_REQUEST);
+			}
+		} else {
+			return new ResponseEntity<>("No se encontró un ayudante con el email proporcionado.", HttpStatus.NOT_FOUND);
+		}
 	}
-	
-	
 
 }

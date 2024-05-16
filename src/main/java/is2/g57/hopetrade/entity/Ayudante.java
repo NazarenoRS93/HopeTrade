@@ -1,33 +1,42 @@
 package is2.g57.hopetrade.entity;
 
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ayudante", uniqueConstraints = {@UniqueConstraint(columnNames = {"id_ayudante"})})
+@Table(name = "ayudante", uniqueConstraints = { @UniqueConstraint(columnNames = { "id_ayudante" }) })
 public class Ayudante {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_ayudante")
 	private Long id_ayudante;
-	
-	@Column(name = "email", nullable= false, unique= true, length= 100)
+
+	@Column(name = "email", nullable = false, unique = true, length = 100)
 	private String email;
-	
-	@Column(name = "dni", nullable = false, unique = true, length=100)
+
+	@Column(name = "dni", nullable = false, unique = true, length = 100)
 	private String dni;
-	
+
 	@Column(name = "pass", nullable = false, length = 50)
 	private String pass;
-	
-	@Column(name = "nombre", nullable= false, length = 100)
+
+	@Column(name = "nombre", nullable = false, length = 100)
 	private String nombre;
-	
-	@Column(name ="apellido",  nullable= false, length=100)
+
+	@Column(name = "apellido", nullable = false, length = 100)
 	private String apellido;
-	
+
 	@Column(name = "activo")
 	private boolean activo;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "filial_id")
+	@JsonBackReference
+	private Filial filial;
+
 	public Ayudante(Long id, String email, String dni, String pass, String nombre, String apellido) {
 		this.id_ayudante = id;
 		this.email = email;
@@ -48,6 +57,29 @@ public class Ayudante {
 	}
 
 	public Ayudante() {
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Ayudante ayudante = (Ayudante) o;
+		return Objects.equals(email, ayudante.email) && Objects.equals(dni, ayudante.dni);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, dni);
+	}
+
+	public Filial getFilial() {
+		return filial;
+	}
+
+	public void setFilial(Filial filial) {
+		this.filial = filial;
 	}
 
 	public Long getId() {
@@ -105,9 +137,9 @@ public class Ayudante {
 	public void setActivo(boolean activo) {
 		this.activo = activo;
 	}
-	
+
 	public boolean isAdmin() {
 		return (this.getEmail().equals("admin@caritas.com") && this.getPass().equals("admin"));
 	}
-	
+
 }
