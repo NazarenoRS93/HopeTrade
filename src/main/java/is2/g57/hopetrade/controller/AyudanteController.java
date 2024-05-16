@@ -77,26 +77,34 @@ public class AyudanteController {
 
 	@PostMapping("/actualizar")
 	public ResponseEntity<?> ActualizarAyudante(@RequestBody AyudanteRequest ayudanteRequest) {
-		String dni = ayudanteRequest.getDni();
-		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByDni(dni);
-
+		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findById(ayudanteRequest.getId_ayudante());
+		int cant = 3;
 		if (ayudanteOp.isPresent()) {
 			Ayudante ayudante = ayudanteOp.get();
 			// Actualizar email, nombre y apellido si los nuevos valores no son nulos
 			if (ayudanteRequest.getEmail() != null) {
+				cant --;
+				if (ayudanteRepository.findAyudanteByEmail(ayudanteRequest.getEmail()).isPresent()) {
+					return new ResponseEntity<>("El mail ya esta en uso", HttpStatus.BAD_REQUEST);
+				}
 				ayudante.setEmail(ayudanteRequest.getEmail());
 			}
 			if (ayudanteRequest.getNombre() != null) {
+				cant --;
 				ayudante.setNombre(ayudanteRequest.getNombre());
 			}
 			if (ayudanteRequest.getApellido() != null) {
+				cant --;
 				ayudante.setApellido(ayudanteRequest.getApellido());
 			}
 			// Guardar los cambios actualizados en la base de datos
 			this.ayudanteRepository.save(ayudante);
+			if (cant == 3) {
+				return new ResponseEntity<>("Debes realizar al menos un cambio",HttpStatus.BAD_REQUEST);
+			}else {
 			return new ResponseEntity<>("Ayudante actualizado correctamente", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("No se encontró ayudante con el DNI proporcionado", HttpStatus.NOT_FOUND);
+			}} else {
+			return new ResponseEntity<>("No se encontró ayudante con la Id proporcionada", HttpStatus.NOT_FOUND);
 		}
 	}
 
