@@ -3,6 +3,7 @@ package is2.g57.hopetrade.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -13,10 +14,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Optional;
 
 import is2.g57.hopetrade.repository.PublicacionRepository;
 import is2.g57.hopetrade.entity.Publicacion;
+import is2.g57.hopetrade.entity.User;
 
 /*
  Llamados http para esta tabla:
@@ -46,23 +52,38 @@ import is2.g57.hopetrade.entity.Publicacion;
 public class PublicacionController {
 	@Autowired
 	private PublicacionRepository publicacionRepository;
-	
-  @PostMapping(path="/add")
-  public @ResponseBody String addNewPublicacion (@RequestParam long userID, @RequestParam String titulo, @RequestParam String descripcion) {
-    // Test titulo > 0 y titulo < 50
 
-    // Test descripcion > 0 y descripcion < 240
+  @PostMapping(path="/add")
+  public ResponseEntity<?> addNewPublicacion (@RequestBody PublicacionRequest PublicacionRequest) {
+    
+    // Test titulo > 0 y titulo < 50
+    try {
+      if (PublicacionRequest.getTitulo().length() > 50 || PublicacionRequest.getTitulo().length() < 1) {
+        return new ResponseEntity<>("Ingrese un titulo de hasta 50 caracteres", HttpStatus.BAD_REQUEST);
+      }
+      if (PublicacionRequest.getDescripcion().length() > 240) {
+        return new ResponseEntity<>("La descripcion puede tener hasta 240 caracteres", HttpStatus.BAD_REQUEST);
+      }
+    } catch (Exception e) {
+      return new ResponseEntity<>("Hubo un error", HttpStatus.BAD_REQUEST);
+    }
 
     // Test (userID, Titulo) no existe en DB
+    try {
+      Iterable<Publicacion> publicacion = publicacionRepository.findAllByUserID(PublicacionRequest.getUserID());
+      for (Publicacion p : publicacion) {
+        if (p.getTitulo().equals(PublicacionRequest.getTitulo()) && p.isActivo()) {
+          return new ResponseEntity<>("Ya hay una publicacion activa con ese titulo", HttpStatus.BAD_REQUEST);
+        }
+      }
+    } catch (Exception e) {
+      return new ResponseEntity<>("Hubo un error", HttpStatus.BAD_REQUEST);
+    }
 
-    // ok
-    Publicacion p = new Publicacion();
-    p.setTitulo(titulo);
-    p.setDescripcion(descripcion);
-    p.setUserID(userID);
+    // OK
+    Publicacion p = new Publicacion(PublicacionRequest);
     publicacionRepository.save(p);
-
-    return "Saved";
+    return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
   }
 	
 	@GetMapping("/{id}")
