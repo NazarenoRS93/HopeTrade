@@ -2,24 +2,31 @@ package is2.g57.hopetrade.controller;
 
 import java.time.LocalDate;
 
-public class AyudanteRequest {
-
-	private Long id_ayudante;
-	private String dni;
+public class UserRequest {
+	private Long id;
+    private String dni;
     private String nombre;
     private String email;
     private String pass;
     private String apellido;
-    
+    private LocalDate fecha_nacimiento;
 
-    // Getters y setters
+    
+    
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	// Getters y setters
     public String getDni() {
         return dni;
     }
 
-
     public void setDni(String dni) {
-
         this.dni = dni;
     }
 
@@ -55,11 +62,11 @@ public class AyudanteRequest {
         this.apellido = apellido;
     }
 
-	public Long getId_ayudante() {
-		return id_ayudante;
-	}
+    public LocalDate getFecha_nacimiento() {
+        return fecha_nacimiento;
+    }
 
-	public void setId_ayudante(Long id_ayudante) {
-		this.id_ayudante = id_ayudante;
-	}
+    public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
+        this.fecha_nacimiento = fecha_nacimiento;
+    }
 }

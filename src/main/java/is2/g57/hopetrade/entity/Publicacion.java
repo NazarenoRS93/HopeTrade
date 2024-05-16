@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import is2.g57.hopetrade.controller.PublicacionRequest;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -57,6 +60,15 @@ public class Publicacion implements Serializable{
 
 
     public Publicacion() {
+        this.fechaHoraCreacion = java.time.LocalDateTime.now();
+        this.active = true;
+    }
+
+    public Publicacion(PublicacionRequest publicacionRequest) {
+        this.userID = publicacionRequest.getUserID();
+        this.titulo = publicacionRequest.getTitulo();
+        this.descripcion = publicacionRequest.getDescripcion();
+        
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.active = true;
     }
