@@ -84,11 +84,7 @@ public class Ayudante {
 		}
 
 	public Long getId() {
-<<<<<<< HEAD
-		return id_ayudante;
-=======
 		return this.id_ayudante;
->>>>>>> branch-lauty3
 	}
 
 	public void setId(Long id) {
