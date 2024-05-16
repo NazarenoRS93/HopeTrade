@@ -3,7 +3,6 @@ package is2.g57.hopetrade.controller;
 import java.time.LocalDate;
 
 public class AyudanteRequest {
-
 	private Long id_ayudante;
 	private String dni;
     private String nombre;
@@ -11,15 +10,12 @@ public class AyudanteRequest {
     private String pass;
     private String apellido;
     
-
     // Getters y setters
     public String getDni() {
         return dni;
     }
 
-
     public void setDni(String dni) {
-
         this.dni = dni;
     }
 
@@ -62,4 +58,6 @@ public class AyudanteRequest {
 	public void setId_ayudante(Long id_ayudante) {
 		this.id_ayudante = id_ayudante;
 	}
+
+    
 }

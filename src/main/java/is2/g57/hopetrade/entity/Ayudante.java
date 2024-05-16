@@ -3,30 +3,33 @@ package is2.g57.hopetrade.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "ayudante")
+@Table(name = "ayudante", uniqueConstraints = {@UniqueConstraint(columnNames = {"id_ayudante"})})
 public class Ayudante {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@Column(name = "id_ayudante")
+	private Long id_ayudante;
 	
-	@Column(nullable= false, unique= true, length= 100)
+	@Column(name = "email", nullable= false, unique= true, length= 100)
 	private String email;
 	
-	@Column(nullable = false, unique = true, length=100)
+	@Column(name = "dni", nullable = false, unique = true, length=100)
 	private String dni;
 	
-	@Column(nullable = false, length = 50)
+	@Column(name = "pass", nullable = false, length = 50)
 	private String pass;
 	
-	@Column(nullable= false, length = 100)
+	@Column(name = "nombre", nullable= false, length = 100)
 	private String nombre;
 	
-	@Column(nullable= false, length=100)
+	@Column(name ="apellido",  nullable= false, length=100)
 	private String apellido;
+	
+	@Column(name = "activo")
 	private boolean activo;
 	
 	public Ayudante(Long id, String email, String dni, String pass, String nombre, String apellido) {
-		this.id = id;
+		this.id_ayudante = id;
 		this.email = email;
 		this.dni = dni;
 		this.pass = pass;
@@ -48,11 +51,11 @@ public class Ayudante {
 	}
 
 	public Long getId() {
-		return id;
+		return id_ayudante;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
+		this.id_ayudante = id;
 	}
 
 	public String getEmail() {
@@ -103,6 +106,8 @@ public class Ayudante {
 		this.activo = activo;
 	}
 	
-	
+	public boolean isAdmin() {
+		return (this.getEmail().equals("admin@caritas.com") && this.getPass().equals("admin"));
+	}
 	
 }

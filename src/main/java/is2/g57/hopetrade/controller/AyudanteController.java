@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,7 +22,6 @@ import is2.g57.hopetrade.repository.AyudanteRepository;
 @RestController
 @RequestMapping("/ayudante")
 public class AyudanteController {
-
 
 	@Autowired
 	private AyudanteRepository ayudanteRepository;
@@ -145,7 +143,7 @@ public class AyudanteController {
 
 	}
 	
-	
+
 	@PostMapping("/dar-baja-ayudante")
 	public ResponseEntity<?> DarDeBajaAyudante(@RequestBody AyudanteRequest ayudanteRequest) {
 	    String mail = ayudanteRequest.getEmail();
@@ -165,36 +163,6 @@ public class AyudanteController {
 	    }
 	}
 	
-	//Se me ocurrio hacerlo como habiamos comentado que los representantes tengan su pass y que sea admin, ya que van a realizar tareas de administracion, 
-    //por lo tanto segun que contraseña ingresen, se dara la ingreso a la cuenta.
-	@PostMapping("/login")
-    public ResponseEntity<?> loginAyudante(@RequestBody AyudanteLoginRequest ayudanteLoginRequest) {
-        String email = ayudanteLoginRequest.getEmail();
-        String password = ayudanteLoginRequest.getPassword();
-
-        Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByEmail(email);
-
-        if (!ayudanteOp.isPresent()) {
-            return new ResponseEntity<>(new LoginResponse(null, null, null, "Email no registrado", null, null, null), HttpStatus.UNAUTHORIZED);
-        }
-
-        Ayudante ayudante = ayudanteOp.get();
-
-        if (!ayudante.getPass().equals(password)) {
-            return new ResponseEntity<>(new LoginResponse(null, null, null, "Email y contraseña no coinciden", null, null, null), HttpStatus.UNAUTHORIZED);
-        }
-
-        if (!ayudante.isActivo()) {
-            return new ResponseEntity<>(new LoginResponse(null, null, null, "Cuenta suspendida", null, null, null), HttpStatus.UNAUTHORIZED);
-        }
-        
-        if(ayudante.getPass().equals("admin")) {
-        	LoginResponse response = new LoginResponse(ayudante.getDni(), ayudante.getId(), ayudante.isActivo(), "Inicio de sesion como Ayudante.", ayudante.getNombre(), ayudante.getApellido(), 2);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
-        	LoginResponse response = new LoginResponse(ayudante.getDni(), ayudante.getId(), ayudante.isActivo(), "Inicio de sesion como Representante.", ayudante.getNombre(), ayudante.getApellido(), 2);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-    }
+	
 
 }
