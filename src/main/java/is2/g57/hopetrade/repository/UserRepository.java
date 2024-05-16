@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 
 

@@ -1,0 +1,1 @@
+export const defaultGateway = "/HopeTrade/rest/api";

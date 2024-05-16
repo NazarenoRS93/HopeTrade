@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import is2.g57.hopetrade.controller.PublicacionDTO;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
@@ -33,6 +36,7 @@ public class Publicacion implements Serializable{
 
     // Uso LocalDateTime en lugar de Date porque tiene hh-mm-ss ademas de fecha
     private LocalDateTime fechaHoraCreacion;
+    private LocalDateTime ultimaModificacion;
     // Constructores
 
     // Id recibido
@@ -53,19 +57,34 @@ public class Publicacion implements Serializable{
         this.descripcion = descripcion;
         // this.imagen = imagen;
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
+        this.ultimaModificacion = java.time.LocalDateTime.now();
     }
 
 
     public Publicacion() {
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
+        this.ultimaModificacion = java.time.LocalDateTime.now();
         this.active = true;
     }
 
-    public Long getId() {
-        return id;
+    public Publicacion(PublicacionDTO publicacionRequest) {
+        this.userID = publicacionRequest.getUserID();
+        this.titulo = publicacionRequest.getTitulo();
+        this.descripcion = publicacionRequest.getDescripcion();
+        
+        this.fechaHoraCreacion = java.time.LocalDateTime.now();
+        this.ultimaModificacion = java.time.LocalDateTime.now();
+        this.active = true;
     }
 
     // Metodos varios
+
+    public void update(PublicacionDTO publicacionRequest) {
+        this.titulo = publicacionRequest.getTitulo();
+        this.descripcion = publicacionRequest.getDescripcion();
+
+        this.ultimaModificacion = java.time.LocalDateTime.now();
+    }
 
     public void eliminarPublicacion(){
         this.active = false;
@@ -73,6 +92,9 @@ public class Publicacion implements Serializable{
 
     // Setters y Getters
 
+    public Long getId() {
+        return id;
+    }
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
