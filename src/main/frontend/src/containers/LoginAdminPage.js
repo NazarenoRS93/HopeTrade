@@ -14,10 +14,10 @@ import IconButton from "@mui/material/IconButton";
 import Item from "../utils/Item";
 import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
-import {defaultFormLogin, defaultGateway} from "../utils/utilConstants";
+import {defaultFormLoginAdmin, defaultGateway} from "../utils/utilConstants";
 import axios from "axios";
 
-function LoginPage(props) {
+function LoginAdminPage(props) {
     const {
         dialog,
         setDialog
@@ -25,12 +25,12 @@ function LoginPage(props) {
 
     const [showPassword, setShowPassword] = useState(false);
     const {userData, setUserData} = useContext(UserContext);
-    const [form, setForm] = useState(defaultFormLogin);
+    const [form, setForm] = useState(defaultFormLoginAdmin);
 
     const handleChange = (e) => {
         let tempForm = {...form};
         switch (e.target.id) {
-            case "dni": tempForm = {...tempForm, dni: e.target.value}; break;
+            case "email": tempForm = {...tempForm, email: e.target.value}; break;
             case "password": tempForm = {...tempForm, password: e.target.value}; break;
             default: break;
         }
@@ -45,12 +45,12 @@ function LoginPage(props) {
         setDialog(tempDialog);
     };
     const login = () => {
-        const res = axios.get(defaultGateway.concat("/user/login"), {
+        const res = axios.get(defaultGateway.concat("/ayudante/login"), {
             params: {
-                request: form
+                data: form
             }
-        }).then((response) => {
-            setUserData(response.data);
+        }).then((res) => {
+            setUserData(res.data);
             let url = window.location.href;
             url = url.substring(0, url.lastIndexOf('/'));
             window.location.replace(url+"/home");
@@ -82,15 +82,15 @@ function LoginPage(props) {
                             display: "flex"
                         }}
                     >
-                        <Item sx={{ flexGrow: 1 }}>
+                        <Item>
                             <Typography variant="subtitle1">Iniciar Sesión</Typography>
                         </Item>
                         <Item>
                             <FormControl>
-                                <TextField onChange={(event)=> {handleChange(event)}} value={form.dni}
-                                           placeholder="DNI" type="number" variant="outlined" id="dni"
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.email}
+                                           placeholder="Email" type="email" variant="outlined" id="email"
                                 />
-                                <FormHelperText id="dni-text">Ingrese su n° de documento sin puntos</FormHelperText>
+                                <FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
                             </FormControl>
                         </Item>
                         <Item>
@@ -119,9 +119,10 @@ function LoginPage(props) {
                         </Item>
                     </Box>
                 </Item>
+                <Item sx={{ flexGrow: 1 }}/>
             </Box>
         </React.Fragment>
     )
 }
 
-export default LoginPage;
+export default LoginAdminPage;

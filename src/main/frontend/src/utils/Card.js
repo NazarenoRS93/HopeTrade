@@ -2,13 +2,16 @@ import React from "react";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
 
-function Item(props) {
+function Card(props) {
     const { sx, ...other } = props;
 
     return (
         <Box
             sx={{
-                p: 1, m: 1,
+                p: 1, m: 1, width: 1/3,
+                border: 1, borderRadius: "10%",
+                borderColor: "primary.main",
+                alignContent: "stretch",
                 fontSize: "0.875rem",
                 fontWeight: "700",
                 ...sx,
@@ -18,7 +21,7 @@ function Item(props) {
     );
 }
 
-Item.propTypes = {
+Card.propTypes = {
     /**
      * The system prop that allows defining system overrides as well as additional CSS styles.
      */
@@ -31,4 +34,4 @@ Item.propTypes = {
     ]),
 };
 
-export default Item;
+export default Card;

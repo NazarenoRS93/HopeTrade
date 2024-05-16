@@ -1,9 +1,7 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext} from "react";
 import '../App.css';
 import Completo from '../Completo.png';
-import axios from "axios";
 import {UserContext} from "../context/userContext";
-import {defaultGateway} from "../utils/utilConstants";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
@@ -16,21 +14,6 @@ import {Link} from "react-router-dom";
 function Header() {
 
     const {userData, setUserData} = useContext(UserContext);
-
-    const getDatosHeader = async () => {
-        try {
-            const res = await axios.get(defaultGateway + '/utils/header')
-            const data = await res.data;
-            setUserData(data);
-        } catch (e) {
-            console.log("Error al recuperar info de usuario", e)
-        }
-    }
-
-    useEffect(() => {
-        getDatosHeader();
-    }, [])
-
 
     return (
         <div className="header-cus">
