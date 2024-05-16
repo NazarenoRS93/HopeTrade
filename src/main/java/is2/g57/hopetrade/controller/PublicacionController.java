@@ -54,13 +54,11 @@ import is2.g57.hopetrade.entity.User;
     "descripcion":"d"
   }
  Pendientes:
- Modificacion
  Baja logica (Activo = false)
  Eliminacion (no requerida)
  Buscar Activas/Inactivas por userID
 
- Logica de campos
- Imagenes
+ Data: Imagenes
  */
 
 @RestController
