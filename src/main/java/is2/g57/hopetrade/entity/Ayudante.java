@@ -1,5 +1,7 @@
 package is2.g57.hopetrade.entity;
 
+import java.util.Objects;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -28,6 +30,12 @@ public class Ayudante {
 	@Column(name = "activo")
 	private boolean activo;
 	
+	    @ManyToOne
+	    @JoinColumn(name = "filial_id")
+	    private Filial filial;
+
+	
+	
 	public Ayudante(Long id, String email, String dni, String pass, String nombre, String apellido) {
 		this.id_ayudante = id;
 		this.email = email;
@@ -49,9 +57,38 @@ public class Ayudante {
 
 	public Ayudante() {
 	}
+	
+	   @Override
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (o == null || getClass() != o.getClass()) return false;
+	        Ayudante ayudante = (Ayudante) o;
+	        return Objects.equals(email, ayudante.email) &&
+	                Objects.equals(dni, ayudante.dni);
+	    }
+
+	    @Override
+	    public int hashCode() {
+	        return Objects.hash(email, dni);
+	    }
+	
+	    
+	    
+
+	public Filial getFilial() {
+			return filial;
+		}
+
+		public void setFilial(Filial filial) {
+			this.filial = filial;
+		}
 
 	public Long getId() {
+<<<<<<< HEAD
 		return id_ayudante;
+=======
+		return this.id_ayudante;
+>>>>>>> branch-lauty3
 	}
 
 	public void setId(Long id) {

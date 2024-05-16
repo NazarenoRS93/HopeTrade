@@ -1,5 +1,9 @@
 package is2.g57.hopetrade.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -15,25 +19,46 @@ public class Filial {
 	@Column(nullable = false, length=150)
 	private String direccion;
 	
-	@Column(nullable = false, length=100)
+	@Column(nullable = false, unique = true, length=100)
 	private String email;
+	
+	 @OneToMany(mappedBy = "filial")
+	  private List<Ayudante> ayudantes;
 
 	public Filial(Long id, String nombre, String direccion, String email) {
 		this.id = id;
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.email = email;
+		this.ayudantes = new ArrayList<Ayudante>();
 	}
 
 	public Filial(String nombre, String direccion, String email) {
 		this.nombre = nombre;
 		this.direccion = direccion;
 		this.email = email;
+		this.ayudantes = new ArrayList<Ayudante>();
 	}
 
 	public Filial() {
 	}
 
+	  @Override
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (o == null || getClass() != o.getClass()) return false;
+	        Filial filial = (Filial) o;
+	        return Objects.equals(nombre, filial.nombre) &&
+	                Objects.equals(direccion, filial.direccion);
+	    }
+
+	    @Override
+	    public int hashCode() {
+	        return Objects.hash(nombre, direccion);
+	    }
+	
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -65,6 +90,15 @@ public class Filial {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public List<Ayudante> getAyudantes() {
+		return ayudantes;
+	}
+
+	public void setAyudantes(List<Ayudante> ayudantes) {
+		this.ayudantes = ayudantes;
+	}
+	
 	
 	
 }
