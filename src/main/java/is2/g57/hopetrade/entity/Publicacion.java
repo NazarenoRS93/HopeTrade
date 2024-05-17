@@ -18,24 +18,30 @@ public class Publicacion implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
     private Long id;
 
-    @Column(length = 50)
+    @Column(name="titulo", length = 50)
     private String titulo;
 
-    @Column(length = 240)
+    @Column(name="descripcion", length = 240)
     private String descripcion;
 
     // Referencia al usuario creador
+    
+    @Column(name="userid")
     private Long userID;
-
+    
+    @Column(name="active")
     private boolean active;
     
     // private String Imagen( )
     // Lo abstraigo para implementar en otro momento
 
     // Uso LocalDateTime en lugar de Date porque tiene hh-mm-ss ademas de fecha
+    @Column(name="fecha_hora_creacion")
     private LocalDateTime fechaHoraCreacion;
+    @Column(name="ultimaModificacion")
     private LocalDateTime ultimaModificacion;
     // Constructores
 
