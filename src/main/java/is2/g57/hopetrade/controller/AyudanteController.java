@@ -75,13 +75,13 @@ public class AyudanteController {
 
 	@PostMapping("/actualizar")
 	public ResponseEntity<?> ActualizarAyudante(@RequestBody AyudanteRequest ayudanteRequest) {
-		String dni = ayudanteRequest.getDni();
-		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByDni(dni);
-
+		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findById(ayudanteRequest.getId_ayudante());
 		if (ayudanteOp.isPresent()) {
 			Ayudante ayudante = ayudanteOp.get();
-			// Actualizar email, nombre y apellido si los nuevos valores no son nulos
 			if (ayudanteRequest.getEmail() != null) {
+				if (ayudanteRepository.findAyudanteByEmail(ayudanteRequest.getEmail()).isPresent()) {
+					return new ResponseEntity<>("El mail ya esta en uso", HttpStatus.BAD_REQUEST);
+				}
 				ayudante.setEmail(ayudanteRequest.getEmail());
 			}
 			if (ayudanteRequest.getNombre() != null) {
@@ -94,7 +94,7 @@ public class AyudanteController {
 			this.ayudanteRepository.save(ayudante);
 			return new ResponseEntity<>("Ayudante actualizado correctamente", HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("No se encontró ayudante con el DNI proporcionado", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("No se encontró ayudante con la Id proporcionada", HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -161,6 +161,23 @@ public class AyudanteController {
 	    }
 	}
 	
-	
+	@PostMapping("/updatepassword")
+	public ResponseEntity<?> updatePass(@RequestBody AyudanteRequest ayudanteRequest) {
+		Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(ayudanteRequest.getId_ayudante());
+		if (ayudanteOp.isPresent()) {
+			Ayudante ayudante = ayudanteOp.get();
+			if (ayudante.getPass().equals(ayudanteRequest.getPass())) {
+				return new ResponseEntity<>("Debes ingresar una contraseña diferente a la actual",
+						HttpStatus.BAD_REQUEST);
+			} else {
+				ayudante.setPass(ayudanteRequest.getPass());
+				ayudanteRepository.save(ayudante);
+				return new ResponseEntity<>("Cambios guardados", HttpStatus.OK);
+			}
+
+		}
+		return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+
+	}
 
 }
