@@ -3,6 +3,7 @@ package is2.g57.hopetrade.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,17 +35,30 @@ import is2.g57.hopetrade.entity.User;
  Buscar por ID: http://localhost:8080/publicacion/{id}
   
  POST
- Add: http://localhost:8080/publicacion/add { PARAMS: userID, titulo, descripcion }
+ Add: http://localhost:8080/publicacion/add 
+ con Header: Content-Type: "application/json"
+ {
+    "userID":"x",
+    "titulo":"t",
+    "descripcion":"d"
+  }
  ^ Tambien acepta una ranciada en la direccion: http://localhost:8080/publicacion/add?userID={ID}&titulo={titulo}&descripcion={descripcion}
 
+ PUT:
+ Update: http://localhost:8080/publicacion/update
+ con Header: Content-Type: "application/json"
+ {  
+    "id":"i",
+    "userID":"x",
+    "titulo":"t",
+    "descripcion":"d"
+  }
  Pendientes:
- Modificacion
  Baja logica (Activo = false)
  Eliminacion (no requerida)
  Buscar Activas/Inactivas por userID
 
- Logica de campos
- Imagenes
+ Data: Imagenes
  */
 
 @RestController
@@ -53,15 +67,19 @@ public class PublicacionController {
 	@Autowired
 	private PublicacionRepository publicacionRepository;
 
-  @PostMapping(path="/add")
-  public ResponseEntity<?> addNewPublicacion (@RequestBody PublicacionRequest PublicacionRequest) {
+  private ResponseEntity<?> PublicacionTest(PublicacionDTO PublicacionDTO) {
     
+    // Test UserID existe
+    if (PublicacionDTO.getUserID() == null) {
+      return new ResponseEntity<>("Se requiere el userID", HttpStatus.BAD_REQUEST);
+    }
+
     // Test titulo > 0 y titulo < 50
     try {
-      if (PublicacionRequest.getTitulo().length() > 50 || PublicacionRequest.getTitulo().length() < 1) {
+      if (PublicacionDTO.getTitulo().length() > 50 || PublicacionDTO.getTitulo().length() < 1) {
         return new ResponseEntity<>("Ingrese un titulo de hasta 50 caracteres", HttpStatus.BAD_REQUEST);
       }
-      if (PublicacionRequest.getDescripcion().length() > 240) {
+      if (PublicacionDTO.getDescripcion().length() > 240) {
         return new ResponseEntity<>("La descripcion puede tener hasta 240 caracteres", HttpStatus.BAD_REQUEST);
       }
     } catch (Exception e) {
@@ -70,9 +88,9 @@ public class PublicacionController {
 
     // Test (userID, Titulo) no existe en DB
     try {
-      Iterable<Publicacion> publicacion = publicacionRepository.findAllByUserID(PublicacionRequest.getUserID());
+      Iterable<Publicacion> publicacion = publicacionRepository.findAllByUserID(PublicacionDTO.getUserID());
       for (Publicacion p : publicacion) {
-        if (p.getTitulo().equals(PublicacionRequest.getTitulo()) && p.isActivo()) {
+        if (p.getTitulo().equals(PublicacionDTO.getTitulo()) && p.isActivo() && p.getId() != PublicacionDTO.getId()) {
           return new ResponseEntity<>("Ya hay una publicacion activa con ese titulo", HttpStatus.BAD_REQUEST);
         }
       }
@@ -80,10 +98,51 @@ public class PublicacionController {
       return new ResponseEntity<>("Hubo un error", HttpStatus.BAD_REQUEST);
     }
 
+    return null;
+  }
+
+  @PostMapping("/add")
+  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO PublicacionDTO) {
+    
+    System.out.println("TEST");
+    // Test titulo > 0 y titulo < 50
+    ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
+    if (test != null) {
+      return test;
+    }
     // OK
-    Publicacion p = new Publicacion(PublicacionRequest);
-    publicacionRepository.save(p);
+    publicacionRepository.save(new Publicacion(PublicacionDTO));
     return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
+  }
+
+  @PutMapping("/update")
+  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO PublicacionDTO) {
+    // Test
+    ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
+    if (test != null) {
+      return test;
+    }
+
+    // Test ID incluido en paquete
+    if (PublicacionDTO.getId() == null) {
+      return new ResponseEntity<>("Se requiere el ID", HttpStatus.BAD_REQUEST);
+    }
+
+    // Test publicacion existe en BD
+    Publicacion publicacion;
+    try {
+      publicacion = publicacionRepository.findById(PublicacionDTO.getId()).get();
+    }
+    catch (Exception e) {
+      return new ResponseEntity<>("La publicacion no existe", HttpStatus.BAD_REQUEST);
+    }
+    // Test publicacion inactiva ( No se si es requerimiento )
+    if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion esta cerrada y no puede modificarse", HttpStatus.BAD_REQUEST);
+
+    // OK
+    publicacion.update(PublicacionDTO);
+    publicacionRepository.save(publicacion);
+    return new ResponseEntity<>("Publicacion actualizada", HttpStatus.OK);
   }
 	
 	@GetMapping("/{id}")
