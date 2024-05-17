@@ -31,7 +31,7 @@ function LoginAdminPage(props) {
         let tempForm = {...form};
         switch (e.target.id) {
             case "email": tempForm = {...tempForm, email: e.target.value}; break;
-            case "password": tempForm = {...tempForm, password: e.target.value}; break;
+            case "pass": tempForm = {...tempForm, pass: e.target.value}; break;
             default: break;
         }
         setForm(tempForm);
@@ -39,26 +39,26 @@ function LoginAdminPage(props) {
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
-    const openDialog = (ok,msg) => {
-        let tempDialog = {...dialog};
-        tempDialog = {...tempDialog, open: ok, msg: msg, path: '/home'}
-        setDialog(tempDialog);
-    };
-    const login = () => {
-        const res = axios.get(defaultGateway.concat("/ayudante/login"), {
+    const login = async () => {
+        const url = defaultGateway+"/login/login-user";
+        await axios({
+            method: "GET",
+            url: url,
             params: {
-                data: form
+                dni: form.dni,
+                pass: form.pass
             }
-        }).then((res) => {
-            setUserData(res.data);
-            let url = window.location.href;
-            url = url.substring(0, url.lastIndexOf('/'));
-            window.location.replace(url+"/home");
-        }).catch((err) => {
-            let url = window.location.href;
-            url = url.substring(0, url.lastIndexOf('/'));
-            window.location.replace(url+"/home");
         })
+            .then((response) => {
+                setUserData(response);
+                console.log(response);
+                let href = window.location.href;
+                href = href.substring(0, href.lastIndexOf('/'));
+                window.location.replace(href+"/home");
+            })
+            .catch((err) => {
+                alert(err.message);
+            })
     }
 
     return (
@@ -95,8 +95,8 @@ function LoginAdminPage(props) {
                         </Item>
                         <Item>
                             <FormControl>
-                                <TextField onChange={(event)=> {handleChange(event)}} value={form.password}
-                                           placeholder="Contraseña" variant="outlined" id="password"
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.pass}
+                                           placeholder="Contraseña" variant="outlined" id="pass"
                                            type={showPassword ? "text" : "password"}
                                            InputProps={{
                                                endAdornment: (
@@ -108,7 +108,7 @@ function LoginAdminPage(props) {
                                                )
                                            }}
                                 />
-                                <FormHelperText id="password-text">Ingrese su contraseña</FormHelperText>
+                                <FormHelperText id="pass-text">Ingrese su contraseña</FormHelperText>
                             </FormControl>
                         </Item>
                         <Item>

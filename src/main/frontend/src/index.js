@@ -9,6 +9,7 @@ import SignUpPage from "./containers/SignUpPage";
 import HomePage from "./containers/HomePage";
 import PostListPage from "./containers/PostListPage";
 import LoginAdminPage from "./containers/LoginAdminPage";
+import axios from "axios";
 
 const router = createBrowserRouter(
     [
@@ -42,6 +43,11 @@ const router = createBrowserRouter(
     {
         basename: "/app"
     });
+
+axios.defaults.baseURL="http://localhost:8080";
+axios.interceptors.response.use(response => {
+    return response.headers['content-type'] === 'application/json' ? response : Promise.reject(response);
+}, error => Promise.reject(error));
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>

@@ -8,17 +8,17 @@ public class LoginResponse {
 	private String dni;
 	private Long id;
 	private Boolean active;
-	private String errorMsg;
+	private String responseMsg;
 	private String nombre;
 	private String apellido;
 	private Integer tipo;
 
-	public LoginResponse(String dni, Long id, Boolean active, String errorMsg, String nombre, String apellido,
+	public LoginResponse(String dni, Long id, Boolean active, String responseMsg, String nombre, String apellido,
 			Integer tipo) {
 		this.dni = dni;
 		this.id = id;
 		this.active = active;
-		this.errorMsg = errorMsg;
+		this.responseMsg = responseMsg;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.tipo = tipo;
@@ -49,12 +49,12 @@ public class LoginResponse {
 		this.active = active;
 	}
 
-	public String getErrorMsg() {
-		return errorMsg;
+	public String getResponseMsg() {
+		return responseMsg;
 	}
 
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
+	public void setResponseMsg(String responseMsg) {
+		this.responseMsg = responseMsg;
 	}
 
 	public String getNombre() {
