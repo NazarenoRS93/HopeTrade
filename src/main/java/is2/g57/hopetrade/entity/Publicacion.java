@@ -92,6 +92,14 @@ public class Publicacion implements Serializable{
         this.ultimaModificacion = java.time.LocalDateTime.now();
     }
 
+    public void desactivar(){
+        this.active = false;
+    }
+
+    public void activar(){
+        this.active = true;
+    }
+
     public void eliminarPublicacion(){
         this.active = false;
     }

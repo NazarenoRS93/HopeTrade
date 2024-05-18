@@ -26,12 +26,14 @@ import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 
 /*
- Llamados http para esta tabla:
+ Interfaz http para esta tabla:
  GET
- All: http://localhost:8080/publicacion
- All-Activas: http://localhost:8080/publicacion/activas
- All-Inactivas: http://localhost:8080/publicacion/inactivas
- Buscar por userID: http://localhost:8080/publicacion/buscar-por-user-id/{userID}
+ All: http://localhost:8080/publicacion/all
+ All-Activas: http://localhost:8080/publicacion/all/activas
+ All-Inactivas: http://localhost:8080/publicacion//all/inactivas
+ Buscar por userID: http://localhost:8080/publicacion/user/{userID}
+ Activas por userID: http://localhost:8080/publicacion/user/{userID}/activas
+ Inactivas por userID: http://localhost:8080/publicacion/user/{userID}/inactivas
  Buscar por ID: http://localhost:8080/publicacion/{id}
   
  POST
@@ -51,11 +53,11 @@ import is2.g57.hopetrade.entity.User;
     "titulo":"t",
     "descripcion":"d"
   }
+  activar: http://localhost:8080/publicacion/activar/{id}
+  desactivar: http://localhost:8080/publicacion/desactivar/{id}
   
  Pendientes:
- Baja logica (Activo = false)
  Eliminacion (no requerida)
- Buscar Activas/Inactivas por userID
 
  Data: Imagenes
  */
@@ -143,6 +145,43 @@ public class PublicacionController {
     publicacionRepository.save(publicacion);
     return new ResponseEntity<>("Publicacion actualizada", HttpStatus.OK);
   }
+
+  @PutMapping("/desactivar/{id}")
+  public ResponseEntity<?> desactivarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
+    Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
+    if(!oPublicacion.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    Publicacion publicacion = oPublicacion.get();
+    publicacion.desactivar();
+    publicacionRepository.save(publicacion);
+    return ResponseEntity.ok(publicacion);
+  }
+
+  @PutMapping("/activar/{id}")
+  public ResponseEntity<?> activarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
+    Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
+    if(!oPublicacion.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    Publicacion publicacion = oPublicacion.get();
+
+    // Check que no exista pub activa con el mismo titulo
+    try {
+      Iterable<Publicacion> publicaciones = publicacionRepository.findAllByUserID(publicacion.getUserID());
+      for (Publicacion p : publicaciones) {
+        if (p.getTitulo().equals(publicacion.getTitulo()) && p.isActivo() && p.getId() != publicacion.getId()) {
+          return new ResponseEntity<>("Ya hay una publicacion activa con ese titulo", HttpStatus.BAD_REQUEST);
+        }
+      }
+    } catch (Exception e) {
+      return new ResponseEntity<>("Hubo un error", HttpStatus.BAD_REQUEST);
+    }
+
+    publicacion.activar();
+    publicacionRepository.save(publicacion);
+    return ResponseEntity.ok(publicacion);
+  }
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> read(@PathVariable(value = "id") Integer publicacionId){
@@ -153,23 +192,34 @@ public class PublicacionController {
 		return ResponseEntity.ok(oPublicacion);
 	}	
 
-  @GetMapping("/buscar-por-user-id/{userID}")
+  @GetMapping("/user/{userID}")
     public @ResponseBody Iterable<Publicacion> buscarPublicacionPorUserId(@PathVariable Long userID) {
         Iterable<Publicacion> publicacion = publicacionRepository.findAllByUserID(userID);
         return publicacion;
     }
+  @GetMapping("/user/{userID}/activas")
+    public @ResponseBody Iterable<Publicacion> buscarActivasPorUserId(@PathVariable Long userID) {
+        Iterable<Publicacion> publicacion = publicacionRepository.findByUserIDAndActiveTrue(userID);
+        return publicacion;
+    }
+  @GetMapping("/user/{userID}/inactivas")
+    public @ResponseBody Iterable<Publicacion> buscarInactivasPorUserId(@PathVariable Long userID) {
+        Iterable<Publicacion> publicacion = publicacionRepository.findByUserIDAndActiveFalse(userID);
+        return publicacion;
+    }
+    
 
-  @GetMapping(path="")
+  @GetMapping(path="/all")
   public @ResponseBody Iterable<Publicacion> getAllPublicaciones() {
     return publicacionRepository.findAll();
   }
 
-  @GetMapping(path="/activas")
+  @GetMapping(path="/all/activas")
   public @ResponseBody Iterable<Publicacion> getAllPublicacionesActivas() {
     return publicacionRepository.findByActiveTrue();
   }
 
-  @GetMapping(path="/inactivas")
+  @GetMapping(path="/all/inactivas")
   public @ResponseBody Iterable<Publicacion> getAllPublicacionesInactivas() {
     return publicacionRepository.findByActiveFalse();
   }
