@@ -11,15 +11,16 @@ import jakarta.persistence.*;
 public class Filial {
 	@Id
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)
+	@Column(name="id_filial")
 	private Long id;
 	
-	@Column(nullable = false, length=100)
+	@Column(name="nombre", nullable = false, length=100)
 	private String nombre;
 	
-	@Column(nullable = false, length=150)
+	@Column(name="direccion", nullable = false, unique = true, length=150)
 	private String direccion;
 	
-	@Column(nullable = false, unique = true, length=100)
+	@Column(name="email", nullable = false, length=100)
 	private String email;
 	
 	 @OneToMany(mappedBy = "filial")

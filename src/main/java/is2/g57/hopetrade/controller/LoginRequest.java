@@ -2,7 +2,7 @@ package is2.g57.hopetrade.controller;
 
 
 public class LoginRequest {
-	private String nombreCuenta;
+	private String dni;
 	private String pass;
 	
 	public String getPass() {
@@ -11,12 +11,12 @@ public class LoginRequest {
 	public void setPass(String pass) {
 		this.pass = pass;
 	}
-	public String getNombreCuenta() {
-		return nombreCuenta;
+	public String getDni() {
+		return dni;
 	}
 	
-	public void setNombreCuenta(String nombreCuenta) {
-		this.nombreCuenta = nombreCuenta;
+	public void setDni(String dni) {
+		this.dni = dni;
 	}
 	
 	

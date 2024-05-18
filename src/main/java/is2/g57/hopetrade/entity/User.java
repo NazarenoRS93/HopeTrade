@@ -31,6 +31,8 @@ public class User {
 	
 	@Column(name="fecha_nacimiento", nullable = false)
 	private Date fecha_nacimiento;
+	
+	@Column(name="activo")
 	private boolean activo;
 	
 	public User(Long id, String email, String dni, String pass, String nombre, String apellido, Date fecha_nacimiento) {
