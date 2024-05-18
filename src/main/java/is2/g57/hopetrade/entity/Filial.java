@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -24,6 +26,7 @@ public class Filial {
 	private String email;
 	
 	 @OneToMany(mappedBy = "filial")
+	 @JsonManagedReference
 	  private List<Ayudante> ayudantes;
 
 	public Filial(Long id, String nombre, String direccion, String email) {

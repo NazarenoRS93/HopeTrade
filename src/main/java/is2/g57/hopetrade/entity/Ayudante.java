@@ -2,6 +2,8 @@ package is2.g57.hopetrade.entity;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -32,6 +34,7 @@ public class Ayudante {
 	
 	    @ManyToOne
 	    @JoinColumn(name = "filial_id")
+	    @JsonBackReference
 	    private Filial filial;
 
 	
