@@ -11,6 +11,7 @@ import Footer from "./components/Footer";
 import {Outlet} from "react-router-dom";
 import {defaultDialogData} from "./utils/utilConstants";
 import CustomDialog from "./components/CustomDialog";
+import ListAyudantesComponent from "./components/ListAyudantesComponent"; // Ruta correcta a tu componente ListAyudantesComponent
 
 const theme = createTheme({ ...themeV5 });
 
@@ -35,7 +36,7 @@ function App() {
                             <hr/>
                         </Item>
                         <Item sx={{flexGrow: 1}}>
-                            <Outlet/>
+                            {/* <ListAyudantesComponent /> Aquí agregamos el componente */}
                         </Item>
                         <Item>
                             <hr/>
