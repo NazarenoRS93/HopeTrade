@@ -42,8 +42,6 @@ import is2.g57.hopetrade.entity.User;
     "titulo":"t",
     "descripcion":"d"
   }
- ^ Tambien acepta una ranciada en la direccion: http://localhost:8080/publicacion/add?userID={ID}&titulo={titulo}&descripcion={descripcion}
-
  PUT:
  Update: http://localhost:8080/publicacion/update
  con Header: Content-Type: "application/json"
@@ -53,6 +51,7 @@ import is2.g57.hopetrade.entity.User;
     "titulo":"t",
     "descripcion":"d"
   }
+  
  Pendientes:
  Baja logica (Activo = false)
  Eliminacion (no requerida)
