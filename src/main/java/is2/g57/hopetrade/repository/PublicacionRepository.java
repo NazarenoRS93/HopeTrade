@@ -13,5 +13,8 @@ public interface PublicacionRepository extends JpaRepository<Publicacion, Intege
     Iterable<Publicacion> findByActiveTrue();
     Iterable<Publicacion> findByActiveFalse();
 
+    Iterable<Publicacion> findByUserIDAndActiveTrue(Long userID);
+    Iterable<Publicacion> findByUserIDAndActiveFalse(Long userID);
+
     Optional<Publicacion> findById(Long id);
 }
