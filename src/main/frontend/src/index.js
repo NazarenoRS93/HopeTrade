@@ -9,6 +9,7 @@ import SignUpPage from "./containers/SignUpPage";
 import HomePage from "./containers/HomePage";
 import PostListPage from "./containers/PostListPage";
 import LoginAdminPage from "./containers/LoginAdminPage";
+import TestPage from "./containers/TestPage";
 import axios from "axios";
 
 const router = createBrowserRouter(
@@ -36,6 +37,10 @@ const router = createBrowserRouter(
                 {
                     path: "/posts",
                     element: <PostListPage/>
+                },
+                {
+                    path: "/test",
+                    element: <TestPage/>
                 },
             ]
         },
