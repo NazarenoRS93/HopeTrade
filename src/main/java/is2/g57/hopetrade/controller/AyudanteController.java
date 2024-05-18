@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import is2.g57.hopetrade.entity.Ayudante;
 import is2.g57.hopetrade.repository.AyudanteRepository;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/ayudante")
 

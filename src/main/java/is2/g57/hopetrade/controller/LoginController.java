@@ -12,6 +12,7 @@ import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.repository.AyudanteRepository;
 import is2.g57.hopetrade.repository.UserRepository;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/login")
 
@@ -22,8 +23,8 @@ public class LoginController {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@GetMapping("/login-administrativo")
-    public ResponseEntity<?> loginAyudante(@RequestParam("email") String email, @RequestParam("dni") String pass) {
+	@GetMapping("/login-administrativo/{email}/{pass}")
+    public ResponseEntity<?> loginAyudante(@PathVariable String email, @PathVariable String pass) {
 
         Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByEmail(email);
 
@@ -52,7 +53,7 @@ public class LoginController {
 	
 	
 	@GetMapping("/login-user/{dni}/{pass}")
-    public ResponseEntity<?> loginUser(@RequestParam("dni") String dni, @RequestParam("dni") String pass) {
+    public ResponseEntity<?> loginUser(@PathVariable String dni, @PathVariable String pass) {
 
         Optional<User> userOp = userRepository.findUserByDni(dni);
         

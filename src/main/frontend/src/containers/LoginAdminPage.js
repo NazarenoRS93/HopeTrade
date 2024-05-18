@@ -15,7 +15,7 @@ import Item from "../utils/Item";
 import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
 import {defaultFormLoginAdmin, defaultGateway} from "../utils/utilConstants";
-import axios from "axios";
+import LoginService from "../services/LoginService";
 
 function LoginAdminPage(props) {
     const {
@@ -40,15 +40,7 @@ function LoginAdminPage(props) {
         setShowPassword(!showPassword)
     }
     const login = async () => {
-        const url = defaultGateway+"/login/login-user";
-        await axios({
-            method: "GET",
-            url: url,
-            params: {
-                dni: form.dni,
-                pass: form.pass
-            }
-        })
+        LoginService.loginAdmin(form)
             .then((response) => {
                 setUserData(response);
                 console.log(response);

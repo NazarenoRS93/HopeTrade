@@ -36,7 +36,7 @@ function App() {
                             <hr/>
                         </Item>
                         <Item sx={{flexGrow: 1}}>
-                            {/* <ListAyudantesComponent /> Aquí agregamos el componente */}
+                            <Outlet />
                         </Item>
                         <Item>
                             <hr/>

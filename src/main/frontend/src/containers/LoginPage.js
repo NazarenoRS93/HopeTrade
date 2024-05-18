@@ -16,6 +16,7 @@ import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
 import {defaultFormLogin, defaultGateway, defaultHeaders} from "../utils/utilConstants";
 import axios from "axios";
+import LoginService from "../services/LoginService";
 
 function LoginPage(props) {
     const {
@@ -40,10 +41,7 @@ function LoginPage(props) {
         setShowPassword(!showPassword)
     }
     const login = async () => {
-        const url = defaultGateway+"/login/login-user/{"+form.dni+"}/{"+form.pass+"}";
-        axios.get(url,{
-            defaultHeaders
-        })
+        LoginService.loginUser(form)
             .then((response) => {
                 setUserData(response);
                 console.log(response);
