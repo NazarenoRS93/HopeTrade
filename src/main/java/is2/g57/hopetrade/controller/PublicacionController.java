@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.core.io.Resource;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +37,7 @@ import is2.g57.hopetrade.entity.User;
  Activas por userID: http://localhost:8080/publicacion/user/{userID}/activas
  Inactivas por userID: http://localhost:8080/publicacion/user/{userID}/inactivas
  Buscar por ID: http://localhost:8080/publicacion/{id}
+ Fetch imagen por ID Publicacion : http://localhost:8080/publicacion/image/{id}
   
  POST
  Add: http://localhost:8080/publicacion/add 
@@ -61,9 +63,7 @@ import is2.g57.hopetrade.entity.User;
   desactivar: http://localhost:8080/publicacion/desactivar/{id}
   
  Pendientes:
- Eliminacion (no requerida)
-
- Imagenes: Fetch (Guardar ya esta implementado, no testeado)
+ Eliminacion (no requerida): http://localhost:8080/publicacion/delete/{id}
  */
 
 @RestController
@@ -215,6 +215,12 @@ public class PublicacionController {
 		}
 		return ResponseEntity.ok(oPublicacion);
 	}	
+
+  @GetMapping("/image/{id}")
+  public Resource getImagen(@RequestParam Long id) {
+      return imageService.load(publicacionRepository.findById(id).get().getImageURL());
+  }
+  
 
   @GetMapping("/user/{userID}")
     public @ResponseBody Iterable<Publicacion> buscarPublicacionPorUserId(@PathVariable Long userID) {
