@@ -35,7 +35,7 @@ public class Publicacion implements Serializable{
     @Column(name="active")
     private boolean active;
     
-    // private String Imagen( )
+    private String imageURL;
     // Lo abstraigo para implementar en otro momento
 
     // Uso LocalDateTime en lugar de Date porque tiene hh-mm-ss ademas de fecha
@@ -105,6 +105,14 @@ public class Publicacion implements Serializable{
     }
 
     // Setters y Getters
+
+    public String getImageURL(){
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL){
+        this.imageURL = imageURL;
+    }
 
     public Long getId() {
         return id;
