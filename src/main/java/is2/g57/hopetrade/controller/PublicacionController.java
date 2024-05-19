@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -22,6 +22,7 @@ import java.time.Period;
 import java.util.Optional;
 
 import is2.g57.hopetrade.repository.PublicacionRepository;
+import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 
@@ -44,6 +45,8 @@ import is2.g57.hopetrade.entity.User;
     "titulo":"t",
     "descripcion":"d"
   }
+(obligatorio) "img": img (multipart/form-data)
+
  PUT:
  Update: http://localhost:8080/publicacion/update
  con Header: Content-Type: "application/json"
@@ -53,13 +56,14 @@ import is2.g57.hopetrade.entity.User;
     "titulo":"t",
     "descripcion":"d"
   }
+  (opcional) "img": img (multipart/form-data)
   activar: http://localhost:8080/publicacion/activar/{id}
   desactivar: http://localhost:8080/publicacion/desactivar/{id}
   
  Pendientes:
  Eliminacion (no requerida)
 
- Data: Imagenes
+ Imagenes: Fetch (Guardar ya esta implementado, no testeado)
  */
 
 @RestController
@@ -68,6 +72,9 @@ public class PublicacionController {
 	@Autowired
 	private PublicacionRepository publicacionRepository;
 
+  @Autowired
+  private ImageService imageService;
+  
   private ResponseEntity<?> PublicacionTest(PublicacionDTO PublicacionDTO) {
     
     // Test UserID existe
@@ -103,21 +110,29 @@ public class PublicacionController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO PublicacionDTO) {
-    
-    System.out.println("TEST");
-    // Test titulo > 0 y titulo < 50
+  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO PublicacionDTO, @RequestParam("img") MultipartFile img) {
     ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
     if (test != null) {
       return test;
     }
-    // OK
-    publicacionRepository.save(new Publicacion(PublicacionDTO));
+    // Check img exists
+    if (img == null) {
+      return new ResponseEntity<>("Se requiere una imagen", HttpStatus.BAD_REQUEST);
+    }
+
+    // Guardar img
+    String filename = imageService.save(img);
+    Publicacion p = new Publicacion(PublicacionDTO);
+
+    // Ok
+    p.setImageURL(filename);
+    publicacionRepository.save(p);
+
     return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
   }
 
   @PutMapping("/update")
-  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO PublicacionDTO) {
+  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO PublicacionDTO, @RequestParam(name="img", required = false) MultipartFile img) {
     // Test
     ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
     if (test != null) {
@@ -139,6 +154,15 @@ public class PublicacionController {
     }
     // Test publicacion inactiva ( No se si es requerimiento )
     if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion esta cerrada y no puede modificarse", HttpStatus.BAD_REQUEST);
+
+    // Check img exists
+    if (img != null) {
+      // Sobreescribir img
+      String filename = publicacion.getImageURL();
+      imageService.delete(filename);
+      filename = imageService.save(img);
+      publicacion.setImageURL(filename);
+    }
 
     // OK
     publicacion.update(PublicacionDTO);
