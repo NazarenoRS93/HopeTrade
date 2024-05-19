@@ -26,13 +26,36 @@ function TestPage() {
 
     const [publicaciones, setPublicaciones] = useState([]);
 
+    const [titulo, setTitulo] = useState([]);
+    const [descripcion, setDesc] = useState([]);
+    const [userID, setUserID] = useState([]);
+
     const fetchPublicaciones = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/publicacion');
+            const response = await axios.get('http://localhost:8080/publicacion/all');
             setPublicaciones(response.data);
         } catch (error) {
             console.error('Error fetching publicaciones:', error);
         }
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log('Publicacion:', {titulo, descripcion, userID});
+
+        var formdata = new FormData();
+        //add three variable to form
+        formdata.append("titulo", titulo);
+        formdata.append("descripcion", descripcion);
+        formdata.append("userID", userID);
+
+        axios.post('http://localhost:8080/publicacion/add', formdata, { headers : {'Content-Type': 'application/json'}})
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     }
 
     return (
@@ -74,6 +97,30 @@ function TestPage() {
                     ))}
                 </ul>
             </Item> 
+    <form onSubmit={handleSubmit}>
+      <label>Titulo publicacion:
+        <input 
+          type="text" 
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
+        />
+      </label>
+      <label>Descripcion publicacion:
+        <input 
+          type="text" 
+          value={descripcion}
+          onChange={(e) => setDesc(e.target.value)}
+        />
+      </label>
+      <label>UserID:
+        <input 
+          type="number" 
+          value={userID}
+          onChange={(e) => setUserID(e.target.value)}
+        />
+      </label>
+      <input type="submit" />
+    </form>
         </React.Fragment>
     )
 }

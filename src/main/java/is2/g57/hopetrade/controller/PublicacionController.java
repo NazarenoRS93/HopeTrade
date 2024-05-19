@@ -110,18 +110,19 @@ public class PublicacionController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO PublicacionDTO, @RequestParam("img") MultipartFile img) {
+  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO PublicacionDTO, @RequestParam( name="img", required = false ) MultipartFile img) {
     ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
     if (test != null) {
       return test;
     }
-    // Check img exists
-    if (img == null) {
-      return new ResponseEntity<>("Se requiere una imagen", HttpStatus.BAD_REQUEST);
-    }
+    // Check img exists ( lo saco para testear )
+    //if (img == null) {
+    //  return new ResponseEntity<>("Se requiere una imagen", HttpStatus.BAD_REQUEST);
+    //}
 
     // Guardar img
-    String filename = imageService.save(img);
+    // String filename = imageService.save(img);
+    String filename = "temp";
     Publicacion p = new Publicacion(PublicacionDTO);
 
     // Ok
@@ -132,7 +133,7 @@ public class PublicacionController {
   }
 
   @PutMapping("/update")
-  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO PublicacionDTO, @RequestParam(name="img", required = false) MultipartFile img) {
+  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO PublicacionDTO, @RequestParam( name="img", required = false ) MultipartFile img) {
     // Test
     ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
     if (test != null) {
