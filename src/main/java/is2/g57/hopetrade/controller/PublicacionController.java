@@ -115,20 +115,19 @@ public class PublicacionController {
     if (test != null) {
       return test;
     }
-    // Check img exists ( lo saco para testear )
-    //if (img == null) {
-    //  return new ResponseEntity<>("Se requiere una imagen", HttpStatus.BAD_REQUEST);
-    //}
 
-    // Guardar img
-    // String filename = imageService.save(img);
-    String filename = "temp";
     Publicacion p = new Publicacion(PublicacionDTO);
+    // Check img exists
+    if (img != null) {
+      // Guarda imagen y retorna ubicacion
+      p.setImageURL(imageService.save(img));
+    }
+    else{
+      // return new ResponseEntity<>("Se requiere la imagen", HttpStatus.BAD_REQUEST);
+    }
 
-    // Ok
-    p.setImageURL(filename);
+    // OK
     publicacionRepository.save(p);
-
     return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
   }
 
