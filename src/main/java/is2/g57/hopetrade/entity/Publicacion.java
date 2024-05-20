@@ -3,6 +3,7 @@ package is2.g57.hopetrade.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 
 import is2.g57.hopetrade.controller.PublicacionDTO;
@@ -35,7 +36,7 @@ public class Publicacion implements Serializable{
     @Column(name="active")
     private boolean active;
     
-    private String imageURL;
+    private byte[] imagen;
     // Lo abstraigo para implementar en otro momento
 
     // Uso LocalDateTime en lugar de Date porque tiene hh-mm-ss ademas de fecha
@@ -73,10 +74,11 @@ public class Publicacion implements Serializable{
         this.active = true;
     }
 
-    public Publicacion(PublicacionDTO publicacionRequest) {
-        this.userID = publicacionRequest.getUserID();
-        this.titulo = publicacionRequest.getTitulo();
-        this.descripcion = publicacionRequest.getDescripcion();
+    public Publicacion(PublicacionDTO publicacionDTO) {
+        this.userID = publicacionDTO.getUserID();
+        this.titulo = publicacionDTO.getTitulo();
+        this.descripcion = publicacionDTO.getDescripcion();
+        setImagen(publicacionDTO.getImage());
         
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
@@ -85,9 +87,10 @@ public class Publicacion implements Serializable{
 
     // Metodos varios
 
-    public void update(PublicacionDTO publicacionRequest) {
-        this.titulo = publicacionRequest.getTitulo();
-        this.descripcion = publicacionRequest.getDescripcion();
+    public void update(PublicacionDTO publicacionDTO) {
+        this.titulo = publicacionDTO.getTitulo();
+        this.descripcion = publicacionDTO.getDescripcion();
+        setImagen(publicacionDTO.getImage());
 
         this.ultimaModificacion = java.time.LocalDateTime.now();
     }
@@ -106,12 +109,12 @@ public class Publicacion implements Serializable{
 
     // Setters y Getters
 
-    public String getImageURL(){
-        return imageURL;
+    public String getImagen(){
+        return Base64.getEncoder().encodeToString(this.imagen);
     }
 
-    public void setImageURL(String imageURL){
-        this.imageURL = imageURL;
+    public void setImagen(String imagenStr){
+        this.imagen = Base64.getDecoder().decode(imagenStr);
     }
 
     public Long getId() {

@@ -11,6 +11,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+// Esto al final no se va a usar. Queda por las dudas.
 @Service
 public class ImageService {
 

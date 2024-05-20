@@ -5,7 +5,14 @@ public class PublicacionDTO {
     private String titulo;
     private String descripcion;
     private Long userID;
+    private String image;
 
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
     public String getTitulo() {
         return titulo;
     }
