@@ -1,5 +1,9 @@
 package is2.g57.hopetrade.controller;
 
+import java.time.LocalDateTime;
+
+import is2.g57.hopetrade.entity.Publicacion;
+
 public class PublicacionDTO {
     private Long id;
     private String titulo;
@@ -7,6 +11,19 @@ public class PublicacionDTO {
     private Long userID;
     private String image;
 
+    private boolean active;
+    private LocalDateTime fechaHoraCreacion;
+    private LocalDateTime ultimaModificacion;
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    public void setFechaHoraCreacion(LocalDateTime fechaHoraCreacion) {
+        this.fechaHoraCreacion = fechaHoraCreacion;
+    }
+    public void setUltimaModificacion(LocalDateTime ultimaModificacion) {
+        this.ultimaModificacion = ultimaModificacion;
+    }
     public String getImage() {
         return image;
     }

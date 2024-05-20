@@ -83,12 +83,26 @@ public class Publicacion implements Serializable{
     public void eliminarPublicacion(){
         this.active = false;
     }
+    public PublicacionDTO export() {
+        PublicacionDTO ret = new PublicacionDTO();
+
+        ret.setId(this.getId());
+        ret.setUserID(this.userID);
+        ret.setTitulo(this.titulo);
+        ret.setDescripcion(this.descripcion);
+        ret.setFechaHoraCreacion(this.getFechaHoraCreacion());
+        ret.setUltimaModificacion(this.getUltimaModificacion());
+        ret.setActive(this.isActivo());
+        // ret.setImage(this.getImagen());
+
+        return ret;
+    }
 
     // Setters y Getters
 
     public String getImagen(){
-        return null;
         // return Base64.getEncoder().encodeToString(this.imagen);
+        return null;
     }
 
     public void setImagen(String imagenStr){
@@ -118,6 +132,10 @@ public class Publicacion implements Serializable{
 
     public LocalDateTime getFechaHoraCreacion() {
         return this.fechaHoraCreacion;
+    }
+
+    public LocalDateTime getUltimaModificacion() {
+        return this.ultimaModificacion;
     }
 
     // Convertir a Date si es necesario
