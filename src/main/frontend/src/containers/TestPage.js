@@ -48,6 +48,7 @@ function TestPage() {
         formdata.append("titulo", titulo);
         formdata.append("descripcion", descripcion);
         formdata.append("userID", userID);
+        formdata.append("image", "a");
 
         axios.post('http://localhost:8080/publicacion/add', formdata, { headers : {'Content-Type': 'application/json'}})
           .then(function (response) {

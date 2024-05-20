@@ -36,7 +36,7 @@ public class Publicacion implements Serializable{
     @Column(name="active")
     private boolean active;
     
-    private byte[] imagen;
+    // private byte[] imagen;
     // Lo abstraigo para implementar en otro momento
 
     // Uso LocalDateTime en lugar de Date porque tiene hh-mm-ss ademas de fecha
@@ -45,29 +45,6 @@ public class Publicacion implements Serializable{
     @Column(name="ultimaModificacion")
     private LocalDateTime ultimaModificacion;
     // Constructores
-
-    // Id recibido
-    public Publicacion(Long id, Long userID, String titulo, String descripcion){
-        this.id = id;
-        this.userID = userID;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        // this.imagen = imagen;
-        this.fechaHoraCreacion = java.time.LocalDateTime.now();
-        this.active = true;
-    }
-
-    // Id generado por base de datos
-    public Publicacion(Long userID, String titulo, String descripcion){
-        this.userID = userID;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        // this.imagen = imagen;
-        this.fechaHoraCreacion = java.time.LocalDateTime.now();
-        this.ultimaModificacion = java.time.LocalDateTime.now();
-    }
-
-
     public Publicacion() {
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
@@ -78,7 +55,7 @@ public class Publicacion implements Serializable{
         this.userID = publicacionDTO.getUserID();
         this.titulo = publicacionDTO.getTitulo();
         this.descripcion = publicacionDTO.getDescripcion();
-        setImagen(publicacionDTO.getImage());
+        // setImagen(publicacionDTO.getImage());
         
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
@@ -90,7 +67,7 @@ public class Publicacion implements Serializable{
     public void update(PublicacionDTO publicacionDTO) {
         this.titulo = publicacionDTO.getTitulo();
         this.descripcion = publicacionDTO.getDescripcion();
-        setImagen(publicacionDTO.getImage());
+        // setImagen(publicacionDTO.getImage());
 
         this.ultimaModificacion = java.time.LocalDateTime.now();
     }
@@ -110,11 +87,12 @@ public class Publicacion implements Serializable{
     // Setters y Getters
 
     public String getImagen(){
-        return Base64.getEncoder().encodeToString(this.imagen);
+        return null;
+        // return Base64.getEncoder().encodeToString(this.imagen);
     }
 
     public void setImagen(String imagenStr){
-        this.imagen = Base64.getDecoder().decode(imagenStr);
+        // this.imagen = Base64.getDecoder().decode(imagenStr);
     }
 
     public Long getId() {
