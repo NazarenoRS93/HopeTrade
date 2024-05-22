@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
 import {UserContext} from "../context/userContext";
@@ -20,6 +20,13 @@ function TestPage() {
     const [showPassword, setShowPassword] = useState(false);
     const {userData, setUserData} = useContext(UserContext);
 
+
+    // Render on start
+    useEffect(() => {
+        fetchPublicaciones();
+    }, []);
+
+    
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
@@ -53,6 +60,9 @@ function TestPage() {
         axios.post('http://localhost:8080/publicacion/add', formdata, { headers : {'Content-Type': 'application/json'}})
           .then(function (response) {
             console.log(response);
+
+            // Re-render al cambiar
+            fetchPublicaciones();
           })
           .catch(function (error) {
             console.log(error, error.response);
