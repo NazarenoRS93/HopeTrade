@@ -26,7 +26,7 @@ function TestPage() {
         fetchPublicaciones();
     }, []);
 
-    
+
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
@@ -59,13 +59,13 @@ function TestPage() {
 
         axios.post('http://localhost:8080/publicacion/add', formdata, { headers : {'Content-Type': 'application/json'}})
           .then(function (response) {
-            console.log(response);
+            console.log(response.data);
 
             // Re-render al cambiar
             fetchPublicaciones();
           })
           .catch(function (error) {
-            console.log(error, error.response);
+            console.log(error.response.data);
           });
     }
 
@@ -124,8 +124,8 @@ function TestPage() {
         />
       </label>
       <label>UserID:
-        <input 
-          type="number" 
+        <input min="0"
+          type="number" id="quantity"
           value={userID}
           onChange={(e) => setUserID(e.target.value)}
         />
