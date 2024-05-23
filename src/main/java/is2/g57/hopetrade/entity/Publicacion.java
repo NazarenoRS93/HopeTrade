@@ -3,6 +3,7 @@ package is2.g57.hopetrade.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 
 import is2.g57.hopetrade.controller.PublicacionDTO;
@@ -35,7 +36,7 @@ public class Publicacion implements Serializable{
     @Column(name="active")
     private boolean active;
     
-    private String imageURL;
+    // private byte[] imagen;
     // Lo abstraigo para implementar en otro momento
 
     // Uso LocalDateTime en lugar de Date porque tiene hh-mm-ss ademas de fecha
@@ -44,39 +45,17 @@ public class Publicacion implements Serializable{
     @Column(name="ultimaModificacion")
     private LocalDateTime ultimaModificacion;
     // Constructores
-
-    // Id recibido
-    public Publicacion(Long id, Long userID, String titulo, String descripcion){
-        this.id = id;
-        this.userID = userID;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        // this.imagen = imagen;
-        this.fechaHoraCreacion = java.time.LocalDateTime.now();
-        this.active = true;
-    }
-
-    // Id generado por base de datos
-    public Publicacion(Long userID, String titulo, String descripcion){
-        this.userID = userID;
-        this.titulo = titulo;
-        this.descripcion = descripcion;
-        // this.imagen = imagen;
-        this.fechaHoraCreacion = java.time.LocalDateTime.now();
-        this.ultimaModificacion = java.time.LocalDateTime.now();
-    }
-
-
     public Publicacion() {
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
         this.active = true;
     }
 
-    public Publicacion(PublicacionDTO publicacionRequest) {
-        this.userID = publicacionRequest.getUserID();
-        this.titulo = publicacionRequest.getTitulo();
-        this.descripcion = publicacionRequest.getDescripcion();
+    public Publicacion(PublicacionDTO publicacionDTO) {
+        this.userID = publicacionDTO.getUserID();
+        this.titulo = publicacionDTO.getTitulo();
+        this.descripcion = publicacionDTO.getDescripcion();
+        // setImagen(publicacionDTO.getImage());
         
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
@@ -85,9 +64,10 @@ public class Publicacion implements Serializable{
 
     // Metodos varios
 
-    public void update(PublicacionDTO publicacionRequest) {
-        this.titulo = publicacionRequest.getTitulo();
-        this.descripcion = publicacionRequest.getDescripcion();
+    public void update(PublicacionDTO publicacionDTO) {
+        this.titulo = publicacionDTO.getTitulo();
+        this.descripcion = publicacionDTO.getDescripcion();
+        // setImagen(publicacionDTO.getImage());
 
         this.ultimaModificacion = java.time.LocalDateTime.now();
     }
@@ -103,15 +83,30 @@ public class Publicacion implements Serializable{
     public void eliminarPublicacion(){
         this.active = false;
     }
+    public PublicacionDTO export() {
+        PublicacionDTO ret = new PublicacionDTO();
+
+        ret.setId(this.getId());
+        ret.setUserID(this.userID);
+        ret.setTitulo(this.titulo);
+        ret.setDescripcion(this.descripcion);
+        ret.setFechaHoraCreacion(this.getFechaHoraCreacion());
+        ret.setUltimaModificacion(this.getUltimaModificacion());
+        ret.setActive(this.isActivo());
+        // ret.setImage(this.getImagen());
+
+        return ret;
+    }
 
     // Setters y Getters
 
-    public String getImageURL(){
-        return imageURL;
+    public String getImagen(){
+        // return Base64.getEncoder().encodeToString(this.imagen);
+        return null;
     }
 
-    public void setImageURL(String imageURL){
-        this.imageURL = imageURL;
+    public void setImagen(String imagenStr){
+        // this.imagen = Base64.getDecoder().decode(imagenStr);
     }
 
     public Long getId() {
@@ -137,6 +132,10 @@ public class Publicacion implements Serializable{
 
     public LocalDateTime getFechaHoraCreacion() {
         return this.fechaHoraCreacion;
+    }
+
+    public LocalDateTime getUltimaModificacion() {
+        return this.ultimaModificacion;
     }
 
     // Convertir a Date si es necesario

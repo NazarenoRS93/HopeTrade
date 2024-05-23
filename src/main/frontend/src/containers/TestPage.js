@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
 import {UserContext} from "../context/userContext";
@@ -15,6 +15,13 @@ import Post from "../utils/Post";
 function TestPage() {
     const [showPassword, setShowPassword] = useState(false);
     const {userData, setUserData} = useContext(UserContext);
+
+
+    // Render on start
+    useEffect(() => {
+        fetchPublicaciones();
+    }, []);
+
 
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
@@ -45,13 +52,17 @@ function TestPage() {
         formdata.append("titulo", titulo);
         formdata.append("descripcion", descripcion);
         formdata.append("userID", userID);
+        formdata.append("image", "a");
 
         axios.post('http://localhost:8080/publicacion/add', formdata, { headers : {'Content-Type': 'application/json'}})
           .then(function (response) {
-            console.log(response);
+            console.log(response.data);
+
+            // Re-render al cambiar
+            fetchPublicaciones();
           })
           .catch(function (error) {
-            console.log(error, error.response);
+            console.log(error.response.data);
           });
     }
 
@@ -103,8 +114,8 @@ function TestPage() {
         />
       </label>
       <label>UserID:
-        <input 
-          type="number" 
+        <input min="0"
+          type="number" id="quantity"
           value={userID}
           onChange={(e) => setUserID(e.target.value)}
         />

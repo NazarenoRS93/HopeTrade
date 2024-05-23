@@ -10,5 +10,4 @@ public class HopetradeApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(HopetradeApplication.class, args);
 	}
-
 }

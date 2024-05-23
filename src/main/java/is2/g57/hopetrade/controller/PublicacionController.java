@@ -23,7 +23,6 @@ import java.time.Period;
 import java.util.Optional;
 
 import is2.g57.hopetrade.repository.PublicacionRepository;
-import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 
@@ -46,8 +45,8 @@ import is2.g57.hopetrade.entity.User;
     "userID":"x",
     "titulo":"t",
     "descripcion":"d"
+    "image": String
   }
-(obligatorio) "img": img (multipart/form-data)
 
  PUT:
  Update: http://localhost:8080/publicacion/update
@@ -57,8 +56,8 @@ import is2.g57.hopetrade.entity.User;
     "userID":"x",
     "titulo":"t",
     "descripcion":"d"
+    "image": String
   }
-  (opcional) "img": img (multipart/form-data)
   activar: http://localhost:8080/publicacion/activar/{id}
   desactivar: http://localhost:8080/publicacion/desactivar/{id}
   
@@ -72,8 +71,8 @@ public class PublicacionController {
 	@Autowired
 	private PublicacionRepository publicacionRepository;
 
-  @Autowired
-  private ImageService imageService;
+  // @Autowired
+  // private ImageService imageService;
   
   private ResponseEntity<?> PublicacionTest(PublicacionDTO PublicacionDTO) {
     
@@ -106,25 +105,23 @@ public class PublicacionController {
       return new ResponseEntity<>("Hubo un error", HttpStatus.BAD_REQUEST);
     }
 
+    // Test imagen está en el DTO
+    if (PublicacionDTO.getImage() == null) {
+      // return new ResponseEntity<>("Se requiere la imagen", HttpStatus.BAD_REQUEST);
+      PublicacionDTO.setImage("a");
+    }
+
     return null;
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO PublicacionDTO, @RequestParam( name="img", required = false ) MultipartFile img) {
+  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO PublicacionDTO) {
     ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
     if (test != null) {
       return test;
     }
 
     Publicacion p = new Publicacion(PublicacionDTO);
-    // Check img exists
-    if (img != null) {
-      // Guarda imagen y retorna ubicacion
-      p.setImageURL(imageService.save(img));
-    }
-    else{
-      // return new ResponseEntity<>("Se requiere la imagen", HttpStatus.BAD_REQUEST);
-    }
 
     // OK
     publicacionRepository.save(p);
@@ -132,7 +129,7 @@ public class PublicacionController {
   }
 
   @PutMapping("/update")
-  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO PublicacionDTO, @RequestParam( name="img", required = false ) MultipartFile img) {
+  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO PublicacionDTO) {
     // Test
     ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
     if (test != null) {
@@ -154,15 +151,6 @@ public class PublicacionController {
     }
     // Test publicacion inactiva ( No se si es requerimiento )
     if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion esta cerrada y no puede modificarse", HttpStatus.BAD_REQUEST);
-
-    // Check img exists
-    if (img != null) {
-      // Sobreescribir img
-      String filename = publicacion.getImageURL();
-      imageService.delete(filename);
-      filename = imageService.save(img);
-      publicacion.setImageURL(filename);
-    }
 
     // OK
     publicacion.update(PublicacionDTO);
@@ -217,8 +205,8 @@ public class PublicacionController {
 	}	
 
   @GetMapping("/image/{id}")
-  public Resource getImagen(@RequestParam Long id) {
-      return imageService.load(publicacionRepository.findById(id).get().getImageURL());
+  public String getImagen(@RequestParam Long id) {
+      return publicacionRepository.findById(id).get().getImagen();
   }
   
 
