@@ -6,7 +6,7 @@ const AYUDANTE_BASE_REST_API_URL = "http://localhost:8080/ayudante";
  class RegisterService{
      register(form){
          const cookie = window.localStorage.getItem("user");
-         let formData = new FormData();
+         let formdata = new FormData();
          //add three variable to form
          formdata.append("id", form.id);
          formdata.append("nombre", form.nombre);

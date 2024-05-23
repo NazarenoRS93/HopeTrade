@@ -1,27 +1,28 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
+import {CardContent} from "@mui/material";
+import Typography from "@mui/material/Typography";
 
-function Card(props) {
-    const { sx, ...other } = props;
+function CustomCard(props) {
+    const { data, icon } = props;
 
     return (
-        <Box
-            sx={{
-                p: 1, m: 1, width: 1/3,
-                border: 1, borderRadius: "10%",
-                borderColor: "primary.main",
-                alignContent: "stretch",
-                fontSize: "0.875rem",
-                fontWeight: "700",
-                ...sx,
-            }}
-            {...other}
-        />
+        <Card>
+            <CardContent>
+                <Typography variant="subtitle2">
+                    {icon}&nbsp;{data.title}
+                </Typography>
+                <hr/>
+                <Typography variant="h2">
+                    {data.description}
+                </Typography>
+            </CardContent>
+        </Card>
     );
 }
 
-Card.propTypes = {
+CustomCard.propTypes = {
     /**
      * The system prop that allows defining system overrides as well as additional CSS styles.
      */
@@ -34,4 +35,4 @@ Card.propTypes = {
     ]),
 };
 
-export default Card;
+export default CustomCard;

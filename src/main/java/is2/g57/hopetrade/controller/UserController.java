@@ -1,8 +1,11 @@
 package is2.g57.hopetrade.controller;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ import is2.g57.hopetrade.repository.UserRepository;
 public class UserController {
 	@Autowired
 	private UserRepository userRepository;
-
+	public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	@GetMapping("/{id}")
 	public ResponseEntity<?> ObtenerUsuarioPorId(@RequestBody UserRequest userRequest) {
 		Long Id = userRequest.getId();
@@ -50,64 +53,34 @@ public class UserController {
 		}
 	}
 
-	@PostMapping("/guardarUsuario")
-    public ResponseEntity<?> GuardarUsuario(@RequestBody UserRequest userRequest) {
-        LocalDate fecha = LocalDate.now();
-        int edad = Period.between(userRequest.getFecha_nacimiento(), fecha).getYears();
-        Date fecha_Nacimiento_Sql = Date.valueOf(userRequest.getFecha_nacimiento());
+	@PostMapping("/guardar")
+    public ResponseEntity<?> GuardarUsuario(@RequestBody UserRequest request) {
+		LocalDate fechaNacimiento = null;
+		try {
+			LocalDate fecha = LocalDate.now();
+			fechaNacimiento = LocalDate.parse(request.getFecha_nacimiento(),dtf);
+			int edad = Period.between(fechaNacimiento, fecha).getYears();
 
-        try {
-            if (userRequest.getDni().length() > 8 || userRequest.getDni().length() < 6) {
-                return new ResponseEntity<>("Ingrese un DNI valido", HttpStatus.BAD_REQUEST);
+            if (request.getDni().length() > 8 || request.getDni().length() < 6) {
+                return new ResponseEntity<>("Ingrese un DNI válido.", HttpStatus.BAD_REQUEST);
             }
-            int dni_parse = Integer.parseInt(userRequest.getDni());
+            int dni_parse = Integer.parseInt(request.getDni());
             if (edad < 18) {
-                return new ResponseEntity<>("Debes ser mayor de 18 años para registrarte", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Debes ser mayor de 18 años para registrarte.", HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>("Ingrese un DNI valido", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Datos inválidos.", HttpStatus.BAD_REQUEST);
         }
-
         try {
-            User user = new User(userRequest.getEmail(), userRequest.getDni(), userRequest.getPass(),
-                                 userRequest.getNombre(), userRequest.getApellido(), fecha_Nacimiento_Sql);
+            User user = new User(request.getEmail(), request.getDni(), request.getPass(),
+                                 request.getNombre(), request.getApellido(), Date.valueOf(fechaNacimiento));
             this.userRepository.save(user);
-            return new ResponseEntity<>("Usuario registrado", HttpStatus.CREATED);
+            return new ResponseEntity<>("¡Usuario registrado exitosamente!", HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("El dni o mail ya pertenece a una cuenta", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("DNI o mail ya están registrados a otra cuenta.", HttpStatus.BAD_REQUEST);
         }
     }
-	
-	
-//	@PostMapping("/guardarUsuario")
-//    public ResponseEntity<?> GuardarUsuario(@RequestParam String dni, @RequestParam String nombre,
-//                                            @RequestParam String email, @RequestParam String pass, 
-//                                            @RequestParam String apellido, @RequestParam LocalDate fecha_nacimiento) {
-//        LocalDate fecha = LocalDate.now();
-//        int edad = Period.between(fecha_nacimiento, fecha).getYears();
-//        Date fecha_Nacimiento_Sql = Date.valueOf(fecha_nacimiento);
-//
-//        try {
-//            if (dni.length() > 8 || dni.length() < 6) {
-//                return new ResponseEntity<>("Ingrese un DNI valido", HttpStatus.BAD_REQUEST);
-//            }
-//            int dni_parse = Integer.parseInt(dni);
-//            if (edad < 18) {
-//                return new ResponseEntity<>("Debes ser mayor de 18 años para registrarte", HttpStatus.BAD_REQUEST);
-//            }
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Ingrese un DNI valido", HttpStatus.BAD_REQUEST);
-//        }
-//
-//        try {
-//            User user = new User(email, dni, pass, nombre, apellido, fecha_Nacimiento_Sql);
-//            this.userRepository.save(user);
-//            return new ResponseEntity<>("Usuario registrado", HttpStatus.CREATED);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("El dni o mail ya pertenece a una cuenta", HttpStatus.BAD_REQUEST);
-//        }
-//    }
-	
+
 	@GetMapping(path="/all")
 	  public @ResponseBody Iterable<User> getAllUsers() {
 	    // This returns a JSON or XML with the users
@@ -115,14 +88,14 @@ public class UserController {
 	  }
 	
 	@PostMapping("/{useredit}")
-	public ResponseEntity<?> ActualizarPerfilUsuario(@RequestBody UserRequest userRequest ) {
+	public ResponseEntity<?> ActualizarPerfilUsuario(@RequestBody UserRequest request ) {
 		
 		try {
 			
-			this.update(userRequest.getId(), userRequest.getEmail(), userRequest.getNombre(), userRequest.getApellido());
+			this.update(request.getId(), request.getEmail(), request.getNombre(), request.getApellido());
 			return new ResponseEntity<>("Cambios guardados",HttpStatus.OK);		
 		}catch (Exception e) {
-						return new ResponseEntity<>("El mail: " + userRequest.getEmail() + " ya se encuentra en uso",HttpStatus.BAD_REQUEST);
+						return new ResponseEntity<>("El mail: " + request.getEmail() + " ya se encuentra en uso",HttpStatus.BAD_REQUEST);
 		}
 		} 
 	

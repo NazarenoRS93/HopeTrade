@@ -1,24 +1,26 @@
 import React from "react";
-import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
+import {CardContent} from "@mui/material";
+import Typography from "@mui/material/Typography";
 
-function Item(props) {
-    const { sx, ...other } = props;
+function Post(props) {
+    const { key, data } = props;
 
     return (
-        <Box
-            sx={{
-                p: 1, m: 1,
-                fontSize: "0.875rem",
-                fontWeight: "700",
-                ...sx,
-            }}
-            {...other}
-        />
+        <Card>
+            <CardContent>
+                <Typography variant="subtitle2">{data.titulo}</Typography>
+                <hr/>
+                <Typography variant="h2">{data.descripcion}</Typography>
+                <hr/>
+                <Typography variant="h6">Estado: {data.activo ? "Disponible" : "Finalizado"}</Typography>
+            </CardContent>
+        </Card>
     );
 }
 
-Item.propTypes = {
+Post.propTypes = {
     /**
      * The system prop that allows defining system overrides as well as additional CSS styles.
      */
@@ -31,4 +33,4 @@ Item.propTypes = {
     ]),
 };
 
-export default Item;
+export default Post;

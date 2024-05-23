@@ -44,22 +44,14 @@ Item.propTypes = {
 
 function Header() {
 
-    const {userData, setUserData} = useContext(UserContext);
-
     const getDatosHeader = async () => {
         try {
             const res = await axios.get(defaultGateway + '/utils/header')
             const data = await res.data;
-            setUserData(data);
         } catch (e) {
             console.log("Error al recuperar info de usuario", e)
         }
     }
-
-    useEffect(() => {
-        getDatosHeader();
-    }, [])
-
 
     return (
         <div className="header-cus">

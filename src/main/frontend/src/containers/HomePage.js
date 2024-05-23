@@ -1,89 +1,41 @@
-import React, {useContext, useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
-import Typography from "@mui/material/Typography";
-import {UserContext} from "../context/userContext";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import FormHelperText from "@mui/material/FormHelperText";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Item from "../utils/Item";
-import FormControl from "@mui/material/FormControl";
-import {colors} from "../utils/colors";
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
+import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import {Link} from "react-router-dom";
+import CustomCard from "../utils/CustomCard";
+import HomeGrid from "../components/home/HomeGrid";
+import HomeItem from "../components/home/HomeItem";
+import {addPostInfo, editProfileInfo, listUsersInfo, myPostsInfo, viewPostsInfo} from "../utils/utilData";
 
 function HomePage() {
-    const [showPassword, setShowPassword] = useState(false);
-    const {userData, setUserData} = useContext(UserContext);
+    const [tipoUser, setTipoUser] = useState(0);
 
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword)
-    }
+    useEffect(() => {
+        const cookie = window.localStorage.getItem("user");
+        if(cookie) {
+            let user = JSON.parse(cookie);
+            setTipoUser(user.tipoUser);
+        };
+    }, [])
 
     return (
         <React.Fragment>
-            <Box
-                sx={{
-                    backgroundColor: colors.background,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    display: "flex",
-                    width: "100%"
-                }}
-            >
-                <Item sx={{ flexGrow: 1 }} />
-                <Item>
-                    <Box
-                        sx={{
-                            backgroundColor: colors.background,
-                            flexDirection: "column",
-                            alignItems: "center",
-                            display: "flex"
-                        }}
-                    >
-                        <Item>
-
-                            <Typography variant="subtitle1">HOME</Typography>
-                        </Item>
-                        <Item>
-                            <FormControl>
-                                <TextField inputProps={{pattern:"\\[0-9]", maxLength:8}} placeholder="DNI" type="number" variant="outlined" id="dni"
-                                />
-                                <FormHelperText id="dni-text">Ingrese su n° de documento sin puntos</FormHelperText>
-                            </FormControl>
-                        </Item>
-                        <Item>
-                            <FormControl>
-                                <TextField
-                                    placeholder="Contraseña" variant="outlined" id="password"
-                                    type={showPassword ? "text" : "password"}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    onClick={handleShowPassword}
-                                                >
-                                                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                />
-                                <FormHelperText id="password-text">Ingrese su contraseña</FormHelperText>
-                            </FormControl>
-                        </Item>
-                        <Item>
-                            <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}>
-                                <Typography variant="button">Ingresar</Typography>
-                            </Button>
-                        </Item>
-                    </Box>
-                </Item>
-                <Item sx={{ flexGrow: 1 }}/>
-            </Box>
+            <HomeGrid>
+                <HomeItem link="/posts" data={viewPostsInfo} icon={<DescriptionRoundedIcon color="primary"/>}/>
+                {tipoUser===0 ?
+                    <HomeItem link="/my-posts" data={myPostsInfo} icon={<DescriptionRoundedIcon color="primary"/>}/>
+                    :
+                    <HomeItem link="/users" data={listUsersInfo} icon={<PeopleRoundedIcon color="primary"/>}/>
+                }
+                {tipoUser===0 ?
+                    <HomeItem link="/add-post" data={addPostInfo} icon={<NoteAddRoundedIcon color="primary"/>}/>
+                    : null
+                }
+                <HomeItem link="/profile" data={editProfileInfo} icon={<PersonRoundedIcon color="primary"/>}/>
+            </HomeGrid>
         </React.Fragment>
     )
 }

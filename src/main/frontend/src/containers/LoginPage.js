@@ -1,7 +1,6 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
-import {UserContext} from "../context/userContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
@@ -14,8 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import Item from "../utils/Item";
 import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
-import {defaultFormLogin, defaultGateway, defaultHeaders} from "../utils/utilConstants";
-import axios from "axios";
+import {baseUser, defaultFormLogin} from "../utils/utilConstants";
 import LoginService from "../services/LoginService";
 
 function LoginPage(props) {
@@ -25,7 +23,6 @@ function LoginPage(props) {
     } = props;
 
     const [showPassword, setShowPassword] = useState(false);
-    const {userData, setUserData} = useContext(UserContext);
     const [form, setForm] = useState(defaultFormLogin);
 
     const handleChange = (e) => {
@@ -43,16 +40,21 @@ function LoginPage(props) {
     const login = async () => {
         LoginService.loginUser(form)
             .then((response) => {
-                setUserData(response);
-                console.log(response);
+                let tempUser = {...response.data};
+                let tempData =
+                    { ...baseUser, isLogged:true, idUser:tempUser.id,
+                        nombre:tempUser.nombre, tipoUser: tempUser.tipo };
+                window.localStorage.setItem("user",JSON.stringify(tempData));
+                console.log(response.data);
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
                 window.location.replace(href+"/home");
         })
             .catch((err) => {
-                alert(err.message);
+                alert(err.response.data.responseMsg);
         })
     }
+
     return (
         <React.Fragment>
             <Box

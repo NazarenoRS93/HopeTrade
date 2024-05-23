@@ -1,21 +1,21 @@
-import { Box, FormControl, Grid, Typography } from "@mui/material";
+import {Box, Grid} from "@mui/material";
 import React from "react";
-import { colors } from "styles/colors";
 import "../../App.css";
+import CustomCard from "../../utils/CustomCard";
+import {Link} from "react-router-dom";
 
 function HomeItem(props) {
-    const { data, list, setList } = props;
+    const { link, data, icon } = props;
 
     return (
-        <Grid item xs={6} sm={4} md={2} lg={2}>
-            <Box className={styles.elemContainer}>
-                <Typography style={{ fontSize: 12, color: colors.darkBlue, fontWeight: "bold", textAlign: "center" }}>{labelTitle + ":"}</Typography>
-                <FormControl fullWidth>
-                    {children}
-                </FormControl>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Box className="ElemContainer">
+                <Link to={link}>
+                    <CustomCard data={data} icon={icon}/>
+                </Link>
             </Box>
         </Grid>
-    );
+    )
 }
 
-export default FilterComponent;
+export default HomeItem;
