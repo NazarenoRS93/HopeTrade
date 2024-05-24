@@ -32,6 +32,18 @@ import is2.g57.hopetrade.entity.User;
  Interfaz http para esta tabla:
  GET
  All: http://localhost:8080/publicacion/all
+ Retorna: List<Publicacion>
+ {
+    "id": long,
+    "userID": long,
+    "titulo": string,
+    "descripcion": string,
+    "imagenUrl": string
+    "active": boolean
+    "ultimaModificacion": Date
+    "fechaHoraCreacion": Date
+ }
+ 
  All-Activas: http://localhost:8080/publicacion/all/activas
  All-Inactivas: http://localhost:8080/publicacion//all/inactivas
  Buscar por userID: http://localhost:8080/publicacion/user/{userID}
@@ -42,28 +54,24 @@ import is2.g57.hopetrade.entity.User;
   
  POST
  Add: http://localhost:8080/publicacion/add 
- con Header: Content-Type: "application/json"
  {
-    "userID":"x",
-    "titulo":"t",
-    "descripcion":"d"
-    "image": String
+    "userID": long,
+    "titulo": string,
+    "descripcion": string,
+    "image": MultipartFile
   }
 
  PUT:
  Update: http://localhost:8080/publicacion/update
- con Header: Content-Type: "application/json"
  {  
-    "id":"i",
-    "userID":"x",
-    "titulo":"t",
-    "descripcion":"d"
-    "image": String
+    "id": long,
+    "userID": long,
+    "titulo": string,
+    "descripcion": string,
+    "image": MultipartFile
   }
   activar: http://localhost:8080/publicacion/activar/{id}
   desactivar: http://localhost:8080/publicacion/desactivar/{id}
-  
- Pendientes:
  */
 
 @RestController
