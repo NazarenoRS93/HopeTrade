@@ -20,11 +20,19 @@ public class CategoriaDataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         List<String> categorias = Arrays.asList("Electrodomesticos (chicos)", 
         "Electrodomesticos (grandes)", 
-        "Ropa", 
+        "Muebles",
+        "Artículos para el hogar",
+        "Vestimenta", 
         "Alimento", 
-        "Articulos de limpieza", 
+        "Productos de limpieza", 
         "Juguetes",
-        "Utiles Escolares",
+        "Material Escolar",
+        "Libros",
+        "Mascotas",
+        "Herramientas",
+        "Higiene Personal",
+        "Suministros médicos",
+        "Materiales de construcción",
         "Otros");
         
         System.out.println("---------     Intentando cargar categorias       --------");
