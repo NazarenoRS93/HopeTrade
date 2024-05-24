@@ -6,7 +6,10 @@ import java.io.Serializable;
 import java.util.Base64;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import is2.g57.hopetrade.controller.PublicacionDTO;
+import is2.g57.hopetrade.services.ImageService;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -36,8 +39,8 @@ public class Publicacion implements Serializable{
     @Column(name="active")
     private boolean active;
     
-    // private byte[] imagen;
-    // Lo abstraigo para implementar en otro momento
+    @Column(name="imagen_url")
+    private String imagenUrl;
 
     // Uso LocalDateTime en lugar de Date porque tiene hh-mm-ss ademas de fecha
     @Column(name="fecha_hora_creacion")
@@ -51,15 +54,14 @@ public class Publicacion implements Serializable{
         this.active = true;
     }
 
-    public Publicacion(PublicacionDTO publicacionDTO) {
+    public Publicacion(PublicacionDTO publicacionDTO, String imagenUrl) {
         this.userID = publicacionDTO.getUserID();
         this.titulo = publicacionDTO.getTitulo();
         this.descripcion = publicacionDTO.getDescripcion();
-        // setImagen(publicacionDTO.getImage());
-        
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
         this.active = true;
+        this.imagenUrl = imagenUrl;
     }
 
     // Metodos varios
@@ -67,8 +69,6 @@ public class Publicacion implements Serializable{
     public void update(PublicacionDTO publicacionDTO) {
         this.titulo = publicacionDTO.getTitulo();
         this.descripcion = publicacionDTO.getDescripcion();
-        // setImagen(publicacionDTO.getImage());
-
         this.ultimaModificacion = java.time.LocalDateTime.now();
     }
 
@@ -93,20 +93,18 @@ public class Publicacion implements Serializable{
         ret.setFechaHoraCreacion(this.getFechaHoraCreacion());
         ret.setUltimaModificacion(this.getUltimaModificacion());
         ret.setActive(this.isActivo());
-        // ret.setImage(this.getImagen());
 
         return ret;
     }
 
     // Setters y Getters
 
-    public String getImagen(){
-        // return Base64.getEncoder().encodeToString(this.imagen);
-        return null;
+    public String getImagenUrl(){
+        return imagenUrl;
     }
 
-    public void setImagen(String imagenStr){
-        // this.imagen = Base64.getDecoder().decode(imagenStr);
+    public void setImagenUrl(String imagenStr){
+        this.imagenUrl = imagenStr;
     }
 
     public Long getId() {

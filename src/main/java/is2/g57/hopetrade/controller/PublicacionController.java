@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.core.io.Resource;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import java.sql.Date;
@@ -23,6 +24,7 @@ import java.time.Period;
 import java.util.Optional;
 
 import is2.g57.hopetrade.repository.PublicacionRepository;
+import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 
@@ -62,7 +64,6 @@ import is2.g57.hopetrade.entity.User;
   desactivar: http://localhost:8080/publicacion/desactivar/{id}
   
  Pendientes:
- Eliminacion (no requerida): http://localhost:8080/publicacion/delete/{id}
  */
 
 @RestController
@@ -70,6 +71,9 @@ import is2.g57.hopetrade.entity.User;
 public class PublicacionController {
 	@Autowired
 	private PublicacionRepository publicacionRepository;
+
+  @Autowired
+  private ImageService imageService;
 
   // @Autowired
   // private ImageService imageService;
@@ -106,22 +110,36 @@ public class PublicacionController {
     }
 
     // Test imagen está en el DTO
-    if (PublicacionDTO.getImage() == null) {
-      // return new ResponseEntity<>("Se requiere la imagen", HttpStatus.BAD_REQUEST);
-      PublicacionDTO.setImage("a");
+    if (PublicacionDTO.getImageData() == null) {
+      return new ResponseEntity<>("Se requiere la imagen", HttpStatus.BAD_REQUEST);
     }
 
     return null;
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO PublicacionDTO) {
-    ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
+  public ResponseEntity<?> addNewPublicacion(
+    @RequestParam("titulo") String titulo,
+    @RequestParam("descripcion") String descripcion,
+    @RequestParam("userID") Long userID,
+    @RequestParam("image") MultipartFile image) {
+
+    PublicacionDTO publicacionDTO = new PublicacionDTO();
+    publicacionDTO.setTitulo(titulo);
+    publicacionDTO.setDescripcion(descripcion);
+    publicacionDTO.setUserID(userID);
+    publicacionDTO.setImageData(image);
+
+    // Test 
+    ResponseEntity<?> test = PublicacionTest(publicacionDTO);
     if (test != null) {
       return test;
     }
+    if (image == null) return new ResponseEntity<>("Se requiere una imagen", HttpStatus.BAD_REQUEST);
 
-    Publicacion p = new Publicacion(PublicacionDTO);
+    String imageUrl = imageService.saveUnique(image);
+
+    Publicacion p = new Publicacion(publicacionDTO, imageUrl);
 
     // OK
     publicacionRepository.save(p);
@@ -129,7 +147,18 @@ public class PublicacionController {
   }
 
   @PutMapping("/update")
-  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO PublicacionDTO) {
+  public ResponseEntity<?> updatePublicacion(    
+  @RequestParam("titulo") String titulo,
+  @RequestParam("descripcion") String descripcion,
+  @RequestParam("userID") Long userID,
+  @RequestParam(name="image", required = false) MultipartFile image) {
+
+    PublicacionDTO PublicacionDTO = new PublicacionDTO();
+    PublicacionDTO.setTitulo(titulo);
+    PublicacionDTO.setDescripcion(descripcion);
+    PublicacionDTO.setUserID(userID);
+    PublicacionDTO.setImageData(image);
+
     // Test
     ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
     if (test != null) {
@@ -152,8 +181,15 @@ public class PublicacionController {
     // Test publicacion inactiva ( No se si es requerimiento )
     if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion esta cerrada y no puede modificarse", HttpStatus.BAD_REQUEST);
 
-    // OK
     publicacion.update(PublicacionDTO);
+
+    if (image != null) {
+      imageService.delete(publicacion.getImagenUrl());
+      String imageUrl = imageService.save(image);
+      publicacion.setImagenUrl(imageUrl);
+    }
+
+    // OK
     publicacionRepository.save(publicacion);
     return new ResponseEntity<>("Publicacion actualizada", HttpStatus.OK);
   }
@@ -205,8 +241,16 @@ public class PublicacionController {
 	}	
 
   @GetMapping("/image/{id}")
-  public String getImagen(@RequestParam Long id) {
-      return publicacionRepository.findById(id).get().getImagen();
+  public ResponseEntity<Resource> getImagen(@PathVariable Long id) {
+    System.out.println(" -------- Fetching URL de id = " + id + " -------- ");
+    Publicacion pub = publicacionRepository.findById(id).get();
+    System.out.println(" -------- Recibido url de id = " + id + " URL = " + pub.getImagenUrl() + "-------- ");
+    Resource image = imageService.load(pub.getImagenUrl());
+    if (image == null) {
+      return ResponseEntity.notFound().build();
+    }
+    return ResponseEntity.ok()
+                .body(image);
   }
   
 
@@ -229,6 +273,7 @@ public class PublicacionController {
 
   @GetMapping(path="/all")
   public @ResponseBody Iterable<Publicacion> getAllPublicaciones() {
+    System.out.println("----- Fetching Publicaciones ------");
     return publicacionRepository.findAll();
   }
 

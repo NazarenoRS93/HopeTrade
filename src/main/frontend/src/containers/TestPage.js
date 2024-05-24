@@ -20,6 +20,7 @@ function TestPage() {
     // Render on start
     useEffect(() => {
         fetchPublicaciones();
+        fetchImagen(5);
     }, []);
 
 
@@ -32,29 +33,53 @@ function TestPage() {
     const [titulo, setTitulo] = useState([]);
     const [descripcion, setDesc] = useState([]);
     const [userID, setUserID] = useState([]);
+    const [imagen, setImagen] = useState([]);
 
     const fetchPublicaciones = async () => {
         try {
 
-            const response = await PostService.getPostsFirstCall();
-            setPublicaciones(response.data);
+            // const response = await PostService.getPostsFirstCall();
+            const response = await axios.get('http://localhost:8080/publicacion/all');
+
+            const publicacionesConImg = await Promise.all( response.data.map( async (publicacion) => { 
+                const img = await fetchImagen(publicacion.id);
+                publicacion.image = img;
+                return publicacion;
+            }));
+            setPublicaciones(publicacionesConImg);
         } catch (error) {
             console.error('Error fetching publicaciones:', error);
         }
     }
 
+    const fetchImagen = async (id) => {
+      try {
+          const response = await axios.get(`http://localhost:8080/publicacion/image/${id}`, {
+          responseType: 'arraybuffer'
+          });
+          const blob = new Blob([response.data], { type: 'image/jpeg' });
+          return URL.createObjectURL(blob); // return URL.createObjectURL(blob);
+      } catch (error) {
+          console.error('Error fetching image:', error);
+          return null;
+      }
+  }
+
+
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('Publicacion:', {titulo, descripcion, userID});
+        console.log('Publicacion:', {titulo, descripcion, userID, imagen});
 
         var formdata = new FormData();
         //add three variable to form
         formdata.append("titulo", titulo);
         formdata.append("descripcion", descripcion);
         formdata.append("userID", userID);
-        formdata.append("image", "a");
+        formdata.append("image", imagen);
 
-        axios.post('http://localhost:8080/publicacion/add', formdata, { headers : {'Content-Type': 'application/json'}})
+        axios.post('http://localhost:8080/publicacion/add', formdata, 
+        { headers : {'Content-Type': 'multipart/form-data'} }
+      )
           .then(function (response) {
             console.log(response.data);
 
@@ -62,7 +87,7 @@ function TestPage() {
             fetchPublicaciones();
           })
           .catch(function (error) {
-            console.log(error.response.data);
+            console.log('Error:', error.response.data);
           });
     }
 
@@ -89,7 +114,8 @@ function TestPage() {
                             <div key={publicacion.id}>
                                 <Item sx={{ width: "auto"}}>
                                     <Link to="/ver-post">
-                                        <Post data={publicacion}/>
+                                        <Post data={publicacion} />
+                                        <img src={publicacion.image} alt="Imagen" />
                                     </Link>
                                 </Item>
                             </div>
@@ -97,7 +123,9 @@ function TestPage() {
                     </ul>
                 </Item>
             </Box>
-{/*
+
+
+    <div> AGREGAR PARA TESTEO </div>
     <form onSubmit={handleSubmit}>
       <label>Titulo publicacion:
         <input 
@@ -120,9 +148,16 @@ function TestPage() {
           onChange={(e) => setUserID(e.target.value)}
         />
       </label>
+      <label>Imagen:
+        <input
+        type="file"
+        id="imagen"
+        name="imagen"
+        onChange={(e) => setImagen(e.target.files[0])}
+        accept=".jpg, .jpeg, .png" />
+        </label>
       <input type="submit" />
     </form>
-*/}
         </React.Fragment>
     )
 }
