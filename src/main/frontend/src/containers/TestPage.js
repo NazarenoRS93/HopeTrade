@@ -36,6 +36,7 @@ function TestPage() {
     const [titulo, setTitulo] = useState([]);
     const [descripcion, setDesc] = useState([]);
     const [userID, setUserID] = useState([]);
+    const [imagen, setImagen] = useState([]);
 
     const fetchPublicaciones = async () => {
         try {
@@ -48,16 +49,18 @@ function TestPage() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('Publicacion:', {titulo, descripcion, userID});
+        console.log('Publicacion:', {titulo, descripcion, userID, imagen});
 
         var formdata = new FormData();
         //add three variable to form
         formdata.append("titulo", titulo);
         formdata.append("descripcion", descripcion);
         formdata.append("userID", userID);
-        formdata.append("image", "a");
+        formdata.append("image", imagen);
 
-        axios.post('http://localhost:8080/publicacion/add', formdata, { headers : {'Content-Type': 'application/json'}})
+        axios.post('http://localhost:8080/publicacion/add', formdata, 
+        { headers : {'Content-Type': 'multipart/form-data'} }
+      )
           .then(function (response) {
             console.log(response.data);
 
@@ -65,7 +68,7 @@ function TestPage() {
             fetchPublicaciones();
           })
           .catch(function (error) {
-            console.log(error.response.data);
+            console.log('Error:', error.response.data);
           });
     }
 
@@ -104,7 +107,7 @@ function TestPage() {
             <Item>
                 <ul>
                     {publicaciones.map((publicacion) => (
-                        <div key={publicacion.id}> {publicacion.id} {publicacion.titulo} {publicacion.descripcion} User: {publicacion.userID}{publicacion.activo}</div>
+                        <div key={publicacion.id}> {publicacion.id} {publicacion.titulo} {publicacion.descripcion} User: {publicacion.userID} {publicacion.imagenUrl}</div>
                     ))}
                 </ul>
             </Item> 
@@ -130,6 +133,14 @@ function TestPage() {
           onChange={(e) => setUserID(e.target.value)}
         />
       </label>
+      <label>Imagen:
+        <input
+        type="file"
+        id="imagen"
+        name="imagen"
+        onChange={(e) => setImagen(e.target.files[0])}
+        accept=".jpg, .jpeg, .png" />
+        </label>
       <input type="submit" />
     </form>
         </React.Fragment>

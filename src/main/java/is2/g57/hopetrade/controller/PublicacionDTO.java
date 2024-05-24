@@ -2,6 +2,8 @@ package is2.g57.hopetrade.controller;
 
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import is2.g57.hopetrade.entity.Publicacion;
 
 public class PublicacionDTO {
@@ -9,7 +11,7 @@ public class PublicacionDTO {
     private String titulo;
     private String descripcion;
     private Long userID;
-    private String image;
+    private MultipartFile imageData;
 
     private boolean active;
     private LocalDateTime fechaHoraCreacion;
@@ -24,11 +26,11 @@ public class PublicacionDTO {
     public void setUltimaModificacion(LocalDateTime ultimaModificacion) {
         this.ultimaModificacion = ultimaModificacion;
     }
-    public String getImage() {
-        return image;
+    public MultipartFile getImageData() {
+        return imageData;
     }
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageData(MultipartFile imageData) {
+        this.imageData = imageData;
     }
     public String getTitulo() {
         return titulo;
