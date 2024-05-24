@@ -3,18 +3,14 @@ import '../App.css';
 import Typography from "@mui/material/Typography";
 import {UserContext} from "../context/userContext";
 import Box from "@mui/material/Box";
+import SearchIcon from '@mui/icons-material/Search';
 import Button from "@mui/material/Button";
-import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import FormHelperText from "@mui/material/FormHelperText";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
 import Item from "../utils/Item";
-import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
 import axios from "axios";
+import PostService from "../services/PostService";
+import {Link} from "react-router-dom";
+import Post from "../utils/Post";
 
 function TestPage() {
     const [showPassword, setShowPassword] = useState(false);
@@ -38,14 +34,34 @@ function TestPage() {
     const [userID, setUserID] = useState([]);
     const [imagen, setImagen] = useState([]);
 
+    const [imageSrc, setImageSrc] = useState(null);
     const fetchPublicaciones = async () => {
         try {
+
+            // const response = await PostService.getPostsFirstCall();
             const response = await axios.get('http://localhost:8080/publicacion/all');
             setPublicaciones(response.data);
         } catch (error) {
             console.error('Error fetching publicaciones:', error);
         }
     }
+
+    const fetchImagen = async (publicacionID) => {
+      try {
+          const response = await axios.get(`http://localhost:8080/publicacion/image/${publicacionID}`, {
+              responseType: 'arraybuffer'
+          });
+          
+          const base64Image = Buffer.from(response.data, 'binary').toString('base64');
+          const imageUrl = `data:image/jpeg;base64,${base64Image}`;
+  
+          return imageUrl;
+      } catch (error) {
+          console.error('Error fetching image:', error);
+          return null;
+      }
+  }
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -77,40 +93,35 @@ function TestPage() {
             <Box
                 sx={{
                     backgroundColor: colors.background,
-                    flexDirection: "row",
+                    flexDirection: "column",
                     alignItems: "center",
                     display: "flex",
                     width: "100%"
                 }}
             >
-                <Item sx={{ flexGrow: 1 }} />
                 <Item>
-                    <Box
-                        sx={{
-                            backgroundColor: colors.background,
-                            flexDirection: "column",
-                            alignItems: "center",
-                            display: "flex"
-                        }}
-                    >
-                    </Box>
+                    <Button variant="contained" color="success" startIcon={<SearchIcon color="primary"/>}
+                            onClick={fetchPublicaciones}>
+                        <Typography variant="button">Buscar publicaciones</Typography>
+                    </Button>
                 </Item>
                 <Item>
-                            <Button variant="contained" color="success"
-                                    onClick={fetchPublicaciones}>
-                                <Typography variant="button">Fetch Publicaciones</Typography>
-                            </Button>
+                    <ul>
+                        {publicaciones.map((publicacion) => (
+                            <div key={publicacion.id}>
+                                <Item sx={{ width: "auto"}}>
+                                    <Link to="/ver-post">
+                                        <Post data={publicacion}/>
+                                    </Link>
+                                </Item>
+                                <div key={publicacion.id}> {imageSrc && <img src={imageSrc} alt="Publicacion Image" style={{ maxWidth: '100px', maxHeight: '100px' }}></img>}</div>
+                            </div>
+                        ))}
+                    </ul>
                 </Item>
-                <Item sx={{ flexGrow: 1 }}/>
             </Box>
 
-            <Item>
-                <ul>
-                    {publicaciones.map((publicacion) => (
-                        <div key={publicacion.id}> {publicacion.id} {publicacion.titulo} {publicacion.descripcion} User: {publicacion.userID} {publicacion.imagenUrl}</div>
-                    ))}
-                </ul>
-            </Item> 
+    <div> AGREGAR PARA TESTEO </div>
     <form onSubmit={handleSubmit}>
       <label>Titulo publicacion:
         <input 

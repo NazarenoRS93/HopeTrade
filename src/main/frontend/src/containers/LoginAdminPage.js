@@ -1,7 +1,6 @@
-import React, {useContext, useState} from "react";
+import React, {useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
-import {UserContext} from "../context/userContext";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
@@ -14,7 +13,7 @@ import IconButton from "@mui/material/IconButton";
 import Item from "../utils/Item";
 import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
-import {defaultFormLoginAdmin, defaultGateway} from "../utils/utilConstants";
+import {baseUser, defaultFormLoginAdmin} from "../utils/utilConstants";
 import LoginService from "../services/LoginService";
 
 function LoginAdminPage(props) {
@@ -24,7 +23,6 @@ function LoginAdminPage(props) {
     } = props;
 
     const [showPassword, setShowPassword] = useState(false);
-    const {userData, setUserData} = useContext(UserContext);
     const [form, setForm] = useState(defaultFormLoginAdmin);
 
     const handleChange = (e) => {
@@ -42,14 +40,18 @@ function LoginAdminPage(props) {
     const login = async () => {
         LoginService.loginAdmin(form)
             .then((response) => {
-                setUserData(response);
-                console.log(response);
+                let tempUser = {...response.data};
+                let tempData=
+                    { ...baseUser, isLogged:true, idUser:tempUser.id,
+                        nombre:tempUser.nombre, tipoUser: tempUser.tipo };
+                window.localStorage.setItem("user",JSON.stringify(tempData));
+                console.log(response.data);
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
                 window.location.replace(href+"/home");
             })
             .catch((err) => {
-                alert(err.message);
+                alert(err.response.data.responseMsg);
             })
     }
 
@@ -75,7 +77,7 @@ function LoginAdminPage(props) {
                         }}
                     >
                         <Item>
-                            <Typography variant="subtitle1">Iniciar Sesión</Typography>
+                            <Typography variant="subtitle1">Ingresar como Administrador</Typography>
                         </Item>
                         <Item>
                             <FormControl>

@@ -1,7 +1,5 @@
 package is2.g57.hopetrade.controller;
 
-import java.time.LocalDate;
-
 public class UserRequest {
 	private Long id;
     private String dni;
@@ -9,7 +7,7 @@ public class UserRequest {
     private String email;
     private String pass;
     private String apellido;
-    private LocalDate fecha_nacimiento;
+    private String fecha_nacimiento;
 
     
     
@@ -62,11 +60,11 @@ public class UserRequest {
         this.apellido = apellido;
     }
 
-    public LocalDate getFecha_nacimiento() {
+    public String getFecha_nacimiento() {
         return fecha_nacimiento;
     }
 
-    public void setFecha_nacimiento(LocalDate fecha_nacimiento) {
+    public void setFecha_nacimiento(String fecha_nacimiento) {
         this.fecha_nacimiento = fecha_nacimiento;
     }
 }

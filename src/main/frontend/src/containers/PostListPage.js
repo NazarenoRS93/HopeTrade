@@ -1,88 +1,57 @@
-import React, {useContext, useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
-import Typography from "@mui/material/Typography";
-import {UserContext} from "../context/userContext";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import FormHelperText from "@mui/material/FormHelperText";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Item from "../utils/Item";
-import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
+import {Link} from "react-router-dom";
+import Post from "../utils/Post";
+import PostService from "../services/PostService";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Item from "../utils/Item";
 
 function PostListPage() {
-    const [showPassword, setShowPassword] = useState(false);
-    const {userData, setUserData} = useContext(UserContext);
+    const [tipoUser, setTipoUser] = useState(0);
+    const [mostrar, setMostrar] = useState(false);
+    const [list, setList] = useState([]);
 
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword)
-    }
+    useEffect(() => {
+        const cookie = window.localStorage.getItem("user");
+        if(cookie) {
+            let user = JSON.parse(cookie);
+            setTipoUser(user.tipoUser);
+        }
+        PostService.getPostsFirstCall()
+            .then((response) => {
+                setList(response.data);
+                console.log(response.data);
+            })
+            .catch((err) => {
+                alert("Ocurrió un error al obtener las publicaciones.");
+                setMostrar(false);
+            })
+    })
 
     return (
         <React.Fragment>
-            <Box
-                sx={{
-                    backgroundColor: colors.background,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    display: "flex",
-                    width: "100%"
-                }}
+            <Box sx={{
+                backgroundColor: colors.background,
+                display: "flex",
+                flexWrap: "wrap"
+            }}
             >
-                <Item sx={{ flexGrow: 1 }} />
-                <Item>
-                    <Box
-                        sx={{
-                            backgroundColor: colors.background,
-                            flexDirection: "column",
-                            alignItems: "center",
-                            display: "flex"
-                        }}
-                    >
-                        <Item>
-
-                            <Typography variant="subtitle1">¡Lista de publicaciones!</Typography>
+                { list.map((p) => {
+                    <div key={p.id}>
+                        <Item sx={{ width: "auto"}}>
+                            <Link to="/ver-post">
+                                <Post data={p}/>
+                            </Link>
                         </Item>
-                        <Item>
-                            <FormControl>
-                                <TextField inputProps={{pattern:"\\[0-9]", maxLength:8}} placeholder="DNI" type="number" variant="outlined" id="dni"
-                                />
-                                <FormHelperText id="dni-text">Ingrese su n° de documento sin puntos</FormHelperText>
-                            </FormControl>
-                        </Item>
-                        <Item>
-                            <FormControl>
-                                <TextField
-                                    placeholder="Contraseña" variant="outlined" id="password"
-                                    type={showPassword ? "text" : "password"}
-                                    InputProps={{
-                                        endAdornment: (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    onClick={handleShowPassword}
-                                                >
-                                                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        )
-                                    }}
-                                />
-                                <FormHelperText id="password-text">Ingrese su contraseña</FormHelperText>
-                            </FormControl>
-                        </Item>
-                        <Item>
-                            <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}>
-                                <Typography variant="button">Ingresar</Typography>
-                            </Button>
-                        </Item>
-                    </Box>
-                </Item>
-                <Item sx={{ flexGrow: 1 }}/>
+                    </div>
+                })
+                }
+                { list.length===0 ?
+                    <Typography variant="h2">No se encontraron publicaciones.</Typography>
+                    : null
+                }
             </Box>
         </React.Fragment>
     )

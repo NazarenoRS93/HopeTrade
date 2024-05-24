@@ -29,12 +29,12 @@ export const themeV5 = createThemeV5({
             color: colors.darkBlue
         },
         subtitle1: {
-            fontSize: 20,
+            fontSize: 24,
             color: colors.darkBlue,
             fontWeight: "bold"
         },
         subtitle2: {
-            fontSize: 16,
+            fontSize: 20,
             color: colors.darkBlue,
             fontWeight: "bold"
         },
@@ -42,6 +42,15 @@ export const themeV5 = createThemeV5({
             fontSize: 14,
             color: colors.darkBlue,
             fontWeight: "bold"
+        },
+        button2: {
+            fontSize: 14,
+            color: colors.background2,
+            fontWeight: "bold"
+        },
+        h2: {
+            fontSize: 16,
+            color: colors.darkBlue
         },
         h6: {
             fontSize: 14,

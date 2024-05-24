@@ -17,59 +17,81 @@ import is2.g57.hopetrade.repository.UserRepository;
 @RequestMapping("/login")
 
 public class LoginController {
-	@Autowired
-	private AyudanteRepository ayudanteRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	@GetMapping("/login-administrativo/{email}/{pass}")
+    @Autowired
+    private AyudanteRepository ayudanteRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @GetMapping("/login-administrativo/{email}/{pass}")
     public ResponseEntity<?> loginAyudante(@PathVariable String email, @PathVariable String pass) {
-
-        Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByEmail(email);
-
-        if (!ayudanteOp.isPresent()) {
-            return new ResponseEntity<>(new LoginResponse(null, null, null, "Email no registrado", null, null, null), HttpStatus.UNAUTHORIZED);
+        LoginResponse response = new LoginResponse();
+        HttpStatus status;
+        try {
+            Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByEmail(email);
+            if (!ayudanteOp.isPresent()) {
+                status = HttpStatus.NOT_FOUND;
+                response.setResponseMsg("Email no registrado.");
+            } else {
+                Ayudante ayudante = ayudanteOp.get();
+                if (!ayudante.getPass().equals(pass)) {
+                    status = HttpStatus.BAD_REQUEST;
+                    response.setResponseMsg("Email y contraseña no coinciden.");
+                } else if (!ayudante.isActivo()) {
+                    status = HttpStatus.BAD_REQUEST;
+                    response.setResponseMsg("Cuenta suspendida.");
+                } else {
+                    Integer tipoUser;
+                    String msg;
+                    if (ayudante.isAdmin()) {
+                        tipoUser = 2;
+                        msg = "Inicio de sesión como representante. ¡Bienvenido!";
+                    } else {
+                        tipoUser = 1;
+                        msg = "Inicio de sesión como ayudante. ¡Bienvenido!";
+                    }
+                    status = HttpStatus.OK;
+                    response = new LoginResponse(ayudante.getDni(), ayudante.getId(),
+                            ayudante.isActivo(), msg, ayudante.getNombre(),
+                            ayudante.getApellido(), tipoUser);
+                }
+            }
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            response.setResponseMsg("Error al querer validar los datos ingresados.");
         }
-
-        Ayudante ayudante = ayudanteOp.get();
-
-        if (!ayudante.getPass().equals(pass)) {
-            return new ResponseEntity<>(new LoginResponse(null, null, null, "Email y contraseña no coinciden", null, null, null), HttpStatus.UNAUTHORIZED);
-        }
-
-        if (!ayudante.isActivo()) {
-            return new ResponseEntity<>(new LoginResponse(null, null, null, "Cuenta suspendida", null, null, null), HttpStatus.UNAUTHORIZED);
-        }
-        
-        if(ayudante.isAdmin()) {
-        	LoginResponse response = new LoginResponse(ayudante.getDni(), ayudante.getId(), ayudante.isActivo(),"Inicio de sesion como Representante." , ayudante.getNombre(), ayudante.getApellido(), 2);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
-        	LoginResponse response = new LoginResponse(ayudante.getDni(), ayudante.getId(), ayudante.isActivo(), "Inicio de sesion como Ayudante.", ayudante.getNombre(), ayudante.getApellido(), 1);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+        return new ResponseEntity<>(response, status);
     }
-	
-	
-	@GetMapping("/login-user/{dni}/{pass}")
-    public ResponseEntity<?> loginUser(@PathVariable String dni, @PathVariable String pass) {
 
-        Optional<User> userOp = userRepository.findUserByDni(dni);
-        
-        if (!userOp.isPresent()) {
-            return new ResponseEntity<>(new LoginResponse(null, null, null, "Dni no registrado", null, null, null), HttpStatus.UNAUTHORIZED);
-        } 
-        User user  = userOp.get();
-        if(!user.getPass().equals(pass)) {
-        	return new ResponseEntity<>(new LoginResponse(null, null, null, "El dni o la contraseña no coinciden ", null, null, null), HttpStatus.UNAUTHORIZED);
+
+    @GetMapping("/login-user/{dni}/{pass}")
+    public ResponseEntity<?> loginUser(@PathVariable String dni, @PathVariable String pass) {
+        LoginResponse response = new LoginResponse();
+        HttpStatus status;
+        try {
+            Optional<User> userOp = userRepository.findUserByDni(dni);
+            if (!userOp.isPresent()) {
+                status = HttpStatus.NOT_FOUND;
+                response.setResponseMsg("DNI no registrado.");
+            } else {
+                User user  = userOp.get();
+                if (!user.getPass().equals(pass)) {
+                    status = HttpStatus.BAD_REQUEST;
+                    response.setResponseMsg("DNI y contraseña no coinciden.");
+                } else if (!user.isActivo()) {
+                    status = HttpStatus.BAD_REQUEST;
+                    response.setResponseMsg("Cuenta suspendida.");
+                } else {
+                    status = HttpStatus.OK;
+                    response = new LoginResponse(user.getDni(), user.getId(),
+                            user.isActivo(), "Inicio de sesión exitoso. ¡Bienvenido!",
+                            user.getNombre(), user.getApellido(),0);
+                }
+            }
+        } catch (Exception e) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            response.setResponseMsg("Error al querer validar los datos ingresados.");
         }
-        if (!user.isActivo()) {
-            return new ResponseEntity<>(new LoginResponse(null, null, null, "Cuenta suspendida", null, null, null), HttpStatus.UNAUTHORIZED);
-        }
-        else {
-        	LoginResponse response = new LoginResponse(user.getDni(), user.getId(),user.isActivo(), "Inicio de sesion exitoso!!.", user.getNombre(), user.getApellido(),null);
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
+        return new ResponseEntity<>(response, status);
     }
 }

@@ -7,6 +7,15 @@ export const defaultFormLoginAdmin = {
     email: '',
     pass: ''
 };
+export const defaultFormRegister = {
+    id: null,
+    nombre: '',
+    apellido: '',
+    dni: '',
+    fecha_nacimiento: '',
+    email: '',
+    pass: ''
+};
 export const defaultDialogData = {
     open: false,
     msg: '',
@@ -20,4 +29,13 @@ export const defaultHeaders = {
         "Access-Control-Allow-Origin": "http://localhost:3000",
         "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With",
         "Access-Control-Allow-Methods":"GET, POST, PUT, DELETE, OPTIONS"
+}
+
+export const baseUser = {
+    appVersion: "1.0.0",
+    isLogged: false,
+    idUser: 0,
+    nombre: "",
+    tipoUser: "",
+    filial: ""
 }

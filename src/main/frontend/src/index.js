@@ -7,7 +7,6 @@ import reportWebVitals from './reportWebVitals';
 import LoginPage from "./containers/LoginPage";
 import SignUpPage from "./containers/SignUpPage";
 import HomePage from "./containers/HomePage";
-import PostListPage from "./containers/PostListPage";
 import LoginAdminPage from "./containers/LoginAdminPage";
 import TestPage from "./containers/TestPage";
 import axios from "axios";
@@ -36,7 +35,11 @@ const router = createBrowserRouter(
                 },
                 {
                     path: "/posts",
-                    element: <PostListPage/>
+                    element: <TestPage/>
+                },
+                {
+                    path: "/mypublis",
+                    element: <TestPage/>
                 },
                 {
                     path: "/test",

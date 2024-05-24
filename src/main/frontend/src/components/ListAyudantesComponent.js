@@ -1,4 +1,4 @@
-import React,{ useEffect, useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import AyudanteService from '../services/AyudanteService';
 
 export const ListAyudantesComponent = () => {

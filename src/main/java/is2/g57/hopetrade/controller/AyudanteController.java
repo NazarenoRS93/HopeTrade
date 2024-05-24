@@ -122,32 +122,32 @@ public class AyudanteController {
 	}
 
 	@PostMapping("/guardar")
-	public ResponseEntity<?> GuardarAyudante(@RequestBody AyudanteRequest ayudanteRequest) {
+	public ResponseEntity<?> GuardarAyudante(@RequestBody AyudanteRequest request) {
 
 		try {
-			if (ayudanteRequest.getDni().length() > 8 || ayudanteRequest.getDni().length() < 6) {
-				return new ResponseEntity<>("Ingrese un DNI valido", HttpStatus.BAD_REQUEST);
+			if (request.getDni().length() > 8 || request.getDni().length() < 6) {
+				return new ResponseEntity<>("Ingrese un DNI válido.", HttpStatus.BAD_REQUEST);
 			}
-			int dni_parse = Integer.parseInt(ayudanteRequest.getDni());
+			int dni_parse = Integer.parseInt(request.getDni());
 		} catch (Exception e) {
-			return new ResponseEntity<>("Ingrese un DNI valido", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Ingrese un DNI válido.", HttpStatus.BAD_REQUEST);
 		}
 
 		try {
-			Ayudante ayudante = new Ayudante(ayudanteRequest.getEmail(), ayudanteRequest.getDni(),
-					ayudanteRequest.getPass(), ayudanteRequest.getNombre(), ayudanteRequest.getApellido());
+			Ayudante ayudante = new Ayudante(request.getEmail(), request.getDni(),
+					request.getPass(), request.getNombre(), request.getApellido());
 			this.ayudanteRepository.save(ayudante);
-			return new ResponseEntity<>("Ayudante registrado", HttpStatus.CREATED);
+			return new ResponseEntity<>("¡Ayudante registrado exitosamente!", HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>("El mail ya pertenece a una cuenta", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("El mail ya pertenece a una cuenta.", HttpStatus.BAD_REQUEST);
 		}
 
 	}
 	
 
 	@PostMapping("/dar-baja-ayudante")
-	public ResponseEntity<?> DarDeBajaAyudante(@RequestBody AyudanteRequest ayudanteRequest) {
-	    String mail = ayudanteRequest.getEmail();
+	public ResponseEntity<?> DarDeBajaAyudante(@RequestBody AyudanteRequest request) {
+	    String mail = request.getEmail();
 	    Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByEmail(mail);
 
 	    if (ayudanteOp.isPresent()) {
@@ -165,15 +165,15 @@ public class AyudanteController {
 	}
 	
 	@PostMapping("/updatepassword")
-	public ResponseEntity<?> updatePass(@RequestBody AyudanteRequest ayudanteRequest) {
-		Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(ayudanteRequest.getId_ayudante());
+	public ResponseEntity<?> updatePass(@RequestBody AyudanteRequest request) {
+		Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(request.getId_ayudante());
 		if (ayudanteOp.isPresent()) {
 			Ayudante ayudante = ayudanteOp.get();
-			if (ayudante.getPass().equals(ayudanteRequest.getPass())) {
+			if (ayudante.getPass().equals(request.getPass())) {
 				return new ResponseEntity<>("Debes ingresar una contraseña diferente a la actual",
 						HttpStatus.BAD_REQUEST);
 			} else {
-				ayudante.setPass(ayudanteRequest.getPass());
+				ayudante.setPass(request.getPass());
 				ayudanteRepository.save(ayudante);
 				return new ResponseEntity<>("Cambios guardados", HttpStatus.OK);
 			}

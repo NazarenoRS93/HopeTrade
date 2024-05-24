@@ -23,7 +23,7 @@ public class LoginResponse {
 		this.apellido = apellido;
 		this.tipo = tipo;
 	}
-
+	public LoginResponse() {}
 	// Getters y setters
 	public String getDni() {
 		return dni;
