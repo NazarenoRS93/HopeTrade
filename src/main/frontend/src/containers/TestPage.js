@@ -20,6 +20,7 @@ function TestPage() {
     // Render on start
     useEffect(() => {
         fetchPublicaciones();
+        fetchImagen(5);
     }, []);
 
 
@@ -34,28 +35,30 @@ function TestPage() {
     const [userID, setUserID] = useState([]);
     const [imagen, setImagen] = useState([]);
 
-    const [imageSrc, setImageSrc] = useState(null);
     const fetchPublicaciones = async () => {
         try {
 
             // const response = await PostService.getPostsFirstCall();
             const response = await axios.get('http://localhost:8080/publicacion/all');
-            setPublicaciones(response.data);
+
+            const publicacionesConImg = await Promise.all( response.data.map( async (publicacion) => { 
+                const img = await fetchImagen(publicacion.id);
+                publicacion.image = img;
+                return publicacion;
+            }));
+            setPublicaciones(publicacionesConImg);
         } catch (error) {
             console.error('Error fetching publicaciones:', error);
         }
     }
 
-    const fetchImagen = async (publicacionID) => {
+    const fetchImagen = async (id) => {
       try {
-          const response = await axios.get(`http://localhost:8080/publicacion/image/${publicacionID}`, {
-              responseType: 'arraybuffer'
+          const response = await axios.get(`http://localhost:8080/publicacion/image/${id}`, {
+          responseType: 'arraybuffer'
           });
-          
-          const base64Image = Buffer.from(response.data, 'binary').toString('base64');
-          const imageUrl = `data:image/jpeg;base64,${base64Image}`;
-  
-          return imageUrl;
+          const blob = new Blob([response.data], { type: 'image/jpeg' });
+          return URL.createObjectURL(blob); // return URL.createObjectURL(blob);
       } catch (error) {
           console.error('Error fetching image:', error);
           return null;
@@ -111,15 +114,16 @@ function TestPage() {
                             <div key={publicacion.id}>
                                 <Item sx={{ width: "auto"}}>
                                     <Link to="/ver-post">
-                                        <Post data={publicacion}/>
+                                        <Post data={publicacion} />
+                                        <img src={publicacion.image} alt="Imagen" />
                                     </Link>
                                 </Item>
-                                <div key={publicacion.id}> {imageSrc && <img src={imageSrc} alt="Publicacion Image" style={{ maxWidth: '100px', maxHeight: '100px' }}></img>}</div>
                             </div>
                         ))}
                     </ul>
                 </Item>
             </Box>
+
 
     <div> AGREGAR PARA TESTEO </div>
     <form onSubmit={handleSubmit}>

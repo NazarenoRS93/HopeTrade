@@ -50,19 +50,22 @@ public class ImageService {
         }
     }
 
-    public Resource load(String filename) {
-        try {
-            Path file = root.resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new RuntimeException("Could not read the file!");
-            }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Error: " + e.getMessage());
+public Resource load(String filename) {
+    try {
+        Path file = root.resolve(filename);
+        System.out.println("Resolved File Path: " + file.toString()); // Log the resolved file path
+        Resource resource = new UrlResource(file.toUri());
+        if (resource.exists() || resource.isReadable()) {
+            System.out.println(filename + " exists and is readable");
+            return resource;
+        } else {
+            throw new RuntimeException("Could not read the file!");
         }
-    }  
+    } catch (MalformedURLException e) {
+        throw new RuntimeException("Error: " + e.getMessage());
+    }
+}
+
 
     public void delete(String filename) {
         Path file = root.resolve(filename);
