@@ -41,7 +41,7 @@ function LoginAdminPage(props) {
         LoginService.loginAdmin(form)
             .then((response) => {
                 let tempUser = {...response.data};
-                let tempData=
+                let tempData =
                     { ...baseUser, isLogged:true, idUser:tempUser.id,
                         nombre:tempUser.nombre, tipoUser: tempUser.tipo };
                 window.localStorage.setItem("user",JSON.stringify(tempData));
