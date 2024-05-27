@@ -66,7 +66,6 @@ function LoginAdminPage(props) {
                     width: "100%"
                 }}
             >
-                <Item sx={{ flexGrow: 1 }} />
                 <Item>
                     <Box
                         sx={{
@@ -113,7 +112,6 @@ function LoginAdminPage(props) {
                         </Item>
                     </Box>
                 </Item>
-                <Item sx={{ flexGrow: 1 }}/>
             </Box>
         </React.Fragment>
     )

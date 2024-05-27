@@ -12,6 +12,7 @@ import Item from "../utils/Item";
 import Typography from "@mui/material/Typography";
 import {Link} from "react-router-dom";
 import {baseUser} from "../utils/utilConstants";
+import {Avatar} from "@mui/material";
 
 function Header() {
 
@@ -45,18 +46,19 @@ function Header() {
                     width: "100%"
                 }}
             >
-                <Item sx={{ flexGrow: 1 }}>
-                    <img src={Completo} width="50%" />
-                </Item>
-                {(user?.isLogged && user.tipoUser===2) ?
                 <Item>
+                    <Avatar src={Completo} variant="square" sx={{width:"auto",height:"80px"}} />
+                </Item>
+                <Item sx={{ flexGrow: 1 }}/>
+                {(user?.isLogged && user.tipoUser===2) ?
+                    <Item>
                         <Link to="/register">
                             <Button variant="contained" color="secondary" startIcon={<LogoutIcon color="primary"/>}>
                                 <Typography variant="button">Registrar ayudante</Typography>
                             </Button>
                         </Link>
-                </Item>
-                        : null
+                    </Item>
+                    : null
                 }
                 <Item>
                     {user?.isLogged ?

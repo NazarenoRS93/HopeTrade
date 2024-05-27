@@ -10,6 +10,8 @@ import HomePage from "./containers/HomePage";
 import LoginAdminPage from "./containers/LoginAdminPage";
 import TestPage from "./containers/TestPage";
 import axios from "axios";
+import PostListPage from "./containers/PostListPage";
+import AddPostPage from "./containers/AddPostPage";
 
 const router = createBrowserRouter(
     [
@@ -35,11 +37,15 @@ const router = createBrowserRouter(
                 },
                 {
                     path: "/posts",
-                    element: <TestPage/>
+                    element: <PostListPage/>
                 },
                 {
-                    path: "/mypublis",
-                    element: <TestPage/>
+                    path: "/my-posts",
+                    element: <PostListPage/>
+                },
+                {
+                    path: "/add-post",
+                    element: <AddPostPage/>
                 },
                 {
                     path: "/test",

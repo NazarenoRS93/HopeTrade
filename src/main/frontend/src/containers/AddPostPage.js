@@ -1,131 +1,145 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
-import {UserContext} from "../context/userContext";
 import Box from "@mui/material/Box";
-import SearchIcon from '@mui/icons-material/Search';
+import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import Item from "../utils/Item";
 import {colors} from "../utils/colors";
 import axios from "axios";
-import {Link} from "react-router-dom";
-import Post from "../components/post/Post";
-import PostGrid from "../components/post/PostGrid";
-import PostItem from "../components/post/PostItem";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import FormHelperText from "@mui/material/FormHelperText";
+import {defaultFormAddPost} from "../utils/utilConstants";
+import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
+import {Select} from "@mui/material";
 
-function TestPage() {
-    // Render on start
-    useEffect(() => {
-        fetchPublicaciones();
-    }, []);
-
+function AddPostPage() {
+    const [user, setUser] = useState({});
     const reader = new FileReader();
-    const [publicaciones, setPublicaciones] = useState([]);
-    const [titulo, setTitulo] = useState([]);
-    const [descripcion, setDesc] = useState([]);
-    const [userID, setUserID] = useState([]);
-    const [imagen, setImagen] = useState([]);
+    const [categorias, setCategorias] = useState([])
+    const [form, setForm] = useState(defaultFormAddPost);
 
-    const fetchPublicaciones = async () => {
+    useEffect(() => {
+        fetchCategorias();
+        const cookie = window.localStorage.getItem("user");
+        if(cookie) {
+            let user = JSON.parse(cookie);
+            setUser(user);
+        };
+    }, []);
+    const fetchCategorias = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/publicacion/all');
-            const data = response.data.map(publicacion => {
-                return {
-                    ...publicacion,
-                    imagenUrl: `data:image/jpeg;base64,${publicacion.imagen}`
-                };
-            });
-            setPublicaciones(data);
+            const response = await axios.get('http://localhost:8080/categoria/all');
+            setCategorias(response.data);
         } catch (error) {
-            alert("Error obteniendo publicaciones: "+error);
+            alert("Error obteniendo categorías: "+error);
         }
     }
 
+    const handleChange = (e) => {
+        let tempForm = {...form};
+        switch (e.target.id) {
+            case "titulo": tempForm = {...tempForm, titulo: e.target.value}; break;
+            case "descripcion": tempForm = {...tempForm, descripcion: e.target.value}; break;
+            case "categoria": tempForm = {...tempForm, categoria: e.target.value}; break;
+            case "imagen": tempForm = {...tempForm, imagen: e.target.value}; break;
+            default: break;
+        }
+        setForm(tempForm);
+    }
     const fileToBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-
             reader.onload = () => {
                 const base64String = reader.result.split(',')[1];
                 resolve(base64String);
             };
-
             reader.onerror = (error) => {
                 reject(error);
             };
-
             reader.readAsDataURL(file);
         });
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
+    const addPost = async () => {
         var formdata = new FormData();
-        formdata.append("titulo", titulo);
-        formdata.append("descripcion", descripcion);
-        formdata.append("userID", userID);
-        formdata.append("imagen", await fileToBase64(imagen));
-
-        console.log('PUBLICACION: ', {titulo, descripcion, userID, imagen});
-
+        formdata.append("titulo", form.titulo);
+        formdata.append("descripcion", form.descripcion);
+        formdata.append("categoria", form.categoria);
+        formdata.append("imagen", await fileToBase64(form.imagen));
+        formdata.append("userID", user.id);
         axios.post('http://localhost:8080/publicacion/add', formdata, {
             headers: {
                 'Content-Type': 'application/json'
             }}
         )
             .then(function (response) {
-                fetchPublicaciones();
+                alert(response.data);
             })
             .catch(function (error) {
-                alert("Error: "+error.response.data);
+                alert(error.response.data);
             });
     }
 
     return (
         <React.Fragment>
-            <PostGrid>
-            { publicaciones.map((publicacion) => (
-                <PostItem link="/ver-post/" key={publicacion.id} data={publicacion}/>
-            ))}
-            </PostGrid>
-
-
-            <div> AGREGAR PARA TESTEO </div>
-            <form onSubmit={handleSubmit}>
-                <label>Titulo publicacion:
-                    <input
-                        type="text"
-                        value={titulo}
-                        onChange={(e) => setTitulo(e.target.value)}
-                    />
-                </label>
-                <label>Descripcion publicacion:
-                    <input
-                        type="text"
-                        value={descripcion}
-                        onChange={(e) => setDesc(e.target.value)}
-                    />
-                </label>
-                <label>UserID:
-                    <input min="0"
-                           type="number" id="quantity"
-                           value={userID}
-                           onChange={(e) => setUserID(e.target.value)}
-                    />
-                </label>
-                <label>Imagen:
-                    <input
-                        type="file"
-                        id="imagen"
-                        name="imagen"
-                        onChange={(e) => setImagen(e.target.files[0])}
-                        accept=".jpg, .jpeg, .png" />
-                </label>
-                <input type="submit" value="Submit"/>
-            </form>
+            <Box
+                sx={{
+                    backgroundColor: colors.background,
+                    flexDirection: "column",
+                    alignItems: "center",
+                    display: "flex"
+                }}
+            >
+                <Item>
+                    <Typography variant="subtitle1">Registrar Publicación</Typography>
+                </Item>
+                <Item>
+                    <FormControl>
+                        <TextField onChange={(event)=> {handleChange(event)}} value={form.titulo}
+                                   placeholder="Título" type="text" variant="outlined" id="titulo" className="AddPostForm"
+                        />
+                        <FormHelperText id="titulo-text">Ingrese el título de su publicación</FormHelperText>
+                    </FormControl>
+                </Item>
+                <Item>
+                    <FormControl>
+                        <TextField onChange={(event)=> {handleChange(event)}} value={form.descripcion} className="AddPostForm"
+                                   placeholder="Descripción" multiline={true} rows={4} type="text" variant="outlined" id="descripcion"
+                        />
+                        <FormHelperText id="descripcion-text">Describa el producto publicado</FormHelperText>
+                    </FormControl>
+                </Item>
+                <Item>
+                    <FormControl>
+                        <Select
+                            defaultValue="Seleccionar" className="AddPostForm"
+                            onChange={(event)=> {handleChange(event)}}
+                            id="categoria" placeholder="Categoría"
+                            options={[...categorias]}
+                            value={form.categoria}
+                        />
+                        <FormHelperText id="categoria-text">Seleccione la categoría del producto publicado</FormHelperText>
+                    </FormControl>
+                </Item>
+                <Item>
+                    <FormControl>
+                        <TextField onChange={(event)=> {handleChange(event)}} value={form.imagen}
+                                   placeholder="Imagen" type="file" variant="outlined" id="imagen" className="AddPostForm"
+                        />
+                        <FormHelperText id="descripcion-text">Agregue una foto del producto publicado</FormHelperText>
+                    </FormControl>
+                </Item>
+                <Item>
+                    <Button variant="contained" color="success" startIcon={<PostAddRoundedIcon color="primary"/>}
+                            onClick={addPost}>
+                        <Typography variant="button">Ingresar</Typography>
+                    </Button>
+                </Item>
+            </Box>
         </React.Fragment>
     )
 }
 
-export default TestPage;
+export default AddPostPage;

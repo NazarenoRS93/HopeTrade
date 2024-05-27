@@ -8,29 +8,17 @@ import Button from "@mui/material/Button";
 import Item from "../utils/Item";
 import {colors} from "../utils/colors";
 import axios from "axios";
-import PostService from "../services/PostService";
 import {Link} from "react-router-dom";
-import Post from "../utils/Post";
+import Post from "../components/post/Post";
 
 function TestPage() {
-    const [showPassword, setShowPassword] = useState(false);
-    const {userData, setUserData} = useContext(UserContext);
-
-
     // Render on start
     useEffect(() => {
         fetchPublicaciones();
     }, []);
 
-
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword)
-    }
-
     const reader = new FileReader();
-
     const [publicaciones, setPublicaciones] = useState([]);
-
     const [titulo, setTitulo] = useState([]);
     const [descripcion, setDesc] = useState([]);
     const [userID, setUserID] = useState([]);
@@ -38,9 +26,6 @@ function TestPage() {
 
     const fetchPublicaciones = async () => {
         try {
-
-            
-            // const response = await PostService.getPostsFirstCall();
             const response = await axios.get('http://localhost:8080/publicacion/all');
             const data = response.data.map(publicacion => {
                 return {
@@ -50,7 +35,7 @@ function TestPage() {
             });
             setPublicaciones(data);
         } catch (error) {
-            console.error('Error fetching publicaciones:', error);
+            alert("Error obteniendo publicaciones: "+error);
         }
     }
 
@@ -71,7 +56,6 @@ function TestPage() {
         });
       };
 
-
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -89,13 +73,10 @@ function TestPage() {
             }}
       )
           .then(function (response) {
-            console.log(response.data);
-
-            // Re-render al cambiar
             fetchPublicaciones();
           })
           .catch(function (error) {
-            console.log('Error:', error.response.data);
+            alert("Error: "+error.response.data);
           });
     }
 
@@ -111,19 +92,12 @@ function TestPage() {
                 }}
             >
                 <Item>
-                    <Button variant="contained" color="success" startIcon={<SearchIcon color="primary"/>}
-                            onClick={fetchPublicaciones}>
-                        <Typography variant="button">Buscar publicaciones</Typography>
-                    </Button>
-                </Item>
-                <Item>
                     <ul>
                         {publicaciones.map((publicacion) => (
                             <div key={publicacion.id}>
                                 <Item sx={{ width: "auto"}}>
                                     <Link to="/ver-post">
                                         <Post data={publicacion} />
-                                        <img src={publicacion.imagenUrl} alt="Imagen" />
                                     </Link>
                                 </Item>
                             </div>

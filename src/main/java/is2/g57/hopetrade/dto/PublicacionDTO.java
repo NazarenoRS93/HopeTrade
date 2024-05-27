@@ -12,11 +12,17 @@ public class PublicacionDTO {
     private Long userID;
     private String imagen;
     private String categoria;
-
     private boolean active;
     private LocalDateTime fechaHoraCreacion;
     private LocalDateTime ultimaModificacion;
 
+    public boolean getActive() { return active; }
+    public LocalDateTime getFechaHoraCreacion() {
+        return fechaHoraCreacion;
+    }
+    public LocalDateTime getUltimaModificacion() {
+        return ultimaModificacion;
+    }
     public void setActive(boolean active) {
         this.active = active;
     }

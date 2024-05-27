@@ -131,20 +131,7 @@ public class PublicacionController {
 
   @PostMapping("/add")
   public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO publicacionDTO) {
-
-    System.out.println("--------------- RECIBIDO EL PAQUETE ---------------");
-
-    // PublicacionDTO publicacionDTO = publicacionMapper.newPublicacionDTO(userID, titulo, descripcion, imagen);
-
-    // Test 
-    ResponseEntity<?> test = PublicacionTest(publicacionDTO);
-    if (test != null) {
-      return test;
-    }
-
     Publicacion p = publicacionMapper.toNewPublicacion(publicacionDTO);
-
-    // OK
     publicacionRepository.save(p);
     return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
   }
