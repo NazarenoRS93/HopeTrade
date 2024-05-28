@@ -36,13 +36,13 @@ import is2.g57.hopetrade.mapper.PublicacionMapper;
  Interfaz http para esta tabla:
  GET
  All: http://localhost:8080/publicacion/all
- Retorna: List<Publicacion>
+ Retorna: List<PublicacionDTO>
  {
     "id": long,
     "userID": long,
     "titulo": string,
     "descripcion": string,
-    "imagenUrl": string
+    "imagen": string (base64)
     "active": boolean
     "ultimaModificacion": Date
     "fechaHoraCreacion": Date
@@ -62,7 +62,7 @@ import is2.g57.hopetrade.mapper.PublicacionMapper;
     "userID": long,
     "titulo": string,
     "descripcion": string,
-    "image": MultipartFile
+    "imagen": string(base64)
   }
 
  PUT:
@@ -72,7 +72,7 @@ import is2.g57.hopetrade.mapper.PublicacionMapper;
     "userID": long,
     "titulo": string,
     "descripcion": string,
-    "image": MultipartFile
+    "imagen": string(base64)
   }
   activar: http://localhost:8080/publicacion/activar/{id}
   desactivar: http://localhost:8080/publicacion/desactivar/{id}
