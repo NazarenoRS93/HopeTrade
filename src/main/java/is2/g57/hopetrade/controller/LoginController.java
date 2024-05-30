@@ -68,7 +68,9 @@ public class LoginController {
     public ResponseEntity<?> loginUser(@PathVariable String dni, @PathVariable String pass) {
         LoginResponse response = new LoginResponse();
         HttpStatus status;
+       
         try {
+               
             Optional<User> userOp = userRepository.findUserByDni(dni);
             if (!userOp.isPresent()) {
                 status = HttpStatus.NOT_FOUND;
