@@ -8,7 +8,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import is2.g57.hopetrade.controller.PublicacionDTO;
+import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.services.ImageService;
 
 import java.time.LocalDateTime;
@@ -35,6 +35,9 @@ public class Publicacion implements Serializable{
     
     @Column(name="userid")
     private Long userID;
+
+    @Column(name="categoria_id")
+    private Long categoria_id;
     
     @Column(name="active")
     private boolean active;
@@ -54,14 +57,13 @@ public class Publicacion implements Serializable{
         this.active = true;
     }
 
-    public Publicacion(PublicacionDTO publicacionDTO, String imagenUrl) {
+    public Publicacion(PublicacionDTO publicacionDTO) {
         this.userID = publicacionDTO.getUserID();
         this.titulo = publicacionDTO.getTitulo();
         this.descripcion = publicacionDTO.getDescripcion();
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
         this.active = true;
-        this.imagenUrl = imagenUrl;
     }
 
     // Metodos varios
@@ -83,20 +85,6 @@ public class Publicacion implements Serializable{
     public void eliminarPublicacion(){
         this.active = false;
     }
-    public PublicacionDTO export() {
-        PublicacionDTO ret = new PublicacionDTO();
-
-        ret.setId(this.getId());
-        ret.setUserID(this.userID);
-        ret.setTitulo(this.titulo);
-        ret.setDescripcion(this.descripcion);
-        ret.setFechaHoraCreacion(this.getFechaHoraCreacion());
-        ret.setUltimaModificacion(this.getUltimaModificacion());
-        ret.setActive(this.isActivo());
-
-        return ret;
-    }
-
     // Setters y Getters
 
     public String getImagenUrl(){
@@ -148,6 +136,14 @@ public class Publicacion implements Serializable{
 
     public void setUserID(long i) {
         this.userID = i;
+    }
+
+    public Long getCategoria_id() {
+        return categoria_id;
+    }
+
+    public void setCategoria_id(Long categoria_id) {
+        this.categoria_id = categoria_id;
     }
 
 }

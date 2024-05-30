@@ -8,28 +8,17 @@ import Button from "@mui/material/Button";
 import Item from "../utils/Item";
 import {colors} from "../utils/colors";
 import axios from "axios";
-import PostService from "../services/PostService";
 import {Link} from "react-router-dom";
-import Post from "../utils/Post";
+import Post from "../components/post/Post";
 
 function TestPage() {
-    const [showPassword, setShowPassword] = useState(false);
-    const {userData, setUserData} = useContext(UserContext);
-
-
     // Render on start
     useEffect(() => {
         fetchPublicaciones();
-        fetchImagen(5);
     }, []);
 
-
-    const handleShowPassword = () => {
-        setShowPassword(!showPassword)
-    }
-
+    const reader = new FileReader();
     const [publicaciones, setPublicaciones] = useState([]);
-
     const [titulo, setTitulo] = useState([]);
     const [descripcion, setDesc] = useState([]);
     const [userID, setUserID] = useState([]);
@@ -37,57 +26,57 @@ function TestPage() {
 
     const fetchPublicaciones = async () => {
         try {
-
-            // const response = await PostService.getPostsFirstCall();
             const response = await axios.get('http://localhost:8080/publicacion/all');
-
-            const publicacionesConImg = await Promise.all( response.data.map( async (publicacion) => { 
-                const img = await fetchImagen(publicacion.id);
-                publicacion.image = img;
-                return publicacion;
-            }));
-            setPublicaciones(publicacionesConImg);
+            const data = response.data.map(publicacion => {
+                return {
+                    ...publicacion,
+                    imagenUrl: `data:image/jpeg;base64,${publicacion.imagen}`
+                };
+            });
+            setPublicaciones(data);
         } catch (error) {
-            console.error('Error fetching publicaciones:', error);
+            alert("Error obteniendo publicaciones: "+error);
         }
     }
 
-    const fetchImagen = async (id) => {
-      try {
-          const response = await axios.get(`http://localhost:8080/publicacion/image/${id}`, {
-          responseType: 'arraybuffer'
-          });
-          const blob = new Blob([response.data], { type: 'image/jpeg' });
-          return URL.createObjectURL(blob); // return URL.createObjectURL(blob);
-      } catch (error) {
-          console.error('Error fetching image:', error);
-          return null;
-      }
-  }
+    const fileToBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+      
+          reader.onload = () => {
+            const base64String = reader.result.split(',')[1];
+            resolve(base64String);
+          };
+      
+          reader.onerror = (error) => {
+            reject(error);
+          };
+      
+          reader.readAsDataURL(file);
+        });
+      };
 
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Publicacion:', {titulo, descripcion, userID, imagen});
 
         var formdata = new FormData();
-        //add three variable to form
         formdata.append("titulo", titulo);
         formdata.append("descripcion", descripcion);
         formdata.append("userID", userID);
-        formdata.append("image", imagen);
+        formdata.append("imagen", await fileToBase64(imagen));
 
-        axios.post('http://localhost:8080/publicacion/add', formdata, 
-        { headers : {'Content-Type': 'multipart/form-data'} }
+        console.log('PUBLICACION: ', {titulo, descripcion, userID, imagen});
+
+        axios.post('http://localhost:8080/publicacion/add', formdata, {
+            headers: {
+                'Content-Type': 'application/json'
+            }}
       )
           .then(function (response) {
-            console.log(response.data);
-
-            // Re-render al cambiar
             fetchPublicaciones();
           })
           .catch(function (error) {
-            console.log('Error:', error.response.data);
+            alert("Error: "+error.response.data);
           });
     }
 
@@ -103,19 +92,12 @@ function TestPage() {
                 }}
             >
                 <Item>
-                    <Button variant="contained" color="success" startIcon={<SearchIcon color="primary"/>}
-                            onClick={fetchPublicaciones}>
-                        <Typography variant="button">Buscar publicaciones</Typography>
-                    </Button>
-                </Item>
-                <Item>
                     <ul>
                         {publicaciones.map((publicacion) => (
                             <div key={publicacion.id}>
                                 <Item sx={{ width: "auto"}}>
                                     <Link to="/ver-post">
                                         <Post data={publicacion} />
-                                        <img src={publicacion.image} alt="Imagen" />
                                     </Link>
                                 </Item>
                             </div>
@@ -156,7 +138,7 @@ function TestPage() {
         onChange={(e) => setImagen(e.target.files[0])}
         accept=".jpg, .jpeg, .png" />
         </label>
-      <input type="submit" />
+      <input type="submit" value="Submit"/>
     </form>
         </React.Fragment>
     )

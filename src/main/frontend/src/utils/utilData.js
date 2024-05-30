@@ -7,16 +7,16 @@ export const editProfileInfo = {
     description: "Revise sus datos y edite los mismos."
 }
 export const myPostsInfo = {
-    title: "Ver mis publicaciones",
+    title: "Mis publicaciones",
     description: "Revise sus publicaciones."
 }
 export const addPostInfo = {
-    title: "Agregar publicación",
+    title: "Crear publicación",
     description: "Comparta aquello que tiene y no necesita, y ayude a alguien que sí le sea útil."
 }
 
 export const listUsersInfo = {
-    title: "Administrar usuarios",
-    description: "Liste y edite los usuarios del sistema."
+    title: "Listar usuarios",
+    description: "Vea y administre los usuarios del sistema."
 }
 

@@ -16,12 +16,7 @@ import {colors} from "../utils/colors";
 import {baseUser, defaultFormLogin} from "../utils/utilConstants";
 import LoginService from "../services/LoginService";
 
-function LoginPage(props) {
-    const {
-        dialog,
-        setDialog
-    } = props;
-
+function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormLogin);
 

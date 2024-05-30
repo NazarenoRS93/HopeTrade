@@ -21,29 +21,33 @@ import org.springframework.http.ResponseEntity;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import is2.g57.hopetrade.repository.PublicacionRepository;
 import is2.g57.hopetrade.services.ImageService;
+import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
+import is2.g57.hopetrade.mapper.PublicacionMapper;
 
 /*
  Interfaz http para esta tabla:
  GET
  All: http://localhost:8080/publicacion/all
- Retorna: List<Publicacion>
+ Retorna: List<PublicacionDTO>
  {
     "id": long,
     "userID": long,
     "titulo": string,
     "descripcion": string,
-    "imagenUrl": string
+    "imagen": string (base64)
     "active": boolean
     "ultimaModificacion": Date
     "fechaHoraCreacion": Date
  }
- 
+
  All-Activas: http://localhost:8080/publicacion/all/activas
  All-Inactivas: http://localhost:8080/publicacion//all/inactivas
  Buscar por userID: http://localhost:8080/publicacion/user/{userID}
@@ -58,7 +62,7 @@ import is2.g57.hopetrade.entity.User;
     "userID": long,
     "titulo": string,
     "descripcion": string,
-    "image": MultipartFile
+    "imagen": string(base64)
   }
 
  PUT:
@@ -68,7 +72,7 @@ import is2.g57.hopetrade.entity.User;
     "userID": long,
     "titulo": string,
     "descripcion": string,
-    "image": MultipartFile
+    "imagen": string(base64)
   }
   activar: http://localhost:8080/publicacion/activar/{id}
   desactivar: http://localhost:8080/publicacion/desactivar/{id}
@@ -82,9 +86,9 @@ public class PublicacionController {
 
   @Autowired
   private ImageService imageService;
-
-  // @Autowired
-  // private ImageService imageService;
+  
+  @Autowired
+  private PublicacionMapper publicacionMapper;
   
   private ResponseEntity<?> PublicacionTest(PublicacionDTO PublicacionDTO) {
     
@@ -118,7 +122,7 @@ public class PublicacionController {
     }
 
     // Test imagen está en el DTO
-    if (PublicacionDTO.getImageData() == null) {
+    if (PublicacionDTO.getImagen() == null) {
       return new ResponseEntity<>("Se requiere la imagen", HttpStatus.BAD_REQUEST);
     }
 
@@ -126,62 +130,39 @@ public class PublicacionController {
   }
 
   @PostMapping("/add")
-  public ResponseEntity<?> addNewPublicacion(
-    @RequestParam("titulo") String titulo,
-    @RequestParam("descripcion") String descripcion,
-    @RequestParam("userID") Long userID,
-    @RequestParam("image") MultipartFile image) {
-
-    PublicacionDTO publicacionDTO = new PublicacionDTO();
-    publicacionDTO.setTitulo(titulo);
-    publicacionDTO.setDescripcion(descripcion);
-    publicacionDTO.setUserID(userID);
-    publicacionDTO.setImageData(image);
-
-    // Test 
-    ResponseEntity<?> test = PublicacionTest(publicacionDTO);
-    if (test != null) {
-      return test;
-    }
-    if (image == null) return new ResponseEntity<>("Se requiere una imagen", HttpStatus.BAD_REQUEST);
-
-    String imageUrl = imageService.saveUnique(image);
-
-    Publicacion p = new Publicacion(publicacionDTO, imageUrl);
-
-    // OK
+  public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO publicacionDTO) {
+    Publicacion p = publicacionMapper.toNewPublicacion(publicacionDTO);
     publicacionRepository.save(p);
     return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
   }
 
   @PutMapping("/update")
   public ResponseEntity<?> updatePublicacion(    
+  // Nota: pasar a @RequestBody PublicacionDTO publicacionDTO asap
+  @RequestParam("id") Long id,
   @RequestParam("titulo") String titulo,
   @RequestParam("descripcion") String descripcion,
   @RequestParam("userID") Long userID,
-  @RequestParam(name="image", required = false) MultipartFile image) {
+  @RequestParam(name="image", required = false) String image) {
 
-    PublicacionDTO PublicacionDTO = new PublicacionDTO();
-    PublicacionDTO.setTitulo(titulo);
-    PublicacionDTO.setDescripcion(descripcion);
-    PublicacionDTO.setUserID(userID);
-    PublicacionDTO.setImageData(image);
+    PublicacionDTO publicacionDTO = publicacionMapper.newPublicacionDTO(userID, titulo, descripcion, image);
+    publicacionDTO.setId(id);
 
     // Test
-    ResponseEntity<?> test = PublicacionTest(PublicacionDTO);
+    ResponseEntity<?> test = PublicacionTest(publicacionDTO);
     if (test != null) {
       return test;
     }
 
     // Test ID incluido en paquete
-    if (PublicacionDTO.getId() == null) {
+    if (publicacionDTO.getId() == null) {
       return new ResponseEntity<>("Se requiere el ID", HttpStatus.BAD_REQUEST);
     }
 
     // Test publicacion existe en BD
     Publicacion publicacion;
     try {
-      publicacion = publicacionRepository.findById(PublicacionDTO.getId()).get();
+      publicacion = publicacionRepository.findById(publicacionDTO.getId()).get();
     }
     catch (Exception e) {
       return new ResponseEntity<>("La publicacion no existe", HttpStatus.BAD_REQUEST);
@@ -189,13 +170,8 @@ public class PublicacionController {
     // Test publicacion inactiva ( No se si es requerimiento )
     if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion esta cerrada y no puede modificarse", HttpStatus.BAD_REQUEST);
 
-    publicacion.update(PublicacionDTO);
-
-    if (image != null) {
-      imageService.delete(publicacion.getImagenUrl());
-      String imageUrl = imageService.save(image);
-      publicacion.setImagenUrl(imageUrl);
-    }
+    // Update
+    publicacion = publicacionMapper.updatePublicacion(publicacion, publicacionDTO);
 
     // OK
     publicacionRepository.save(publicacion);
@@ -280,9 +256,11 @@ public class PublicacionController {
     
 
   @GetMapping(path="/all")
-  public @ResponseBody Iterable<Publicacion> getAllPublicaciones() {
+  public @ResponseBody Iterable<PublicacionDTO> getAllPublicaciones() {
     System.out.println("----- Fetching Publicaciones ------");
-    return publicacionRepository.findAll();
+    return publicacionRepository.findAll().stream()
+      .map(publicacionMapper::toPublicacionDTO)
+      .collect(Collectors.toList());
   }
 
   @GetMapping(path="/all/activas")

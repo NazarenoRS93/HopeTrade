@@ -49,10 +49,12 @@
   }
 }
 
-.ElemContainer {
+.ItemGrid {
   display: flex;
-  align-items: center;
-  height: auto;
-  width: 100%;
-  padding: 5px;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.AddPostForm {
+  width: 400px;
 }

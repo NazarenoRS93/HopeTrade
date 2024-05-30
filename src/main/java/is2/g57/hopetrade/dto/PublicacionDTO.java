@@ -1,22 +1,28 @@
-package is2.g57.hopetrade.controller;
+package is2.g57.hopetrade.dto;
 
 import java.time.LocalDateTime;
 
 import org.springframework.web.multipart.MultipartFile;
-
-import is2.g57.hopetrade.entity.Publicacion;
+import org.springframework.core.io.Resource;
 
 public class PublicacionDTO {
     private Long id;
     private String titulo;
     private String descripcion;
     private Long userID;
-    private MultipartFile imageData;
-
+    private String imagen;
+    private String categoria;
     private boolean active;
     private LocalDateTime fechaHoraCreacion;
     private LocalDateTime ultimaModificacion;
 
+    public boolean getActive() { return active; }
+    public LocalDateTime getFechaHoraCreacion() {
+        return fechaHoraCreacion;
+    }
+    public LocalDateTime getUltimaModificacion() {
+        return ultimaModificacion;
+    }
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -26,11 +32,11 @@ public class PublicacionDTO {
     public void setUltimaModificacion(LocalDateTime ultimaModificacion) {
         this.ultimaModificacion = ultimaModificacion;
     }
-    public MultipartFile getImageData() {
-        return imageData;
+    public String getImagen() {
+        return imagen;
     }
-    public void setImageData(MultipartFile imageData) {
-        this.imageData = imageData;
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
     public String getTitulo() {
         return titulo;
@@ -58,5 +64,10 @@ public class PublicacionDTO {
         this.userID = userID;
     }  
 
-    
+    public String getCategoria() {
+        return categoria;
+    }
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
 }
