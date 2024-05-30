@@ -1,17 +1,66 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import LoginPage from "./containers/LoginPage";
+import SignUpPage from "./containers/SignUpPage";
+import HomePage from "./containers/HomePage";
+import LoginAdminPage from "./containers/LoginAdminPage";
+import TestPage from "./containers/TestPage";
+import axios from "axios";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+const router = createBrowserRouter(
+    [
+        {
+            path: "",
+            element: <App/>,
+            children: [
+                {
+                    path: "/login",
+                    element: <LoginPage/>
+                },
+                {
+                    path: "/logAdmin",
+                    element: <LoginAdminPage/>
+                },
+                {
+                    path: "/register",
+                    element: <SignUpPage/>
+                },
+                {
+                    path: "/home",
+                    element: <HomePage/>
+                },
+                {
+                    path: "/posts",
+                    element: <TestPage/>
+                },
+                {
+                    path: "/mypublis",
+                    element: <TestPage/>
+                },
+                {
+                    path: "/test",
+                    element: <TestPage/>
+                },
+            ]
+        },
+    ],
+    {
+        basename: "/app"
+    });
+
+axios.defaults.baseURL="http://localhost:8080";
+axios.interceptors.response.use(response => {
+    return response.headers['content-type'] === 'application/json' ? response : Promise.reject(response);
+}, error => Promise.reject(error));
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

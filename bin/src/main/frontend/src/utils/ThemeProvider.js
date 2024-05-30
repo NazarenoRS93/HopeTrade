@@ -1,5 +1,5 @@
-import { createTheme as createThemeV5 } from '@mui/material/styles';
-import { colors } from './colors';
+import {createTheme as createThemeV5} from '@mui/material/styles';
+import {colors} from './colors';
 
 export const themeV5 = createThemeV5({
     palette: {
@@ -13,7 +13,7 @@ export const themeV5 = createThemeV5({
             main: colors.background,
         },
         success: {
-            main: colors.green1,
+            main: colors.green2,
         },
         warning: {
             main: colors.warn,
@@ -29,12 +29,32 @@ export const themeV5 = createThemeV5({
             color: colors.darkBlue
         },
         subtitle1: {
-            fontSize: 16,
+            fontSize: 24,
             color: colors.darkBlue,
             fontWeight: "bold"
         },
+        subtitle2: {
+            fontSize: 20,
+            color: colors.darkBlue,
+            fontWeight: "bold"
+        },
+        button: {
+            fontSize: 14,
+            color: colors.darkBlue,
+            fontWeight: "bold"
+        },
+        button2: {
+            fontSize: 14,
+            color: colors.background2,
+            fontWeight: "bold"
+        },
+        h2: {
+            fontSize: 16,
+            color: colors.darkBlue
+        },
         h6: {
-            color: colors.blue,
+            fontSize: 14,
+            color: colors.darkBlue,
             fontWeight: "bold"
         },
     },

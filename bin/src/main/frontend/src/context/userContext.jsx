@@ -1,20 +1,13 @@
-import React, { createContext, useState } from "react";
-
-const base = {
-    appVersion: "1.0.0",
-    filial: "",
-    isLogged: false,
-    nombre: "",
-    tipoUser: ""
-}
+import React, {createContext, useState} from "react";
+import {baseUser} from "../utils/utilConstants";
 
 export const UserContext= createContext({});
 
 const UserProvider = ({ children }) => {
-    const [userData, setUserData] = useState(undefined);
+    const [userData, setUserData] = useState(baseUser);
 
     return (
-        <UserContext.Provider value={{ userData, setUserData, base }}>
+        <UserContext.Provider value={{ userData, setUserData }}>
             {children}
         </UserContext.Provider>
     );

@@ -30,6 +30,13 @@
 			<artifactId>javax.persistence</artifactId>
 			<version>10.0-b28</version>
 		</dependency>
+		
+		<dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-mail</artifactId>
+           <version>3.3.0</version>
+        </dependency>
+        
 		<!-- Dependencia de Spring Boot Starter -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
