@@ -15,6 +15,8 @@ public class PublicacionDTO {
     private boolean active;
     private LocalDateTime fechaHoraCreacion;
     private LocalDateTime ultimaModificacion;
+    private String estado;
+    private long estadoID;
 
     public boolean getActive() { return active; }
     public LocalDateTime getFechaHoraCreacion() {
@@ -69,5 +71,17 @@ public class PublicacionDTO {
     }
     public void setCategoria(String categoria) {
         this.categoria = categoria;
+    }
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    public String getEstado() {
+        return estado;
+    }
+    public void setEstadoID(long estadoID) {
+        this.estadoID = estadoID;
+    }
+    public long getEstadoID() {
+        return estadoID;
     }
 }

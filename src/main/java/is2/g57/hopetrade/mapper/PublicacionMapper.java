@@ -2,13 +2,14 @@ package is2.g57.hopetrade.mapper;
 
 
 import is2.g57.hopetrade.dto.PublicacionDTO;
+import is2.g57.hopetrade.entity.Categoria;
 import is2.g57.hopetrade.entity.Publicacion;
+import is2.g57.hopetrade.entity.state.PublicacionStateDisponible;
 import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.repository.CategoriaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class PublicacionMapper {
@@ -48,7 +49,7 @@ public class PublicacionMapper {
         dto.setUserID(publicacion.getUserID());
         // Convert URL to Base 64 image
         dto.setImagen(imageService.loadBase64(publicacion.getImagenUrl()));
-        dto.setCategoria(categoriaRepository.findById(publicacion.getCategoria_id()).get().getNombre());
+        dto.setCategoria(publicacion.getCategoria().getNombre());
         return dto;
     }
 
@@ -60,11 +61,12 @@ public class PublicacionMapper {
 
         // Temporal, porque el paso de categorias desde el front no esta implementado
         if (publicacionDTO.getCategoria() == null) {
-            p.setCategoria_id(1L);
+            p.setCategoria(new Categoria("Otros"));
         }
         else {
-            p.setCategoria_id(categoriaRepository.findByNombre(publicacionDTO.getCategoria()).get().getId());
+            p.setCategoria(categoriaRepository.findByNombre(publicacionDTO.getCategoria()).get());
         }
+        p.setState(new PublicacionStateDisponible());
         return p;
     }
 
@@ -72,10 +74,10 @@ public class PublicacionMapper {
         publicacion.update(publicacionDTO);
         // Temporal, porque el paso de categorias desde el front no esta implementado
         if (publicacionDTO.getCategoria() == null) {
-            publicacion.setCategoria_id(1L);
+            publicacion.setCategoria(new Categoria("Otros"));
         }
         else {
-            publicacion.setCategoria_id(categoriaRepository.findByNombre(publicacionDTO.getCategoria()).get().getId());
+            publicacion.setCategoria(categoriaRepository.findByNombre(publicacionDTO.getCategoria()).get());
         }
 
         if (publicacionDTO.getImagen() != null) {

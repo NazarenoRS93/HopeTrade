@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.services.ImageService;
+import is2.g57.hopetrade.entity.state.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -36,11 +37,16 @@ public class Publicacion implements Serializable{
     @Column(name="userid")
     private Long userID;
 
-    @Column(name="categoria_id")
-    private Long categoria_id;
+    @ManyToOne
+    @JoinColumn(name = "ID_CATEGORIA")
+    private Categoria categoria;
     
     @Column(name="active")
     private boolean active;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_ESTADO")
+    private PublicacionState state;
     
     @Column(name="imagen_url")
     private String imagenUrl;
@@ -64,6 +70,7 @@ public class Publicacion implements Serializable{
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
         this.active = true;
+        this.setState(new PublicacionStateDisponible());
     }
 
     // Metodos varios
@@ -138,12 +145,20 @@ public class Publicacion implements Serializable{
         this.userID = i;
     }
 
-    public Long getCategoria_id() {
-        return categoria_id;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setCategoria_id(Long categoria_id) {
-        this.categoria_id = categoria_id;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public PublicacionState getState(){
+        return state;
+    }
+
+    public void setState(PublicacionState state){
+        this.state = state;
     }
 
 }
