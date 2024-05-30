@@ -50,6 +50,8 @@ public class PublicacionMapper {
         // Convert URL to Base 64 image
         dto.setImagen(imageService.loadBase64(publicacion.getImagenUrl()));
         dto.setCategoria(publicacion.getCategoria().getNombre());
+        dto.setEstado(publicacion.getState().getNombre());
+        dto.setEstadoID(publicacion.getState().getId());
         return dto;
     }
 
