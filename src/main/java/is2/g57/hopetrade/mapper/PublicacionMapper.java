@@ -7,6 +7,7 @@ import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.state.PublicacionStateDisponible;
 import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.repository.CategoriaRepository;
+import is2.g57.hopetrade.repository.PublicacionStateRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,14 +19,17 @@ public class PublicacionMapper {
     private ImageService imageService;
     @Autowired
     private CategoriaRepository categoriaRepository;
+    @Autowired
+    private PublicacionStateRepository publicacionStateRepository;
 
-    public PublicacionDTO newPublicacionDTO(Long userID, String titulo, String descripcion, String categoria, String image) {
+    public PublicacionDTO newPublicacionDTO(Long userID, String titulo, String descripcion, String categoria, String estado, String image) {
         PublicacionDTO dto = new PublicacionDTO();
         dto.setUserID(userID);
         dto.setTitulo(titulo);
         dto.setDescripcion(descripcion);
         dto.setImagen(imageService.saveUnique(image));
         dto.setCategoria(categoria);
+        dto.setEstado(estado);
         return dto;
     }
 
@@ -35,6 +39,8 @@ public class PublicacionMapper {
         dto.setTitulo(titulo);
         dto.setDescripcion(descripcion);
         dto.setImagen(image);
+        dto.setCategoria("Otros");
+        dto.setEstado("Disponible");
         return dto;
     }
 
@@ -63,12 +69,12 @@ public class PublicacionMapper {
 
         // Temporal, porque el paso de categorias desde el front no esta implementado
         if (publicacionDTO.getCategoria() == null) {
-            p.setCategoria(new Categoria("Otros"));
+            p.setCategoria(categoriaRepository.findByNombre("Otros").get());
         }
         else {
             p.setCategoria(categoriaRepository.findByNombre(publicacionDTO.getCategoria()).get());
         }
-        p.setState(new PublicacionStateDisponible());
+        p.setState(publicacionStateRepository.findById(1).get());
         return p;
     }
 
@@ -76,7 +82,7 @@ public class PublicacionMapper {
         publicacion.update(publicacionDTO);
         // Temporal, porque el paso de categorias desde el front no esta implementado
         if (publicacionDTO.getCategoria() == null) {
-            publicacion.setCategoria(new Categoria("Otros"));
+            publicacion.setCategoria(categoriaRepository.findById(1L).get());
         }
         else {
             publicacion.setCategoria(categoriaRepository.findByNombre(publicacionDTO.getCategoria()).get());

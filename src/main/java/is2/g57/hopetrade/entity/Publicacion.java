@@ -37,14 +37,14 @@ public class Publicacion implements Serializable{
     @Column(name="userid")
     private Long userID;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.DETACH)
     @JoinColumn(name = "ID_CATEGORIA")
     private Categoria categoria;
     
     @Column(name="active")
     private boolean active;
 
-    @ManyToOne
+    @ManyToOne (cascade = CascadeType.DETACH)
     @JoinColumn(name = "ID_ESTADO")
     private PublicacionState state;
     
