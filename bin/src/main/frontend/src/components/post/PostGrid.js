@@ -1,6 +1,6 @@
 import {Grid} from "@mui/material";
 
-function HomeGrid(props) {
+function PostGrid(props) {
     const { children } = props;
 
     return (
@@ -10,4 +10,4 @@ function HomeGrid(props) {
     );
 }
 
-export default HomeGrid;
+export default PostGrid;
