@@ -3,17 +3,18 @@ import React from "react";
 import "../../App.css";
 import CustomCard from "../../utils/CustomCard";
 import {Link} from "react-router-dom";
+import Post from "./Post";
 
-function HomeItem(props) {
-    const { link, data, icon } = props;
+function PostItem(props) {
+    const { link, key, data } = props;
 
     return (
-        <Grid item xs={12} sm={6} md={3}>
-            <Link to={link}>
-                <CustomCard data={data} icon={icon}/>
+        <Grid item key={key} sm={12} md={6}>
+            <Link to={link.concat(key)}>
+                <Post data={data} />
             </Link>
         </Grid>
     )
 }
 
-export default HomeItem;
+export default PostItem;

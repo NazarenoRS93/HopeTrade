@@ -16,6 +16,17 @@ export const defaultFormRegister = {
     email: '',
     pass: ''
 };
+export const defaultFormAddPost = {
+    id: null,
+    titulo: '',
+    descripcion: '',
+    userID: 0,
+    imagen: '',
+    categoria: '',
+    active: '',
+    fechaHoraCreacion: '',
+    ultimaModificacion: ''
+};
 export const defaultDialogData = {
     open: false,
     msg: '',
