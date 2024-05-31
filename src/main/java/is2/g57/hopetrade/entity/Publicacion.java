@@ -138,7 +138,13 @@ public class Publicacion implements Serializable{
     }
 
     public boolean isActivo() {
-        return this.active;
+        if (this.getState().getNombre().equals("Disponible")) {
+            return true;
+        }
+        if (this.getState().getNombre().equals("Reservada")) {
+            return true;
+        }
+        return false;
     }
 
     public void setUserID(long i) {

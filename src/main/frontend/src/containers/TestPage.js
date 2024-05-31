@@ -26,7 +26,7 @@ function TestPage() {
 
     const fetchPublicaciones = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/publicacion/all');
+            const response = await axios.get('http://localhost:8080/publicacion/all/activas');
             const data = response.data.map(publicacion => {
                 return {
                     ...publicacion,

@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import is2.g57.hopetrade.repository.PublicacionRepository;
+import is2.g57.hopetrade.repository.PublicacionStateRepository;
 import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.entity.Publicacion;
@@ -89,6 +90,9 @@ public class PublicacionController {
   
   @Autowired
   private PublicacionMapper publicacionMapper;
+
+  @Autowired 
+  private PublicacionStateRepository publicacionStateRepository;
   
   private ResponseEntity<?> PublicacionTest(PublicacionDTO PublicacionDTO) {
     
@@ -264,12 +268,16 @@ public class PublicacionController {
   }
 
   @GetMapping(path="/all/activas")
-  public @ResponseBody Iterable<Publicacion> getAllPublicacionesActivas() {
-    return publicacionRepository.findByActiveTrue();
+  public @ResponseBody Iterable<PublicacionDTO> getAllPublicacionesActivas() {
+    return publicacionRepository.findByStates("Disponible", "Reservado").stream()
+    .map(publicacionMapper::toPublicacionDTO)
+    .collect(Collectors.toList());
   }
 
-  @GetMapping(path="/all/inactivas")
-  public @ResponseBody Iterable<Publicacion> getAllPublicacionesInactivas() {
-    return publicacionRepository.findByActiveFalse();
+  @GetMapping(path="/all/finalizadas")
+  public @ResponseBody Iterable<PublicacionDTO> getAllPublicacionesFinalizadas() {
+    return publicacionRepository.findByState("Finalizado").stream()
+    .map(publicacionMapper::toPublicacionDTO)
+    .collect(Collectors.toList());
   }
 }
