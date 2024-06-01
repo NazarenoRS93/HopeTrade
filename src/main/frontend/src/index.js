@@ -12,6 +12,7 @@ import TestPage from "./containers/TestPage";
 import axios from "axios";
 import PostListPage from "./containers/PostListPage";
 import AddPostPage from "./containers/AddPostPage";
+import SelectFilialPage from "./containers/SelectFilialPage";
 
 const router = createBrowserRouter(
     [
@@ -50,6 +51,10 @@ const router = createBrowserRouter(
                 {
                     path: "/test",
                     element: <TestPage/>
+                },
+                {
+                    path: "/select-filial",  
+                    element: <SelectFilialPage/>
                 },
             ]
         },

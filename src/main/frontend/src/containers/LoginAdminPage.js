@@ -15,13 +15,16 @@ import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
 import {baseUser, defaultFormLoginAdmin} from "../utils/utilConstants";
 import LoginService from "../services/LoginService";
+import { useNavigate } from "react-router-dom";
 
 function LoginAdminPage(props) {
     const {
         dialog,
         setDialog
     } = props;
-
+    
+     const navigate = useNavigate();
+    
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormLoginAdmin);
 
@@ -48,7 +51,8 @@ function LoginAdminPage(props) {
                 console.log(response.data);
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
-                window.location.replace(href+"/home");
+                window.location.replace(href+"/select-filial")
+                //window.location.replace(href+"/home");
             })
             .catch((err) => {
                 alert(err.response.data.responseMsg);

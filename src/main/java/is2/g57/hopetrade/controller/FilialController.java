@@ -86,7 +86,7 @@ public class FilialController {
 
 	}
 
-	@GetMapping("/listar-filiales")
+	@GetMapping("/all")
 	public @ResponseBody Iterable<Filial> getAllFiliales() {
 		return filialRepository.findAll();
 	}

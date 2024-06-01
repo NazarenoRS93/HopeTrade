@@ -1,29 +1,51 @@
-import { Fragment, useState, useEffect } from "react";
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
-import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
-import { Grid } from '@mui/material';
-import Completo from './Completo.png';
+import React, {useState} from "react";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import './App.css';
-import { colors } from "./utils/colors";
-import { themeV5 } from "./utils/ThemeProvider";
+import {themeV5} from "./utils/ThemeProvider";
 import UserProvider from "./context/userContext";
 import Header from "./components/Header";
+import {colors} from "./utils/colors";
+import Box from "@mui/material/Box";
+import Item from "./utils/Item";
+import Footer from "./components/Footer";
+import {Outlet} from "react-router-dom";
+import {defaultDialogData} from "./utils/utilConstants";
+import CustomDialog from "./components/CustomDialog";
 
 const theme = createTheme({ ...themeV5 });
 
 function App() {
+    const [dialogData,setDialogData] = useState(defaultDialogData);
     return (
-        <Fragment>
+        <React.Fragment className="App">
             <ThemeProvider theme={theme}>
                 <UserProvider>
-                    <BrowserRouter basename="/" className="App">
-                        <Header/>
-                    </BrowserRouter>
+                    <Box
+                        sx={{
+                            backgroundColor: colors.background,
+                            flexDirection: "column",
+                            alignItems: "center",
+                            display: "flex",
+                            width: "100%",
+                            height: "90%"
+                        }}
+                    >
+                        <Item sx={{flexGrow: 2}}>
+                            <Header/>
+                            <hr/>
+                        </Item>
+                        <Item sx={{flexGrow: 1}}>
+                            <Outlet />
+                        </Item>
+                        <Item>
+                            <hr/>
+                            <Footer/>
+                        </Item>
+                    </Box>
+                    <CustomDialog data={dialogData} setData={setDialogData}/>
                 </UserProvider>
             </ThemeProvider>
-        </Fragment>
+        </React.Fragment>
     );
 }
 
