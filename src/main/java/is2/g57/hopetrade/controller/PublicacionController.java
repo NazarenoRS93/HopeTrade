@@ -73,11 +73,13 @@ import is2.g57.hopetrade.mapper.PublicacionMapper;
  PUT:
  Update: http://localhost:8080/publicacion/update
  {  
+    (Necesarios)
     "id": long,
-    "userID": long,
+    (Opcionales)
     "titulo": string,
     "descripcion": string,
     "imagen": string(base64)
+    "categoria_ID": long
   }
   activar: http://localhost:8080/publicacion/activar/{id}
   desactivar: http://localhost:8080/publicacion/desactivar/{id}
@@ -170,6 +172,24 @@ public class PublicacionController {
     }
     // Test publicacion esta activa (Esto deberia ser manejado por los states)
     if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion no puede modificarse", HttpStatus.BAD_REQUEST);
+    
+    // Test titulo
+    if (publicacionDTO.getTitulo() != null){
+    Iterable<Publicacion> pub = publicacionRepository.findAllByUserID(publicacionDTO.getUserID());
+      for (Publicacion p : pub) {
+        if (p.getTitulo().equals(publicacionDTO.getTitulo()) && p.isActivo() && p.getId() != publicacionDTO.getId()) {
+          return new ResponseEntity<>("Ya hay una publicacion activa con ese titulo", HttpStatus.BAD_REQUEST);
+        }
+      }
+      if (publicacionDTO.getTitulo().length() > 50 || PublicacionDTO.getTitulo().length() < 1) {
+        return new ResponseEntity<>("Ingrese un titulo de hasta 50 caracteres", HttpStatus.BAD_REQUEST);
+      }
+    }
+    if (publicacionDTO.getDescripcion() != null){
+      if (publicacionDTO.getDescripcion().length() > 240) {
+        return new ResponseEntity<>("La descripcion puede tener hasta 240 caracteres", HttpStatus.BAD_REQUEST);
+      }
+    }
 
     // Update
     publicacion = publicacionMapper.updatePublicacion(publicacion, publicacionDTO);
