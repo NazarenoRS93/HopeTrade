@@ -12,7 +12,7 @@ public class PublicacionDTO {
     private Long userID;
     private String imagen;
     private String categoria_nombre;
-    private Long categoria_id;
+    private long categoria_id;
     private boolean active;
     private LocalDateTime fechaHoraCreacion;
     private LocalDateTime ultimaModificacion;

@@ -76,7 +76,7 @@ function TestPage() {
         formdata.append("descripcion", descripcion);
         formdata.append("userID", userID);
         formdata.append("imagen", await fileToBase64(imagen));
-        formdata.append("categoria_id", categoria);
+        formdata.append("categoria_ID", categoria);
 
         console.log('PUBLICACION: ', {titulo, descripcion, userID, imagen, categoria});
 

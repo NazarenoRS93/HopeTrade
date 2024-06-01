@@ -16,7 +16,7 @@ function Post(props) {
                         <hr/>
                         <Typography variant="h2">{data.descripcion}</Typography>
                         <hr/>
-                        <Typography variant="h6">Categoria: {data.categoria}</Typography>
+                        <Typography variant="h6">Categoria: {data.categoria_Nombre}</Typography>
                         <hr/>
                         <Typography variant="h6">Estado: {data.estado}</Typography>
                     </Grid>

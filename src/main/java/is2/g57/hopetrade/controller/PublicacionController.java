@@ -139,7 +139,7 @@ public class PublicacionController {
 
   @PostMapping("/add")
   public ResponseEntity<?> addNewPublicacion(@RequestBody PublicacionDTO publicacionDTO) {
-
+    System.out.println("----- Add Publicacion ------ categoria: " + publicacionDTO.getCategoria_ID());
     // Test
     ResponseEntity<?> test = PublicacionTest(publicacionDTO);
     if (test != null) {
