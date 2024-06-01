@@ -181,7 +181,7 @@ public class PublicacionController {
           return new ResponseEntity<>("Ya hay una publicacion activa con ese titulo", HttpStatus.BAD_REQUEST);
         }
       }
-      if (publicacionDTO.getTitulo().length() > 50 || PublicacionDTO.getTitulo().length() < 1) {
+      if (publicacionDTO.getTitulo().length() > 50 || publicacionDTO.getTitulo().length() < 1) {
         return new ResponseEntity<>("Ingrese un titulo de hasta 50 caracteres", HttpStatus.BAD_REQUEST);
       }
     }
