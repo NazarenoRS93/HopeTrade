@@ -11,7 +11,8 @@ public class PublicacionDTO {
     private String descripcion;
     private Long userID;
     private String imagen;
-    private String categoria;
+    private String categoria_nombre;
+    private Long categoria_id;
     private boolean active;
     private LocalDateTime fechaHoraCreacion;
     private LocalDateTime ultimaModificacion;
@@ -66,11 +67,17 @@ public class PublicacionDTO {
         this.userID = userID;
     }  
 
-    public String getCategoria() {
-        return categoria;
+    public void setCategoria_ID(Long categoria_id) {
+        this.categoria_id = categoria_id;
     }
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public Long getCategoria_ID() {
+        return categoria_id;
+    }
+    public String getCategoria_Nombre() {
+        return categoria_nombre;
+    }
+    public void setCategoria_Nombre(String categoria_nombre) {
+        this.categoria_nombre = categoria_nombre;
     }
     public void setEstado(String estado) {
         this.estado = estado;

@@ -145,7 +145,7 @@ function TestPage() {
       </label>
       <select name="categoria" id="categoria" onChange={(e) => setCategoria(e.target.value)} value={categoria}>
         {categorias.map((categoria) => (
-          <option key={categoria.id} value={categoria.nombre}>
+          <option key={categoria.id} value={categoria.id}>
             {categoria.id} - {categoria.nombre}
           </option>
         ))}

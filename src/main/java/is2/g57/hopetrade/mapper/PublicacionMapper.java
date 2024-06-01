@@ -22,13 +22,14 @@ public class PublicacionMapper {
     @Autowired
     private PublicacionStateRepository publicacionStateRepository;
 
-    public PublicacionDTO newPublicacionDTO(Long userID, String titulo, String descripcion, String categoria, String estado, String image) {
+    public PublicacionDTO newPublicacionDTO(Long userID, String titulo, String descripcion, String categoria, Long categoria_id, String estado, String image) {
         PublicacionDTO dto = new PublicacionDTO();
         dto.setUserID(userID);
         dto.setTitulo(titulo);
         dto.setDescripcion(descripcion);
         dto.setImagen(imageService.saveUnique(image));
-        dto.setCategoria(categoria);
+        dto.setCategoria_Nombre(categoria);
+        dto.setCategoria_ID(categoria_id);
         dto.setEstado(estado);
         return dto;
     }
@@ -39,7 +40,7 @@ public class PublicacionMapper {
         dto.setTitulo(titulo);
         dto.setDescripcion(descripcion);
         dto.setImagen(image);
-        dto.setCategoria("Otros");
+        dto.setCategoria_Nombre("Otros");
         dto.setEstado("Disponible");
         return dto;
     }
@@ -55,7 +56,8 @@ public class PublicacionMapper {
         dto.setUserID(publicacion.getUserID());
         // Convert URL to Base 64 image
         dto.setImagen(imageService.loadBase64(publicacion.getImagenUrl()));
-        dto.setCategoria(publicacion.getCategoria().getNombre());
+        dto.setCategoria_Nombre(publicacion.getCategoria().getNombre());
+        dto.setCategoria_ID(publicacion.getCategoria().getId());
         dto.setEstado(publicacion.getState().getNombre());
         dto.setEstadoID(publicacion.getState().getId());
         return dto;
@@ -68,11 +70,11 @@ public class PublicacionMapper {
         p.setImagenUrl(imageService.saveUnique(publicacionDTO.getImagen()));
 
         // Temporal, porque el paso de categorias desde el front no esta implementado
-        if (publicacionDTO.getCategoria() == null) {
+        if (publicacionDTO.getCategoria_ID() == null) {
             p.setCategoria(categoriaRepository.findByNombre("Otros").get());
         }
         else {
-            p.setCategoria(categoriaRepository.findByNombre(publicacionDTO.getCategoria()).get());
+            p.setCategoria(categoriaRepository.findById(publicacionDTO.getCategoria_ID()).get());
         }
         p.setState(publicacionStateRepository.findById(1).get());
         return p;
@@ -81,11 +83,11 @@ public class PublicacionMapper {
     public Publicacion updatePublicacion(Publicacion publicacion, PublicacionDTO publicacionDTO) {
         publicacion.update(publicacionDTO);
         // Temporal, porque el paso de categorias desde el front no esta implementado
-        if (publicacionDTO.getCategoria() == null) {
+        if (publicacionDTO.getCategoria_ID() == null) {
             publicacion.setCategoria(categoriaRepository.findById(1L).get());
         }
         else {
-            publicacion.setCategoria(categoriaRepository.findByNombre(publicacionDTO.getCategoria()).get());
+            publicacion.setCategoria(categoriaRepository.findById(publicacionDTO.getCategoria_ID()).get());
         }
 
         if (publicacionDTO.getImagen() != null) {
