@@ -39,21 +39,24 @@ import is2.g57.hopetrade.mapper.PublicacionMapper;
  All: http://localhost:8080/publicacion/all
  Retorna: List<PublicacionDTO>
  {
-    "id": long,
-    "userID": long,
-    "titulo": string,
-    "descripcion": string,
-    "imagen": string (base64)
-    "active": boolean
-    "ultimaModificacion": Date
-    "fechaHoraCreacion": Date
+    Long id;
+    String titulo;
+    String descripcion;
+    Long userID;
+    String imagen (base64);
+    String categoria;
+    boolean active; ( Creo que no hace nada a esta altura )
+    LocalDateTime fechaHoraCreacion;
+    LocalDateTime ultimaModificacion;
+    String estado;
+    long estadoID;
  }
 
  All-Activas: http://localhost:8080/publicacion/all/activas
- All-Inactivas: http://localhost:8080/publicacion//all/inactivas
+ All-Finalizadas: http://localhost:8080/publicacion//all/finalizadas
  Buscar por userID: http://localhost:8080/publicacion/user/{userID}
  Activas por userID: http://localhost:8080/publicacion/user/{userID}/activas
- Inactivas por userID: http://localhost:8080/publicacion/user/{userID}/inactivas
+ Finalizadas por userID: http://localhost:8080/publicacion/user/{userID}/finalizadas
  Buscar por ID: http://localhost:8080/publicacion/{id}
  Fetch imagen por ID Publicacion : http://localhost:8080/publicacion/image/{id}
   
@@ -64,6 +67,7 @@ import is2.g57.hopetrade.mapper.PublicacionMapper;
     "titulo": string,
     "descripcion": string,
     "imagen": string(base64)
+    "categoria": string
   }
 
  PUT:
@@ -148,18 +152,10 @@ public class PublicacionController {
     return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
   }
 
+  // Por ahora requiere que se envie el titulo, la imagen, etc. Probablemente deba hacer que solo se verifiquen si no son null, en cuyo caso se deja el dato como esta en la BD. No se
   @PutMapping("/update")
-  public ResponseEntity<?> updatePublicacion(    
-  // Nota: pasar a @RequestBody PublicacionDTO publicacionDTO asap
-  @RequestParam("id") Long id,
-  @RequestParam("titulo") String titulo,
-  @RequestParam("descripcion") String descripcion,
-  @RequestParam("userID") Long userID,
-  @RequestParam(name="image", required = false) String image) {
-
-    PublicacionDTO publicacionDTO = publicacionMapper.newPublicacionDTO(userID, titulo, descripcion, image);
-    publicacionDTO.setId(id);
-
+  public ResponseEntity<?> updatePublicacion
+  (@RequestBody PublicacionDTO publicacionDTO) {
     // Test
     ResponseEntity<?> test = PublicacionTest(publicacionDTO);
     if (test != null) {
@@ -179,8 +175,8 @@ public class PublicacionController {
     catch (Exception e) {
       return new ResponseEntity<>("La publicacion no existe", HttpStatus.BAD_REQUEST);
     }
-    // Test publicacion inactiva ( No se si es requerimiento )
-    if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion esta cerrada y no puede modificarse", HttpStatus.BAD_REQUEST);
+    // Test publicacion esta activa (Esto deberia ser manejado por los states)
+    if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion no puede modificarse", HttpStatus.BAD_REQUEST);
 
     // Update
     publicacion = publicacionMapper.updatePublicacion(publicacion, publicacionDTO);
@@ -233,9 +229,10 @@ public class PublicacionController {
 		if(!oPublicacion.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(oPublicacion);
+		return ResponseEntity.ok(publicacionMapper.toPublicacionDTO(oPublicacion.get()));
 	}	
 
+  // Esto no deberia tener uso, y creo que ya no funciona con el formato actual de las imagenes. Queda por las dudas
   @GetMapping("/image/{id}")
   public ResponseEntity<Resource> getImagen(@PathVariable Long id) {
     System.out.println(" -------- Fetching URL de id = " + id + " -------- ");
