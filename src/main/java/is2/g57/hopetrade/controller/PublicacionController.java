@@ -251,19 +251,25 @@ public class PublicacionController {
   
 
   @GetMapping("/user/{userID}")
-    public @ResponseBody Iterable<Publicacion> buscarPublicacionPorUserId(@PathVariable Long userID) {
-        Iterable<Publicacion> publicacion = publicacionRepository.findAllByUserID(userID);
-        return publicacion;
+    public @ResponseBody Iterable<PublicacionDTO> buscarPublicacionPorUserId(@PathVariable Long userID) {
+        System.out.println("----- Fetching Publicaciones de id = " + userID + " ------");
+        return publicacionRepository.findAllByUserID(userID).stream()
+        .map(publicacionMapper::toPublicacionDTO)
+        .collect(Collectors.toList());
     }
   @GetMapping("/user/{userID}/activas")
-    public @ResponseBody Iterable<Publicacion> buscarActivasPorUserId(@PathVariable Long userID) {
-        Iterable<Publicacion> publicacion = publicacionRepository.findByUserIDAndActiveTrue(userID);
-        return publicacion;
+    public @ResponseBody Iterable<PublicacionDTO> buscarActivasPorUserId(@PathVariable Long userID) {
+        System.out.println("----- Fetching Publicaciones Activas de id = " + userID + " ------");
+        return publicacionRepository.findByUserIdAndStates(userID, "Disponible", "Reservado").stream()
+        .map(publicacionMapper::toPublicacionDTO)
+        .collect(Collectors.toList());
     }
-  @GetMapping("/user/{userID}/inactivas")
-    public @ResponseBody Iterable<Publicacion> buscarInactivasPorUserId(@PathVariable Long userID) {
-        Iterable<Publicacion> publicacion = publicacionRepository.findByUserIDAndActiveFalse(userID);
-        return publicacion;
+  @GetMapping("/user/{userID}/finalizadas")
+    public @ResponseBody Iterable<PublicacionDTO> buscarFinalizadasPorUserId(@PathVariable Long userID) {
+        System.out.println("----- Fetching Publicaciones Finalizadas de id = " + userID + " ------");
+        return publicacionRepository.findByUserIdAndState(userID, "Finalizado").stream()
+          .map(publicacionMapper::toPublicacionDTO)
+          .collect(Collectors.toList());
     }
     
 
@@ -277,6 +283,7 @@ public class PublicacionController {
 
   @GetMapping(path="/all/activas")
   public @ResponseBody Iterable<PublicacionDTO> getAllPublicacionesActivas() {
+    System.out.println("----- Fetching Publicaciones Activas ------");
     return publicacionRepository.findByStates("Disponible", "Reservado").stream()
     .map(publicacionMapper::toPublicacionDTO)
     .collect(Collectors.toList());
@@ -284,6 +291,7 @@ public class PublicacionController {
 
   @GetMapping(path="/all/finalizadas")
   public @ResponseBody Iterable<PublicacionDTO> getAllPublicacionesFinalizadas() {
+    System.out.println("----- Fetching Publicaciones Finalizadas ------");
     return publicacionRepository.findByState("Finalizado").stream()
     .map(publicacionMapper::toPublicacionDTO)
     .collect(Collectors.toList());
