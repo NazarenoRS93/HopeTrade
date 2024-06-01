@@ -76,8 +76,8 @@ public class Publicacion implements Serializable{
     // Metodos varios
 
     public void update(PublicacionDTO publicacionDTO) {
-        this.titulo = publicacionDTO.getTitulo();
-        this.descripcion = publicacionDTO.getDescripcion();
+        if (publicacionDTO.getTitulo() != null) this.titulo = publicacionDTO.getTitulo();
+        if (publicacionDTO.getDescripcion() != null) this.descripcion = publicacionDTO.getDescripcion();
         this.ultimaModificacion = java.time.LocalDateTime.now();
     }
 

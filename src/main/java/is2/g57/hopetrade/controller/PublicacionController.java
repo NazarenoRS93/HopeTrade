@@ -152,16 +152,9 @@ public class PublicacionController {
     return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
   }
 
-  // Por ahora requiere que se envie el titulo, la imagen, etc. Probablemente deba hacer que solo se verifiquen si no son null, en cuyo caso se deja el dato como esta en la BD. No se
+  // Por ahora requiere que se envie el titulo, la imagen, etc. Probablemente deba hacer que solo se verifiquen si no son null, en cuyo caso se deja el dato como esta en la BD
   @PutMapping("/update")
-  public ResponseEntity<?> updatePublicacion
-  (@RequestBody PublicacionDTO publicacionDTO) {
-    // Test
-    ResponseEntity<?> test = PublicacionTest(publicacionDTO);
-    if (test != null) {
-      return test;
-    }
-
+  public ResponseEntity<?> updatePublicacion(@RequestBody PublicacionDTO publicacionDTO) {
     // Test ID incluido en paquete
     if (publicacionDTO.getId() == null) {
       return new ResponseEntity<>("Se requiere el ID", HttpStatus.BAD_REQUEST);

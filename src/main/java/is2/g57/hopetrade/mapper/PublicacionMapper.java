@@ -83,10 +83,7 @@ public class PublicacionMapper {
     public Publicacion updatePublicacion(Publicacion publicacion, PublicacionDTO publicacionDTO) {
         publicacion.update(publicacionDTO);
         // Temporal, porque el paso de categorias desde el front no esta implementado
-        if (publicacionDTO.getCategoria_ID() == null) {
-            publicacion.setCategoria(categoriaRepository.findById(1L).get());
-        }
-        else {
+        if (publicacionDTO.getCategoria_ID() != null) {
             publicacion.setCategoria(categoriaRepository.findById(publicacionDTO.getCategoria_ID()).get());
         }
 
