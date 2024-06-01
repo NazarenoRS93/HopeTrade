@@ -15,10 +15,13 @@ function TestPage() {
     // Render on start
     useEffect(() => {
         fetchPublicaciones();
+        fetchCategorias();
     }, []);
 
     const reader = new FileReader();
     const [publicaciones, setPublicaciones] = useState([]);
+    const [categorias, setCategorias] = useState([]);
+    const [categoria, setCategoria] = useState([]);
     const [titulo, setTitulo] = useState([]);
     const [descripcion, setDesc] = useState([]);
     const [userID, setUserID] = useState([]);
@@ -26,7 +29,7 @@ function TestPage() {
 
     const fetchPublicaciones = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/publicacion/all/activas');
+            const response = await axios.get('http://localhost:8080/publicacion/all');
             const data = response.data.map(publicacion => {
                 return {
                     ...publicacion,
@@ -36,6 +39,15 @@ function TestPage() {
             setPublicaciones(data);
         } catch (error) {
             alert("Error obteniendo publicaciones: "+error);
+        }
+    }
+
+    const fetchCategorias = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/categoria/all');
+            setCategorias(response.data);
+        } catch (error) {
+            alert("Error obteniendo categorías: "+error);
         }
     }
 
@@ -64,8 +76,9 @@ function TestPage() {
         formdata.append("descripcion", descripcion);
         formdata.append("userID", userID);
         formdata.append("imagen", await fileToBase64(imagen));
+        formdata.append("categoria", categoria);
 
-        console.log('PUBLICACION: ', {titulo, descripcion, userID, imagen});
+        console.log('PUBLICACION: ', {titulo, descripcion, userID, imagen, categoria});
 
         axios.post('http://localhost:8080/publicacion/add', formdata, {
             headers: {
@@ -130,6 +143,13 @@ function TestPage() {
           onChange={(e) => setUserID(e.target.value)}
         />
       </label>
+      <select name="categoria" id="categoria" onChange={(e) => setCategoria(e.target.value)} value={categoria}>
+        {categorias.map((categoria) => (
+          <option key={categoria.id} value={categoria.nombre}>
+            {categoria.id} - {categoria.nombre}
+          </option>
+        ))}
+      </select>
       <label>Imagen:
         <input
         type="file"
