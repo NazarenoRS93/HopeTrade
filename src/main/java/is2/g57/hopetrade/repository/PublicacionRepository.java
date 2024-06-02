@@ -36,4 +36,7 @@ public interface PublicacionRepository extends JpaRepository<Publicacion, Intege
 
     @Query("SELECT p FROM Publicacion p WHERE p.userID = :userID AND p.state.nombre = :statename")
     List<Publicacion> findByUserIdAndState(@Param ("userID") Long userID, @Param("statename") String statename);
+
+    @Query("SELECT p FROM Publicacion p WHERE p.categoria.id = :catID")
+    List<Publicacion> findByCategoriaID(@Param("catID") Long catID);
 }

@@ -306,4 +306,12 @@ public class PublicacionController {
     .map(publicacionMapper::toPublicacionDTO)
     .collect(Collectors.toList());
   }
+
+  @GetMapping(path="/all/categoria/{idCategoria}")
+  public @ResponseBody Iterable<PublicacionDTO> getAllPublicacionesPorCategoria(@PathVariable Long idCategoria) {
+    System.out.println("----- Fetching Publicaciones por categoria ------");
+    return publicacionRepository.findByCategoriaID(idCategoria).stream()
+    .map(publicacionMapper::toPublicacionDTO)
+    .collect(Collectors.toList());
+  }
 }
