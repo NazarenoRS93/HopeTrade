@@ -11,5 +11,4 @@ public interface FilialRepository extends JpaRepository<Filial, Long>{
 	Optional<Filial> findById(Long id);
 	Optional<Filial> findByNombre(String nombre);
 	Optional<Filial> findByDireccion(String direccion);
-	
 }

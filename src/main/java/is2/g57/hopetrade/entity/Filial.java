@@ -13,7 +13,7 @@ import jakarta.persistence.*;
 public class Filial {
 	@Id
 	@GeneratedValue(strategy  = GenerationType.IDENTITY)
-	@Column(name="id_filial")
+	@Column(name="id")
 	private Long id;
 	
 	@Column(name="nombre", nullable = false, length=100)
