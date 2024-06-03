@@ -1,18 +1,13 @@
 package is2.g57.hopetrade.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "usuario" )
 public class User {
 	
+	private static final long serialVersionUID = -7597079625316159690L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
@@ -40,10 +35,6 @@ public class User {
 	@Column(name="activo")
 	private boolean activo;
 	
-	 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-	 @JsonManagedReference
-	  private List<Oferta> ofertas;
-	
 	public User(Long id, String email, String dni, String pass, String nombre, String apellido, Date fecha_nacimiento) {
 		this.id = id;
 		this.email = email;
@@ -53,7 +44,6 @@ public class User {
 		this.apellido = apellido;
 		this.fecha_nacimiento = fecha_nacimiento;
 		this.activo = true;
-		this.ofertas = new ArrayList<Oferta>();
 	}
 
 	public User(String email, String dni, String pass, String nombre, String apellido, Date fecha_nacimiento) {
@@ -64,25 +54,10 @@ public class User {
 		this.apellido = apellido;
 		this.fecha_nacimiento = fecha_nacimiento;
 		this.activo = true;
-		this.ofertas = new ArrayList<Oferta>();
 	}
 
 	public User() {
 	}
-	
-	  @Override
-	    public boolean equals(Object o) {
-	        if (this == o) return true;
-	        if (o == null || getClass() != o.getClass()) return false;
-	        User user = (User) o;
-	        return Objects.equals(id, user.id) &&
-	                Objects.equals(dni, user.dni);
-	    }
-
-	    @Override
-	    public int hashCode() {
-	        return Objects.hash(id, email, dni);
-	    }
 
 	public String getEmail() {
 		return email;

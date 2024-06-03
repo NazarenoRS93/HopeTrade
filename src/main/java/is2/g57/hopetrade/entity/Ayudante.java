@@ -9,135 +9,141 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "ayudante", uniqueConstraints = {@UniqueConstraint(columnNames = {"id_ayudante"})})
 public class Ayudante {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_ayudante")
-    private Long id_ayudante;
-    
-    @Column(name = "email", nullable= false, unique= true, length= 100)
-    private String email;
-    
-    @Column(name = "dni", nullable = false, unique = true, length=100)
-    private String dni;
-    
-    @Column(name = "pass", nullable = false, length = 50)
-    private String pass;
-    
-    @Column(name = "nombre", nullable= false, length = 100)
-    private String nombre;
-    
-    @Column(name ="apellido",  nullable= false, length=100)
-    private String apellido;
-    
-    @Column(name = "activo")
-    private boolean activo;
-    
-    @ManyToOne
-    @JoinColumn(name = "filial_id")
-    @JsonBackReference
-    private Filial filial;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_ayudante")
+	private Long id_ayudante;
+	
+	@Column(name = "email", nullable= false, unique= true, length= 100)
+	private String email;
+	
+	@Column(name = "dni", nullable = false, unique = true, length=100)
+	private String dni;
+	
+	@Column(name = "pass", nullable = false, length = 50)
+	private String pass;
+	
+	@Column(name = "nombre", nullable= false, length = 100)
+	private String nombre;
+	
+	@Column(name ="apellido",  nullable= false, length=100)
+	private String apellido;
+	
+	@Column(name = "activo")
+	private boolean activo;
+	
+	    @ManyToOne
+	    @JoinColumn(name = "filial_id")
+	    @JsonBackReference
+	    private Filial filial;
 
-    public Ayudante(Long id, String email, String dni, String pass, String nombre, String apellido) {
-        this.id_ayudante = id;
-        this.email = email;
-        this.dni = dni;
-        this.pass = pass;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.activo = true;
-    }
+	
+	
+	public Ayudante(Long id, String email, String dni, String pass, String nombre, String apellido) {
+		this.id_ayudante = id;
+		this.email = email;
+		this.dni = dni;
+		this.pass = pass;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.activo = true;
+	}
 
-    public Ayudante(String email, String dni, String pass, String nombre, String apellido) {
-        this.email = email;
-        this.dni = dni;
-        this.pass = pass;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.activo = true;
-    }
+	public Ayudante(String email, String dni, String pass, String nombre, String apellido) {
+		this.email = email;
+		this.dni = dni;
+		this.pass = pass;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.activo = true;
+	}
 
-    public Ayudante() {
-    }
+	public Ayudante() {
+	}
+	
+	   @Override
+	    public boolean equals(Object o) {
+	        if (this == o) return true;
+	        if (o == null || getClass() != o.getClass()) return false;
+	        Ayudante ayudante = (Ayudante) o;
+	        return Objects.equals(email, ayudante.email) &&
+	                Objects.equals(dni, ayudante.dni);
+	    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ayudante ayudante = (Ayudante) o;
-        return Objects.equals(email, ayudante.email) &&
-                Objects.equals(dni, ayudante.dni);
-    }
+	    @Override
+	    public int hashCode() {
+	        return Objects.hash(email, dni);
+	    }
+	
+	    
+	    
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, dni);
-    }
-    
-    public Long getId() {
-        return id_ayudante;
-    }
+	public Filial getFilial() {
+			return filial;
+		}
 
-    public void setId(Long id) {
-        this.id_ayudante = id;
-    }
+		public void setFilial(Filial filial) {
+			this.filial = filial;
+		}
 
-    public String getEmail() {
-        return email;
-    }
+	public Long getId() {
+		return this.id_ayudante;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setId(Long id) {
+		this.id_ayudante = id;
+	}
 
-    public String getDni() {
-        return dni;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getPass() {
-        return pass;
-    }
+	public String getDni() {
+		return dni;
+	}
 
-    public void setPass(String pass) {
-        this.pass = pass;
-    }
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
 
-    public String getNombre() {
-        return nombre;
-    }
+	public String getPass() {
+		return pass;
+	}
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
 
-    public String getApellido() {
-        return apellido;
-    }
+	public String getNombre() {
+		return nombre;
+	}
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    public boolean isActivo() {
-        return activo;
-    }
+	public String getApellido() {
+		return apellido;
+	}
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
 
-    public Filial getFilial() {
-        return filial;
-    }
+	public boolean isActivo() {
+		return activo;
+	}
 
-    public void setFilial(Filial filial) {
-        this.filial = filial;
-    }
-
-    public boolean isAdmin() {
-        return (this.getEmail().equals("admin@caritas.com") && this.getPass().equals("admin"));
-    }
+	public void setActivo(boolean activo) {
+		this.activo = activo;
+	}
+	
+	public boolean isAdmin() {
+		return (this.getEmail().equals("admin@caritas.com") && this.getPass().equals("admin"));
+	}
+	
 }
