@@ -3,10 +3,15 @@ package is2.g57.hopetrade.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.services.ImageService;
@@ -56,11 +61,18 @@ public class Publicacion implements Serializable{
     private LocalDateTime fechaHoraCreacion;
     @Column(name="ultimaModificacion")
     private LocalDateTime ultimaModificacion;
+    
+     @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+	 @JsonManagedReference
+	   private List<Oferta> ofertas;
+    
+    
     // Constructores
     public Publicacion() {
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
         this.active = true;
+		this.ofertas = new ArrayList<Oferta>();
     }
 
     public Publicacion(PublicacionDTO publicacionDTO) {
@@ -71,6 +83,22 @@ public class Publicacion implements Serializable{
         this.ultimaModificacion = java.time.LocalDateTime.now();
         this.active = true;
         this.setState(new PublicacionStateDisponible());
+        this.ofertas = new ArrayList<Oferta>();	
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Publicacion that = (Publicacion) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(titulo, that.titulo) &&
+                Objects.equals(userID, that.userID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, descripcion, userID, categoria_id, active, imagenUrl, fechaHoraCreacion, ultimaModificacion);
     }
 
     // Metodos varios
