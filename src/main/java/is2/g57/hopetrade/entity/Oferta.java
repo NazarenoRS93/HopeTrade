@@ -27,7 +27,7 @@ public class Oferta {
     private LocalDateTime fechaIntercambio;
 
     @Column(name = "estado")
-    private boolean estado;
+    private Boolean estado;
 
     @Column(name = "imagen_url")
     private String imagenUrl;

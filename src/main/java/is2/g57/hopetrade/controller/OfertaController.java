@@ -74,25 +74,25 @@ public class OfertaController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public @ResponseBody Iterable<Oferta> buscarOfertaPorUserId(@PathVariable Long userId) {
+	public @ResponseBody Iterable<Oferta> buscarOfertaPorUserId(@PathVariable ("userId") Long userId) {
 		Iterable<Oferta> oferta = ofertaRepository.findAllByUserId(userId);
 		return oferta;
 	}
 
 	@GetMapping("/filial/{filialId}")
-	public @ResponseBody Iterable<Oferta> buscarOfertaPorFilialId(@PathVariable Long filialId) {
+	public @ResponseBody Iterable<Oferta> buscarOfertaPorFilialId(@PathVariable("filialId") Long filialId) {
 		Iterable<Oferta> oferta = ofertaRepository.findAllByFilialId(filialId);
 		return oferta;
 	}
 
 	@GetMapping("/publicacion/{publicacionId}")
-	public @ResponseBody Iterable<Oferta> buscarOfertaPorPublicacionId(@PathVariable Long publicacionId) {
+	public @ResponseBody Iterable<Oferta> buscarOfertaPorPublicacionId(@PathVariable("publicacionId") Long publicacionId) {
 		Iterable<Oferta> oferta = ofertaRepository.findAllByPublicacionId(publicacionId);
 		return oferta;
 	}
 
 	@PostMapping("/aceptar/{id}")
-	public ResponseEntity<?> aceptarOferta(@PathVariable Long ofertaId) {
+	public ResponseEntity<?> aceptarOferta(@PathVariable("id") Long ofertaId) {
 		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
@@ -104,7 +104,7 @@ public class OfertaController {
 	}
 
 	@PostMapping("/rechazar/{id}")
-	public ResponseEntity<?> rechazarOferta(@PathVariable Long ofertaId, OfertaRequest ofertaRequest) {
+	public ResponseEntity<?> rechazarOferta(@PathVariable("id") Long ofertaId, OfertaRequest ofertaRequest) {
 		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
@@ -118,7 +118,7 @@ public class OfertaController {
 	}
 
 	@GetMapping("/image/{id}")
-	public ResponseEntity<Resource> getImagen(@PathVariable Long id) {
+	public ResponseEntity<Resource> getImagen(@PathVariable("id") Long id) {
 		System.out.println(" -------- Fetching URL de id = " + id + " -------- ");
 		Oferta of = ofertaRepository.findById(id).get();
 		System.out.println(" -------- Recibido url de id = " + id + " URL = " + of.getImagenUrl() + "-------- ");
