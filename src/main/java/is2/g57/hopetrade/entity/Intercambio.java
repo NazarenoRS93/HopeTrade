@@ -23,6 +23,8 @@ public class Intercambio implements Serializable {
     // @ManyToOne (cascade = CascadeType.DETACH)
     // @JoinColumn(name = "ID_ESTADO")
     // IntercambioState estado;
+    // ESTADOS POSIBLES: PROGRAMADO, FINALIZADO, CANCELADO
+    // Hay que pensar si hace falta implementar state para esto o con un String alcanza
 
     public Intercambio() {}
 
