@@ -62,10 +62,9 @@ public class OfertaController {
 		}
 	}
 
-	@GetMapping("/id")
-	public ResponseEntity<?> obtenerOfertaPorId(@RequestBody OfertaRequest ofertaRequest) {
-		Long id = ofertaRequest.getId();
-		Optional<Oferta> ofertaOp = this.ofertaRepository.findById(id);
+	@GetMapping("/ObtenerPorId/{id}")
+	public ResponseEntity<?> obtenerOfertaPorId(@PathVariable("id") Long ofertaId) {
+		Optional<Oferta> ofertaOp = this.ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
 			return new ResponseEntity<>(ofertaOp.get(), HttpStatus.OK);
 		} else {
