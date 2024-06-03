@@ -77,6 +77,18 @@ public class Publicacion implements Serializable{
         this.ultimaModificacion = java.time.LocalDateTime.now();
     }
 
+    public void eliminar(){
+        this.state.eliminar(this);
+    }
+
+    public void suspender(){
+        this.state.suspender(this);
+    }
+
+    public void finalizar(){
+        this.state.confirmarIntercambio(this);
+    }
+
     public void desactivar(){
         this.active = false;
     }
