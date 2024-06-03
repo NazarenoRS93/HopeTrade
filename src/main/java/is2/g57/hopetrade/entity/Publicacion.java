@@ -3,13 +3,9 @@ package is2.g57.hopetrade.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Base64;
 import java.util.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import is2.g57.hopetrade.dto.PublicacionDTO;
-import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.entity.state.*;
 
 import java.time.LocalDateTime;
@@ -23,7 +19,7 @@ public class Publicacion implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+    @Column(name="id")
     private Long id;
 
     @Column(name="titulo", length = 50)

@@ -2,9 +2,6 @@ package is2.g57.hopetrade.dto;
 
 import java.time.LocalDateTime;
 
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.Resource;
-
 public class PublicacionDTO {
     private Long id;
     private String titulo;
