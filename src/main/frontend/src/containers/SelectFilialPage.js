@@ -23,6 +23,7 @@ function SelectFilialPage() {
 		try {
 			const response = await axios.get('http://localhost:8080/filial/all');
 			setFiliales(response.data);
+			console.log(response.data);
 		} catch (error) {
 			alert("Error obteniendo filiales: " + error);
 		}
