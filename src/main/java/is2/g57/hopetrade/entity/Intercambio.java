@@ -14,21 +14,32 @@ public class Intercambio implements Serializable {
     @Column(name="id_publicacion")
     private Long publicacionID;
 
-    // @JoinColumn(name = "id_oferta")
-    // private Oferta oferta;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_oferta", unique = true)
+    private Oferta oferta;
 
     @Column(name="observacion")
     private String observacion;
 
-    // @ManyToOne (cascade = CascadeType.DETACH)
-    // @JoinColumn(name = "ID_ESTADO")
-    // IntercambioState estado;
-    // ESTADOS POSIBLES: PROGRAMADO, FINALIZADO, CANCELADO
-    // Hay que pensar si hace falta implementar state para esto o con un String alcanza
+//     @ManyToOne (cascade = CascadeType.DETACH)
+//     @JoinColumn(name = "ID_ESTADO")
+//    IntercambioState estado;
+//     ESTADOS POSIBLES: PROGRAMADO, FINALIZADO, CANCELADO
+//     Hay que pensar si hace falta implementar state para esto o con un String alcanza
 
     public Intercambio() {}
+    
+    
 
-    public Long getPublicacionID() {
+    public Intercambio(Long publicacionID, Oferta oferta, String observacion) {
+		this.publicacionID = publicacionID;
+		this.oferta = oferta;
+		this.observacion = observacion;
+	}
+
+
+
+	public Long getPublicacionID() {
         return publicacionID;
     }
 
@@ -36,13 +47,13 @@ public class Intercambio implements Serializable {
         this.publicacionID = publicacionID;
     }
 
-    //public Oferta getOferta() {
-    //    return oferta;
-    //}
+    public Oferta getOferta() {
+        return oferta;
+    }
 
-    //public void setOferta(Oferta oferta) {
-    //    this.oferta = oferta;
-    //}
+   public void setOferta(Oferta oferta) {
+        this.oferta = oferta;
+    }
 
     public String getObservacion() {
         return observacion;

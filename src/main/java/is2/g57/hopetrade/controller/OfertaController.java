@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import is2.g57.hopetrade.entity.Intercambio;
 import is2.g57.hopetrade.entity.Oferta;
 import is2.g57.hopetrade.entity.Publicacion;
+import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.OfertaRepository;
 import is2.g57.hopetrade.services.ImageService;
 
@@ -32,6 +34,8 @@ public class OfertaController {
 
 	@Autowired
 	private ImageService imageService;
+	
+	@Autowired IntercambioRepository intercambioRepository;
 
 	@PostMapping("/guardar")
 	public ResponseEntity<?> guardarOferta(@RequestBody OfertaRequest ofertaRequest) {
@@ -98,6 +102,8 @@ public class OfertaController {
 			Oferta oferta = ofertaOp.get();
 			oferta.setEstado(true);
 		    this.ofertaRepository.save(oferta);
+		    Intercambio intercambio = new Intercambio(oferta.getPublicacion().getId(), oferta, "Pendiente");
+		    this.intercambioRepository.save(intercambio);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
