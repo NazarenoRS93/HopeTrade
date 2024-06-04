@@ -12,7 +12,7 @@ import Item from "../utils/Item";
 import Typography from "@mui/material/Typography";
 import {Link} from "react-router-dom";
 import {baseUser} from "../utils/utilConstants";
-import {Avatar} from "@mui/material";
+import {Avatar, Stack} from "@mui/material";
 
 function Header() {
 
@@ -50,48 +50,65 @@ function Header() {
                     <Avatar src={Completo} variant="square" sx={{width:"auto",height:"80px"}} />
                 </Item>
                 <Item sx={{ flexGrow: 1 }}/>
-                {(user?.isLogged && user.tipoUser===2) ?
-                    <Item>
-                        <Link to="/register">
-                            <Button variant="contained" color="secondary" startIcon={<LogoutIcon color="primary"/>}>
-                                <Typography variant="button">Registrar ayudante</Typography>
-                            </Button>
-                        </Link>
-                    </Item>
-                    : null
-                }
                 <Item>
-                    {user?.isLogged ?
-                        <Link to="/home">
-                            <Button variant="contained" color="success" startIcon={<HomeRoundedIcon color="primary"/>}>
-                                <Typography variant="button">Inicio</Typography>
-                            </Button>
-                        </Link>
-                        :
-                        <Link to="/register">
-                            <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary"/>}>
-                                <Typography variant="button">Registrarse</Typography>
-                            </Button>
-                        </Link>
-                    }
-                </Item>
-                <Item>
-                    {!user?.isLogged ?
-                        <Link to="/login">
-                            <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}>
-                                <Typography variant="button">Ingresar</Typography>
-                            </Button>
-                        </Link>
-                        :
-                        <Button variant="contained" color="error" startIcon={<PersonAddAltRoundedIcon color="background2"/>}
-                                onClick={logout}>
-                            <Typography variant="button2">Cerrar sesión</Typography>
-                        </Button>
-                    }
+                    <Box
+                        sx={{
+                            backgroundColor: colors.background,
+                            flexDirection: "column",
+                            alignItems: "right",
+                        }}
+                    >
+                        <Item>
+                            <Stack spacing={2} direction="row">
+                                {(user?.isLogged && user.tipoUser===2) ?
+                                    <Link to="/register">
+                                        <Button variant="contained" color="secondary" startIcon={<LogoutIcon color="primary"/>}>
+                                            <Typography variant="button">Registrar ayudante</Typography>
+                                        </Button>
+                                    </Link>
+                                    : null
+                                }
+                                {user?.isLogged ?
+                                    <Link to="/home">
+                                        <Button variant="contained" color="success" startIcon={<HomeRoundedIcon color="primary"/>}>
+                                            <Typography variant="button">Inicio</Typography>
+                                        </Button>
+                                    </Link>
+                                    :
+                                    <Link to="/register">
+                                        <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary"/>}>
+                                            <Typography variant="button">Registrarse</Typography>
+                                        </Button>
+                                    </Link>
+                                }
+                                {!user?.isLogged ?
+                                    <Link to="/login">
+                                        <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}>
+                                            <Typography variant="button">Ingresar</Typography>
+                                        </Button>
+                                    </Link>
+                                    :
+                                    <Button variant="contained" color="error" startIcon={<PersonAddAltRoundedIcon color="background2"/>}
+                                            onClick={logout}>
+                                        <Typography variant="button2">Cerrar sesión</Typography>
+                                    </Button>
+                                }
+                            </Stack>
+                        </Item>
+                        <Item sx={{textAlign: "right"}}>
+                            {user?.isLogged ?
+                                <Typography variant="h5">Usuario: <strong>{user.apellido}, {user.nombre}</strong> | App Versión {user.appVersion}</Typography>
+                            :
+                                <Typography variant="h5">App Versión {user.appVersion}</Typography>
+                            }
+                        </Item>
+                    </Box>
                 </Item>
             </Box>
+
         </div>
     )
 }
 
 export default Header;
+

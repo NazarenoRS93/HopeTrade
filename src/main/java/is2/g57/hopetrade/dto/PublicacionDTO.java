@@ -2,19 +2,19 @@ package is2.g57.hopetrade.dto;
 
 import java.time.LocalDateTime;
 
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.core.io.Resource;
-
 public class PublicacionDTO {
     private Long id;
     private String titulo;
     private String descripcion;
     private Long userID;
     private String imagen;
-    private String categoria;
+    private String categoria_nombre;
+    private long categoria_id;
     private boolean active;
     private LocalDateTime fechaHoraCreacion;
     private LocalDateTime ultimaModificacion;
+    private String estado;
+    private long estadoID;
 
     public boolean getActive() { return active; }
     public LocalDateTime getFechaHoraCreacion() {
@@ -64,10 +64,28 @@ public class PublicacionDTO {
         this.userID = userID;
     }  
 
-    public String getCategoria() {
-        return categoria;
+    public void setCategoria_ID(Long categoria_id) {
+        this.categoria_id = categoria_id;
     }
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public Long getCategoria_ID() {
+        return categoria_id;
+    }
+    public String getCategoria_Nombre() {
+        return categoria_nombre;
+    }
+    public void setCategoria_Nombre(String categoria_nombre) {
+        this.categoria_nombre = categoria_nombre;
+    }
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+    public String getEstado() {
+        return estado;
+    }
+    public void setEstadoID(long estadoID) {
+        this.estadoID = estadoID;
+    }
+    public long getEstadoID() {
+        return estadoID;
     }
 }

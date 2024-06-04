@@ -58,3 +58,10 @@
 .AddPostForm {
   width: 400px;
 }
+
+.AlignRight {
+  justify-content: right;
+}
+.AlignLeft {
+  justify-content: left;
+}

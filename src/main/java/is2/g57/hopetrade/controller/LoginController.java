@@ -68,7 +68,9 @@ public class LoginController {
     public ResponseEntity<?> loginUser(@PathVariable String dni, @PathVariable String pass) {
         LoginResponse response = new LoginResponse();
         HttpStatus status;
+       
         try {
+               
             Optional<User> userOp = userRepository.findUserByDni(dni);
             if (!userOp.isPresent()) {
                 status = HttpStatus.NOT_FOUND;
@@ -84,7 +86,7 @@ public class LoginController {
                 } else {
                     status = HttpStatus.OK;
                     response = new LoginResponse(user.getDni(), user.getId(),
-                            user.isActivo(), "Inicio de sesión exitoso. ¡Bienvenido!",
+                            user.isActivo(), "¡Bienvenido a HopeTrade!",
                             user.getNombre(), user.getApellido(),0);
                 }
             }

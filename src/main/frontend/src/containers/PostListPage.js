@@ -1,34 +1,34 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
-import Typography from "@mui/material/Typography";
-import {UserContext} from "../context/userContext";
-import Box from "@mui/material/Box";
-import SearchIcon from '@mui/icons-material/Search';
-import Button from "@mui/material/Button";
-import Item from "../utils/Item";
-import {colors} from "../utils/colors";
 import axios from "axios";
-import {Link} from "react-router-dom";
-import Post from "../components/post/Post";
 import PostGrid from "../components/post/PostGrid";
 import PostItem from "../components/post/PostItem";
+import {defaultFormAddPost} from "../utils/utilConstants";
 
 function PostListPage() {
     // Render on start
     useEffect(() => {
-        fetchPublicaciones();
+        const cookie = window.localStorage.getItem("user");
+        if(cookie) {
+            let usuario = JSON.parse(cookie);
+            setUser(usuario);
+            fetchPublicaciones(usuario.idUser);
+        }
     }, []);
 
     const reader = new FileReader();
+    const [user, setUser] = useState({});
     const [publicaciones, setPublicaciones] = useState([]);
-    const [titulo, setTitulo] = useState([]);
-    const [descripcion, setDesc] = useState([]);
-    const [userID, setUserID] = useState([]);
-    const [imagen, setImagen] = useState([]);
+    const [form, setForm] = useState(defaultFormAddPost)
 
-    const fetchPublicaciones = async () => {
+    const fetchPublicaciones = async (idUser) => {
         try {
-            const response = await axios.get('http://localhost:8080/publicacion/all');
+            let path = "/all";
+            if(window.location.href.includes("my-posts")) {
+                path = "/user/"+idUser;
+            }
+            let url = "http://localhost:8080/publicacion"+path;
+            const response = await axios.get(url);
             const data = response.data.map(publicacion => {
                 return {
                     ...publicacion,
@@ -62,12 +62,10 @@ function PostListPage() {
         event.preventDefault();
 
         var formdata = new FormData();
-        formdata.append("titulo", titulo);
-        formdata.append("descripcion", descripcion);
-        formdata.append("userID", userID);
-        formdata.append("imagen", await fileToBase64(imagen));
-
-        console.log('PUBLICACION: ', {titulo, descripcion, userID, imagen});
+        formdata.append("titulo", form.titulo);
+        formdata.append("descripcion", form.descripcion);
+        formdata.append("userID", user.id);
+        formdata.append("imagen", await fileToBase64(form.imagen));
 
         axios.post('http://localhost:8080/publicacion/add', formdata, {
             headers: {
@@ -86,44 +84,9 @@ function PostListPage() {
         <React.Fragment>
             <PostGrid>
             { publicaciones.map((publicacion) => (
-                <PostItem link="/ver-post/" key={publicacion.id} data={publicacion}/>
+                <PostItem id={publicacion.id} data={publicacion} user={user} />
             ))}
             </PostGrid>
-
-
-            <div> AGREGAR PARA TESTEO </div>
-            <form onSubmit={handleSubmit}>
-                <label>Titulo publicacion:
-                    <input
-                        type="text"
-                        value={titulo}
-                        onChange={(e) => setTitulo(e.target.value)}
-                    />
-                </label>
-                <label>Descripcion publicacion:
-                    <input
-                        type="text"
-                        value={descripcion}
-                        onChange={(e) => setDesc(e.target.value)}
-                    />
-                </label>
-                <label>UserID:
-                    <input min="0"
-                           type="number" id="quantity"
-                           value={userID}
-                           onChange={(e) => setUserID(e.target.value)}
-                    />
-                </label>
-                <label>Imagen:
-                    <input
-                        type="file"
-                        id="imagen"
-                        name="imagen"
-                        onChange={(e) => setImagen(e.target.files[0])}
-                        accept=".jpg, .jpeg, .png" />
-                </label>
-                <input type="submit" value="Submit"/>
-            </form>
         </React.Fragment>
     )
 }

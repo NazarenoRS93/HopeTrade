@@ -38,7 +38,7 @@ function LoginPage() {
                 let tempUser = {...response.data};
                 let tempData =
                     { ...baseUser, isLogged:true, idUser:tempUser.id,
-                        nombre:tempUser.nombre, tipoUser: tempUser.tipo };
+                        nombre:tempUser.nombre, apellido:tempUser.apellido, tipoUser: tempUser.tipo };
                 window.localStorage.setItem("user",JSON.stringify(tempData));
                 console.log(response.data);
                 let href = window.location.href;
