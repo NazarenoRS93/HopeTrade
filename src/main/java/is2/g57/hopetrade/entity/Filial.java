@@ -28,6 +28,10 @@ public class Filial {
 	 @OneToMany(mappedBy = "filial")
 	 @JsonManagedReference
 	  private List<Ayudante> ayudantes;
+	 
+	 @OneToMany(mappedBy = "filial", cascade = CascadeType.ALL, orphanRemoval = true)
+	    @JsonManagedReference
+	    private List<Oferta> ofertas = new ArrayList<>();
 
 	public Filial(Long id, String nombre, String direccion, String email) {
 		this.id = id;
@@ -47,20 +51,19 @@ public class Filial {
 	public Filial() {
 	}
 
-	  @Override
+	 @Override
 	    public boolean equals(Object o) {
 	        if (this == o) return true;
 	        if (o == null || getClass() != o.getClass()) return false;
 	        Filial filial = (Filial) o;
-	        return Objects.equals(nombre, filial.nombre) &&
-	                Objects.equals(direccion, filial.direccion);
+	        return Objects.equals(id, filial.id);
 	    }
+
 
 	    @Override
 	    public int hashCode() {
-	        return Objects.hash(nombre, direccion);
+	        return Objects.hash(id);
 	    }
-	
 	
 	
 	public Long getId() {

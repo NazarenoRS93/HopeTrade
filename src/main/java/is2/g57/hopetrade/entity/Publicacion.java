@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.entity.state.*;
@@ -52,6 +56,12 @@ public class Publicacion implements Serializable{
     private LocalDateTime fechaHoraCreacion;
     @Column(name="ultimaModificacion")
     private LocalDateTime ultimaModificacion;
+    
+    @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+  	 @JsonManagedReference
+  	   private List<Oferta> ofertas;
+    
+    
     // Constructores
     public Publicacion() {
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
@@ -70,6 +80,21 @@ public class Publicacion implements Serializable{
     }
 
     // Metodos varios
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Publicacion that = (Publicacion) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(titulo, that.titulo) &&
+                Objects.equals(userID, that.userID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, descripcion, userID, categoria, active, imagenUrl, fechaHoraCreacion, ultimaModificacion);
+    }
 
     public void update(PublicacionDTO publicacionDTO) {
         if (publicacionDTO.getTitulo() != null) this.titulo = publicacionDTO.getTitulo();
