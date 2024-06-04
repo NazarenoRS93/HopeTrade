@@ -86,7 +86,7 @@ public class LoginController {
                 } else {
                     status = HttpStatus.OK;
                     response = new LoginResponse(user.getDni(), user.getId(),
-                            user.isActivo(), "Inicio de sesión exitoso. ¡Bienvenido!",
+                            user.isActivo(), "¡Bienvenido a HopeTrade!",
                             user.getNombre(), user.getApellido(),0);
                 }
             }

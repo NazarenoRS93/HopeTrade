@@ -51,8 +51,11 @@ function LoginAdminPage(props) {
                 console.log(response.data);
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
-                window.location.replace(href+"/select-filial")
-                //window.location.replace(href+"/home");
+                let path = "/home";
+                if (tempUser.tipo === 1) {
+                    path = "/select-filial";
+                }
+                window.location.replace(href+path)
             })
             .catch((err) => {
                 alert(err.response.data.responseMsg);

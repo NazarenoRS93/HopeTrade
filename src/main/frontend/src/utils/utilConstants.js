@@ -22,7 +22,8 @@ export const defaultFormAddPost = {
     descripcion: '',
     userID: 0,
     imagen: '',
-    categoria: '',
+    catID: 0,
+    catName: '',
     active: '',
     fechaHoraCreacion: '',
     ultimaModificacion: ''

@@ -1,4 +1,4 @@
-import {Box, Grid} from "@mui/material";
+import {Grid} from "@mui/material";
 import React from "react";
 import "../../App.css";
 import CustomCard from "../../utils/CustomCard";

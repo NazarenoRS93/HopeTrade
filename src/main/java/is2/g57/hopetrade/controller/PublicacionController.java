@@ -97,16 +97,16 @@ public class PublicacionController {
     
     // Test UserID existe
     if (PublicacionDTO.getUserID() == null) {
-      return new ResponseEntity<>("Se requiere el userID", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("Se requiere el userID.", HttpStatus.BAD_REQUEST);
     }
 
     // Test titulo > 0 y titulo < 50
     try {
       if (PublicacionDTO.getTitulo().length() > 50 || PublicacionDTO.getTitulo().length() < 1) {
-        return new ResponseEntity<>("Ingrese un titulo de hasta 50 caracteres", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Ingrese un titulo de hasta 50 caracteres.", HttpStatus.BAD_REQUEST);
       }
       if (PublicacionDTO.getDescripcion().length() > 240) {
-        return new ResponseEntity<>("La descripcion puede tener hasta 240 caracteres", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("La descripción no debe superar los 240 caracteres.", HttpStatus.BAD_REQUEST);
       }
     } catch (Exception e) {
       return new ResponseEntity<>("Hubo un error", HttpStatus.BAD_REQUEST);
@@ -117,16 +117,21 @@ public class PublicacionController {
       Iterable<Publicacion> publicacion = publicacionRepository.findAllByUserID(PublicacionDTO.getUserID());
       for (Publicacion p : publicacion) {
         if (p.getTitulo().equals(PublicacionDTO.getTitulo()) && p.isActivo() && p.getId() != PublicacionDTO.getId()) {
-          return new ResponseEntity<>("Ya hay una publicacion activa con ese titulo", HttpStatus.BAD_REQUEST);
+          return new ResponseEntity<>("Ya hay una publicación activa con ese título.", HttpStatus.BAD_REQUEST);
         }
       }
     } catch (Exception e) {
-      return new ResponseEntity<>("Hubo un error", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("Hubo un error.", HttpStatus.BAD_REQUEST);
+    }
+
+    // Test categoría
+    if (! (PublicacionDTO.getCategoria_ID() != null && PublicacionDTO.getCategoria_ID() < 17 && PublicacionDTO.getCategoria_ID() > 0)) {
+      return new ResponseEntity<>("Seleccione una categoría.", HttpStatus.BAD_REQUEST);
     }
 
     // Test imagen está en el DTO
     if (PublicacionDTO.getImagen() == null) {
-      return new ResponseEntity<>("Se requiere la imagen", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("Se requiere la imagen.", HttpStatus.BAD_REQUEST);
     }
 
     return null;
@@ -144,7 +149,7 @@ public class PublicacionController {
     // Add
     Publicacion p = publicacionMapper.toNewPublicacion(publicacionDTO);
     publicacionRepository.save(p);
-    return new ResponseEntity<>("Publicacion registrada", HttpStatus.CREATED);
+    return new ResponseEntity<>("¡Publicación registrada exitosamente!", HttpStatus.CREATED);
   }
 
   // Por ahora requiere que se envie el titulo, la imagen, etc. Probablemente deba hacer que solo se verifiquen si no son null, en cuyo caso se deja el dato como esta en la BD
@@ -161,10 +166,10 @@ public class PublicacionController {
       publicacion = publicacionRepository.findById(publicacionDTO.getId()).get();
     }
     catch (Exception e) {
-      return new ResponseEntity<>("La publicacion no existe", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("La publicación no existe.", HttpStatus.BAD_REQUEST);
     }
     // Test publicacion esta activa (Esto deberia ser manejado por los states)
-    if (!publicacion.isActivo()) return new ResponseEntity<>("La publicacion no puede modificarse", HttpStatus.BAD_REQUEST);
+    if (!publicacion.isActivo()) return new ResponseEntity<>("La publicación no puede modificarse.", HttpStatus.BAD_REQUEST);
     
     // Test titulo
     if (publicacionDTO.getTitulo() != null){
@@ -182,6 +187,11 @@ public class PublicacionController {
       if (publicacionDTO.getDescripcion().length() > 240) {
         return new ResponseEntity<>("La descripcion puede tener hasta 240 caracteres", HttpStatus.BAD_REQUEST);
       }
+    }
+
+    // Test categoría
+    if (! (publicacionDTO.getCategoria_ID() != null && publicacionDTO.getCategoria_ID() < 17 && publicacionDTO.getCategoria_ID() > 0)) {
+      return new ResponseEntity<>("Seleccione una categoría.", HttpStatus.BAD_REQUEST);
     }
 
     // Update

@@ -5,8 +5,6 @@ import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import FindInPageRoundedIcon from '@mui/icons-material/FindInPageRounded';
-import {Link} from "react-router-dom";
-import CustomCard from "../utils/CustomCard";
 import HomeGrid from "../components/home/HomeGrid";
 import HomeItem from "../components/home/HomeItem";
 import {addPostInfo, editProfileInfo, listUsersInfo, myPostsInfo, viewPostsInfo} from "../utils/utilData";

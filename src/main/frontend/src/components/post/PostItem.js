@@ -1,18 +1,15 @@
-import {Box, Grid} from "@mui/material";
+import {Grid} from "@mui/material";
 import React from "react";
 import "../../App.css";
-import CustomCard from "../../utils/CustomCard";
 import {Link} from "react-router-dom";
 import Post from "./Post";
 
 function PostItem(props) {
-    const { link, key, data } = props;
+    const { id, data, user } = props;
 
     return (
-        <Grid item key={key} sm={12} md={6}>
-            <Link to={link.concat(key)}>
-                <Post data={data} />
-            </Link>
+        <Grid item key={id} sm={12} md={6}>
+            <Post id={id} data={data} user={user} />
         </Grid>
     )
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
-import {CardContent, Divider} from "@mui/material";
+import {CardContent} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 function CustomCard(props) {

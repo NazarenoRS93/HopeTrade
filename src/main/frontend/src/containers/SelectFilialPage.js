@@ -37,16 +37,20 @@ function SelectFilialPage() {
 		if (userId && selectedFilial) {
 			try {
 				const response = await FilialService.selectFilial(userId, selectedFilial);
-				//alert('Filial seleccionada con éxito');
+				const cookie = window.localStorage.getItem("user");
+				if(cookie) {
+					let user = JSON.parse(cookie);
+					user = {...user, filial: selectedFilial};
+					window.localStorage.setItem("user",JSON.stringify(user));
+				};
 				let href = window.location.href;
 	            href = href.substring(0, href.lastIndexOf('/'));
 	            window.location.replace(href+"/home");
-				console.log(response.data);
 			} catch (error) {
 				alert("Error al seleccionar filial: " + error.response.data);
 			}
 		} else {
-			alert("Seleccione una filial");
+			alert("Seleccione una filial.");
 		}
 	};
 	
@@ -54,12 +58,10 @@ function SelectFilialPage() {
 		<Box
 			sx={{
 				backgroundColor: colors.background,
-				flexDirection: "column",
+				flexDirection: "row",
 				alignItems: "center",
 				display: "flex",
-				width: "100%",
-				height: "100vh",
-				justifyContent: "center"
+				width: "100%"
 			}}
 		>
 			<Typography variant="h4" gutterBottom>
@@ -80,8 +82,8 @@ function SelectFilialPage() {
 					</MenuItem>
 				))}
 			</Select>
-			<Button variant="contained" color="primary" onClick={handleSelect}>
-				Seleccionar
+			<Button variant="contained" color="success" onClick={handleSelect}>
+				<Typography variant="button">Seleccionar</Typography>
 			</Button>
 		</Box>
 	);
