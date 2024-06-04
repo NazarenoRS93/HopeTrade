@@ -2,16 +2,7 @@ package is2.g57.hopetrade.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.Resource;
 
 import org.springframework.http.HttpStatus;
@@ -32,6 +23,8 @@ import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.mapper.PublicacionMapper;
+
+import is2.g57.hopetrade.entity.state.*;
 
 /*
  Interfaz http para esta tabla:
@@ -199,20 +192,8 @@ public class PublicacionController {
     return new ResponseEntity<>("Publicacion actualizada", HttpStatus.OK);
   }
 
-  @PutMapping("/desactivar/{id}")
-  public ResponseEntity<?> desactivarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
-    Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
-    if(!oPublicacion.isPresent()) {
-      return ResponseEntity.notFound().build();
-    }
-    Publicacion publicacion = oPublicacion.get();
-    publicacion.desactivar();
-    publicacionRepository.save(publicacion);
-    return ResponseEntity.ok(publicacion);
-  }
-
-  @PutMapping("/activar/{id}")
-  public ResponseEntity<?> activarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
+  @PutMapping("/publicar/{id}")
+  public ResponseEntity<?> publicarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
     Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
     if(!oPublicacion.isPresent()) {
       return ResponseEntity.notFound().build();
@@ -231,7 +212,43 @@ public class PublicacionController {
       return new ResponseEntity<>("Hubo un error", HttpStatus.BAD_REQUEST);
     }
 
-    publicacion.activar();
+    publicacion.setState(new PublicacionStateReservado());
+    publicacionRepository.save(publicacion);
+    return ResponseEntity.ok(publicacion);
+  }
+
+  @PutMapping("/suspender/{id}")
+  public ResponseEntity<?> suspenderPublicacion(@PathVariable(value = "id") Integer publicacionId) {
+    Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
+    if(!oPublicacion.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    Publicacion publicacion = oPublicacion.get();
+    publicacion.suspender();
+    publicacionRepository.save(publicacion);
+    return ResponseEntity.ok(publicacion);
+  }
+
+  @PutMapping("/eliminar/{id}")
+  public ResponseEntity<?> cancelarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
+    Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
+    if(!oPublicacion.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    Publicacion publicacion = oPublicacion.get();
+    publicacion.eliminar();
+    publicacionRepository.save(publicacion);
+    return ResponseEntity.ok(publicacion);
+  }
+
+  @PutMapping("/finalizar/{id}")
+  public ResponseEntity<?> finalizarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
+    Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
+    if(!oPublicacion.isPresent()) {
+      return ResponseEntity.notFound().build();
+    }
+    Publicacion publicacion = oPublicacion.get();
+    publicacion.finalizar();
     publicacionRepository.save(publicacion);
     return ResponseEntity.ok(publicacion);
   }
@@ -243,7 +260,7 @@ public class PublicacionController {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.ok(publicacionMapper.toPublicacionDTO(oPublicacion.get()));
-	}	
+	}
 
   // Esto no deberia tener uso, y creo que ya no funciona con el formato actual de las imagenes. Queda por las dudas
   @GetMapping("/image/{id}")

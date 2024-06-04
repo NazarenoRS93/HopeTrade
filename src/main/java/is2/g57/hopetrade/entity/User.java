@@ -1,6 +1,5 @@
 package is2.g57.hopetrade.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +12,7 @@ import jakarta.persistence.*;
 @Table(name = "usuario" )
 public class User {
 	
+	private static final long serialVersionUID = -7597079625316159690L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
@@ -53,7 +53,6 @@ public class User {
 		this.apellido = apellido;
 		this.fecha_nacimiento = fecha_nacimiento;
 		this.activo = true;
-		this.ofertas = new ArrayList<Oferta>();
 	}
 
 	public User(String email, String dni, String pass, String nombre, String apellido, Date fecha_nacimiento) {
@@ -64,10 +63,6 @@ public class User {
 		this.apellido = apellido;
 		this.fecha_nacimiento = fecha_nacimiento;
 		this.activo = true;
-		this.ofertas = new ArrayList<Oferta>();
-	}
-
-	public User() {
 	}
 	
 	  @Override
@@ -83,6 +78,9 @@ public class User {
 	    public int hashCode() {
 	        return Objects.hash(id, email, dni);
 	    }
+
+	public User() {
+	}
 
 	public String getEmail() {
 		return email;

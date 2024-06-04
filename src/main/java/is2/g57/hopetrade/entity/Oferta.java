@@ -55,6 +55,7 @@ public class Oferta {
         this.publicacion = publicacion;
         this.filial = filial;
         this.user = user;
+        this.estado= true;
     }
 
     public Oferta() {
