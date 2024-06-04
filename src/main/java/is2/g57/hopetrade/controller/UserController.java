@@ -94,7 +94,7 @@ public class UserController {
 	        this.update(request.getId(), request.getEmail(), request.getNombre(), request.getApellido());
 	        return new ResponseEntity<>("Cambios guardados", HttpStatus.OK);
 	    } catch (Exception e) {
-	        return new ResponseEntity<>("El mail: " + request.getEmail() + " ya se encuentra en uso", HttpStatus.BAD_REQUEST);
+	        return new ResponseEntity<>("El mail: " + request.getEmail() + " ya se encuentra en uso" , HttpStatus.BAD_REQUEST);
 	    }
 	}
 
@@ -102,18 +102,21 @@ public class UserController {
 	    Optional<User> userOp = userRepository.findById(id);
 	    if (userOp.isPresent()) {
 	        User user = userOp.get();
-	        if (email != null) {
-	            if (userRepository.findUserByEmail(email).isPresent()) {
-	                throw new IllegalArgumentException();
-	            } else {
-	                user.setEmail(email);
-	            }
+	        if (email != "" ){
+	        	if(!email.equals(user.getEmail())) {
+	        		if (userRepository.findUserByEmail(email).isPresent()) {
+		                throw new IllegalArgumentException();
+		            }
+	        		else {
+		                user.setEmail(email);
+		            }
+	        	}
 	        }
 
-	        if (apellido != null) {
+	        if (apellido != "" ) {
 	            user.setApellido(apellido);
 	        }
-	        if (nombre != null) {
+	        if (nombre != "" ) {
 	            user.setNombre(nombre);
 	        }
 	        userRepository.save(user);
