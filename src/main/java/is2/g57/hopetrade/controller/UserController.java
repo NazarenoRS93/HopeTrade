@@ -31,17 +31,17 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<?> ObtenerUsuarioPorId(@RequestBody UserRequest userRequest) {
-		Long Id = userRequest.getId();
-		Optional<User> userOp = this.userRepository.findById(Id);
-		if (userOp.isPresent()) {
-			return new ResponseEntity<>(userOp.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("No se encontro usuario",HttpStatus.NOT_FOUND);
-		}
+	public ResponseEntity<?> ObtenerUsuarioPorId(@PathVariable Long id) {
+	    Optional<User> userOp = this.userRepository.findById(id);
+	    if (userOp.isPresent()) {
+	        return new ResponseEntity<>(userOp.get(), HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>("No se encontro usuario", HttpStatus.NOT_FOUND);
+	    }
 	}
-
+	
 	@GetMapping("/buscar-por-dni")
 	public ResponseEntity<?> ObtenerUsuarioPorDni( @RequestBody  UserRequest userRequest) {
 		String dni = userRequest.getDni();
@@ -87,39 +87,37 @@ public class UserController {
 	    return userRepository.findAll();
 	  }
 	
-	@PostMapping("/{useredit}")
-	public ResponseEntity<?> ActualizarPerfilUsuario(@RequestBody UserRequest request ) {
-		
-		try {
-			
-			this.update(request.getId(), request.getEmail(), request.getNombre(), request.getApellido());
-			return new ResponseEntity<>("Cambios guardados",HttpStatus.OK);		
-		}catch (Exception e) {
-						return new ResponseEntity<>("El mail: " + request.getEmail() + " ya se encuentra en uso",HttpStatus.BAD_REQUEST);
-		}
-		} 
 	
+	@PostMapping("/updateProfile")
+	public ResponseEntity<?> ActualizarPerfilUsuario(@RequestBody UserRequest request) {
+	    try {
+	        this.update(request.getId(), request.getEmail(), request.getNombre(), request.getApellido());
+	        return new ResponseEntity<>("Cambios guardados", HttpStatus.OK);
+	    } catch (Exception e) {
+	        return new ResponseEntity<>("El mail: " + request.getEmail() + " ya se encuentra en uso", HttpStatus.BAD_REQUEST);
+	    }
+	}
+
 	public void update(Long id, String email, String nombre, String apellido) {
-		Optional<User> userOp = userRepository.findById(id);
-		if (userOp.isPresent()) {
-			User user = userOp.get();
-			if (email != null) {
-				if (userRepository.findUserByEmail(email).isPresent()) {
-					throw new IllegalArgumentException();
-				} else {
-					user.setEmail(email);
-				}
-			}
+	    Optional<User> userOp = userRepository.findById(id);
+	    if (userOp.isPresent()) {
+	        User user = userOp.get();
+	        if (email != null) {
+	            if (userRepository.findUserByEmail(email).isPresent()) {
+	                throw new IllegalArgumentException();
+	            } else {
+	                user.setEmail(email);
+	            }
+	        }
 
-			if (apellido != null) {
-				user.setApellido(apellido);
-			}
-			if (nombre != null) {
-				user.setNombre(nombre);
-			}
-		userRepository.save(user);
-		}
-
+	        if (apellido != null) {
+	            user.setApellido(apellido);
+	        }
+	        if (nombre != null) {
+	            user.setNombre(nombre);
+	        }
+	        userRepository.save(user);
+	    }
 	}
 	
 	@PostMapping("/updatepassword")
