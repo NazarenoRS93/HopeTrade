@@ -97,6 +97,7 @@ public class OfertaController {
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
 			oferta.setEstado(true);
+		    this.ofertaRepository.save(oferta);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
@@ -109,6 +110,7 @@ public class OfertaController {
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
 			oferta.setEstado(false);
+			this.ofertaRepository.save(oferta);
 			oferta.setRespuesta(ofertaRequest.getRespuesta());
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
