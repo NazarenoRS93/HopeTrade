@@ -7,13 +7,23 @@ import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {DeleteRounded, EditNote, EditNoteRounded, RepeatRounded, Visibility} from "@mui/icons-material";
 
+import axios from "axios";
+
 function Post(props) {
     const {id, data, user} = props;
 
     const editPost = () => {
 
     }
-    const deletePost = () => {}
+    const deletePost = async () => {
+        console.log("Eliminando publicación con ID:", id);
+        try {
+            await axios.put("http://localhost:8080/publicacion/eliminar/"+id);
+            alert("Publicación eliminada");
+        } catch (error) {
+            alert("Error eliminando publicación: "+error);
+        }
+    }
     const addIntercambio = () => {}
 
     return (

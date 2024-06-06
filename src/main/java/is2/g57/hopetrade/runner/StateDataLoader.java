@@ -22,10 +22,10 @@ public class StateDataLoader implements ApplicationRunner {
         if (stateRepository.count() == 0) {
             List<PublicacionState> states = List.of(
                     new PublicacionStateDisponible(),
-                    new PublicacionStateEliminado(),
-                    new PublicacionStateFinalizado(),
+                    new PublicacionStateSuspendido(),
                     new PublicacionStateReservado(),
-                    new PublicacionStateSuspendido()
+                    new PublicacionStateFinalizado(),
+                    new PublicacionStateEliminado()
             );
             stateRepository.saveAll(states);
         }

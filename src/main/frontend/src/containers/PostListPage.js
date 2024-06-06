@@ -23,9 +23,9 @@ function PostListPage() {
 
     const fetchPublicaciones = async (idUser) => {
         try {
-            let path = "/all";
+            let path = "/all/activas";
             if(window.location.href.includes("my-posts")) {
-                path = "/user/"+idUser;
+                path = "/user/activas/"+idUser;
             }
             let url = "http://localhost:8080/publicacion"+path;
             const response = await axios.get(url);
@@ -37,10 +37,15 @@ function PostListPage() {
             });
             setPublicaciones(data);
         } catch (error) {
-            alert("Error obteniendo publicaciones: "+error);
+            console.log("Error obteniendo publicaciones: " + error);
+            // alert("Error obteniendo publicaciones: "+error);
         }
     }
 
+    const testLog = () => {
+        console.log("TEST");
+    }
+    
     const fileToBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -84,7 +89,7 @@ function PostListPage() {
         <React.Fragment>
             <PostGrid>
             { publicaciones.map((publicacion) => (
-                <PostItem id={publicacion.id} data={publicacion} user={user} />
+                <PostItem id={publicacion.id} data={publicacion} user={user}/>
             ))}
             </PostGrid>
         </React.Fragment>
