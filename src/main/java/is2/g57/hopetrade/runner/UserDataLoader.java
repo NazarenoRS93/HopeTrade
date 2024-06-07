@@ -42,7 +42,8 @@ public class UserDataLoader implements ApplicationRunner {
 
         List<String[]> usuarios = Arrays.asList( 
             new String[]{"usuario1@caritas.com", "99999996", "12345", "Armando", "Testi", "1999-05-10"},
-            new String[]{"usuario2@caritas.com", "99999995", "12345", "user", "user3", "1995-02-02"}
+            new String[]{"usuario2@caritas.com", "99999995", "12345", "Jose", "Baneado", "1995-02-02"},
+            new String[]{"matilozano96@hotmail.com", "19011452", "12345", "Matias", "Lozano", "1996-02-02"}
         );
 
 
