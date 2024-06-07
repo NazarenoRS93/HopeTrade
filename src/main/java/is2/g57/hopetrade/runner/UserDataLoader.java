@@ -41,7 +41,7 @@ public class UserDataLoader implements ApplicationRunner {
         );
 
         List<String[]> usuarios = Arrays.asList( 
-            new String[]{"usuario1@caritas.com", "99999996", "12345", "user", "user", "1999-05-10"},
+            new String[]{"usuario1@caritas.com", "99999996", "12345", "Armando", "Testi", "1999-05-10"},
             new String[]{"usuario2@caritas.com", "99999995", "12345", "user", "user3", "1995-02-02"}
         );
 
@@ -66,13 +66,14 @@ public class UserDataLoader implements ApplicationRunner {
 
         // Check admin existe
         System.out.println("-------   Cargando admin a BD   -------");
-        if (ayudanteRepository.findAyudanteByEmail("admin@caritas.com") == null) {
+        if (ayudanteRepository.findAyudanteByEmail("admin@caritas.com").isEmpty()) {
             System.out.println("Cargando admin");
             ayudanteRepository.save(new Ayudante("admin@caritas.com", "99999999", "12345", "admin", "admin"));
         }
 
         System.out.println("-------   Intentando cargar ayudantes a BD   -------");
         if  (ayudanteRepository.count() == 1) {
+            System.out.println("Cargando ayudantes");
             for (String[] f: ayudantes) {
                 String email = f[0];
                 String dni = f[1];

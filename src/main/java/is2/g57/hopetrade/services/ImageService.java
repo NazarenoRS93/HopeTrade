@@ -25,6 +25,7 @@ public class ImageService {
 
     // Crear dir si no existe
     private final Path root = Paths.get("imgs");
+    private final Path sample = Paths.get("sample");
 
         public ImageService() {
         try {
@@ -102,6 +103,32 @@ public Resource load(String filename) {
             throw new RuntimeException("Could not read the file!");
         }
     } catch (MalformedURLException e) {
+        throw new RuntimeException("Error: " + e.getMessage());
+    }
+}
+
+public Resource loadSample(String filename) {
+    try {
+        Path file = sample.resolve(filename);
+        System.out.println("Resolved File Path: " + file.toString()); // Log the resolved file path
+        Resource resource = new UrlResource(file.toUri());
+        if (resource.exists() || resource.isReadable()) {
+            System.out.println(filename + " exists and is readable");
+            return resource;
+        } else {
+            throw new RuntimeException("Could not read the file!");
+        }
+    } catch (MalformedURLException e) {
+        throw new RuntimeException("Error: " + e.getMessage());
+    }
+}
+
+public String loadSampleBase64(String filename) {
+    try {
+        Path file = sample.resolve(filename);
+        System.out.println("Resolved File Path: " + file.toString()); // Log the resolved file path
+        return Base64.getEncoder().encodeToString(Files.readAllBytes(file));
+    } catch (IOException e) {
         throw new RuntimeException("Error: " + e.getMessage());
     }
 }

@@ -9,6 +9,7 @@ function PostListPage() {
     // Render on start
     useEffect(() => {
         const cookie = window.localStorage.getItem("user");
+        console.log("Cookie:", cookie);
         if(cookie) {
             let usuario = JSON.parse(cookie);
             setUser(usuario);
