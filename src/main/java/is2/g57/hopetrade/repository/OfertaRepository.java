@@ -14,4 +14,5 @@ public interface OfertaRepository extends JpaRepository<Oferta, Long> {
  Iterable<Oferta> findAllByPublicacionId(Long publicacionId);
  Iterable<Oferta> findAllByFilialId(Long filialId);
  
+ Integer countByPublicacionId(Long publicacionId);
 }

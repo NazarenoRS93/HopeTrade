@@ -68,6 +68,7 @@ function Post(props) {
                         <hr/>
                         <Typography variant="h6"><strong>Categoria: </strong>{data.categoria_Nombre}</Typography>
                         <Typography variant="h6"><strong>Estado: </strong>{data.estado}</Typography>
+                        <Typography variant="h6"><strong>Ofertas: </strong>{data.ofertas}</Typography>
                     </Grid>
                     <Grid item xs={3}>
                         <Avatar src={data.imagenUrl} variant="rounded" sx={{ width:"150px",height:"150px"}} />

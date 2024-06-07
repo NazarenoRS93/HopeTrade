@@ -8,6 +8,7 @@ import is2.g57.hopetrade.entity.state.PublicacionStateDisponible;
 import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.repository.CategoriaRepository;
 import is2.g57.hopetrade.repository.PublicacionStateRepository;
+import is2.g57.hopetrade.repository.OfertaRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,8 @@ public class PublicacionMapper {
     private CategoriaRepository categoriaRepository;
     @Autowired
     private PublicacionStateRepository publicacionStateRepository;
+    @Autowired
+    private OfertaRepository ofertaRepository;
 
     public PublicacionDTO newPublicacionDTO(Long userID, String titulo, String descripcion, String categoria, Long categoria_id, String estado, String image) {
         PublicacionDTO dto = new PublicacionDTO();
@@ -60,6 +63,7 @@ public class PublicacionMapper {
         dto.setCategoria_ID(publicacion.getCategoria().getId());
         dto.setEstado(publicacion.getState().getNombre());
         dto.setEstadoID(publicacion.getState().getId());
+        dto.setOfertas(ofertaRepository.countByPublicacionId(publicacion.getId()));
         return dto;
     }
 

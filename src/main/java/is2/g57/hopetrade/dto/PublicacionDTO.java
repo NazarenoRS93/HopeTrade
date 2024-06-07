@@ -15,6 +15,7 @@ public class PublicacionDTO {
     private LocalDateTime ultimaModificacion;
     private String estado;
     private long estadoID;
+    private Integer ofertas;
 
     public boolean getActive() { return active; }
     public LocalDateTime getFechaHoraCreacion() {
@@ -87,5 +88,11 @@ public class PublicacionDTO {
     }
     public long getEstadoID() {
         return estadoID;
+    }
+    public void setOfertas(Integer ofertas) {
+        this.ofertas = ofertas;
+    }
+    public Integer getOfertas() {
+        return ofertas;
     }
 }
