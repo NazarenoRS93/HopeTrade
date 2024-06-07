@@ -29,6 +29,8 @@ function Post(props) {
 
         let userID = user.idUser;
         var formdata = new FormData();
+
+        // Valores genericos de prueba para no usar form
         var texto = "test";
         var fechaIntercambio = "2024-010-10 09:00:00.000000";
 
@@ -38,6 +40,9 @@ function Post(props) {
         formdata.append("filialId", 1);
         // No pude hacer andar el formato. Esta hardcodeado en el controller, por ahora
         // formdata.append("fechaIntercambio", fechaIntercambio);
+
+        // Imagen comentada hasta que se implemente el form
+        // formdata.append("imagen", await fileToBase64(imagen));
 
         axios.post('http://localhost:8080/oferta/guardar', formdata, {
             headers: {

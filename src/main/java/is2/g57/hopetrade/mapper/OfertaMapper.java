@@ -37,8 +37,15 @@ public class OfertaMapper {
         dto.setFechaCreacion(oferta.getFechaCreacion());
         dto.setRespuesta(oferta.getRespuesta());
         dto.setEstado(oferta.isEstado());
+
         // Convert URL to Base 64 image
-        // dto.setImagen(imageService.loadBase64(oferta.getImagenUrl()));
+        // Si existe la imagen, cargarla
+        if (oferta.getImagenUrl() != null) {
+            dto.setImagen(imageService.loadBase64(oferta.getImagenUrl()));
+        }
+        else {
+            System.out.println("No hay imagen");
+        }
         return dto;
     }
 
@@ -49,8 +56,15 @@ public class OfertaMapper {
         oferta.setPublicacion(publicacionRepository.findById(dto.getPublicacionId()).get());
         oferta.setFilial(filialRepository.findById(dto.getFilialId()).get());
         oferta.setUser(userRepository.findById(dto.getUserId()).get());
+
         // Convert Base 64 image to URL
-        // oferta.setImagenUrl(imageService.saveUnique(dto.getImagen()));
+        // Si el DTO contiene imagen, guardarla
+        if (dto.getImagen() != null) {
+            oferta.setImagenUrl(imageService.saveUnique(dto.getImagen()));
+        }
+        else { 
+            System.out.println("No hay imagen");
+        }
         return oferta;
     }
 }

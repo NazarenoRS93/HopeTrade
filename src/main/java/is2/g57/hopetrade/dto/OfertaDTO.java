@@ -80,7 +80,7 @@ public class OfertaDTO {
 		return imagen;
 	}
 
-	public void setImagenUrl(String imagenUrl) {
+	public void setImagen(String imagenUrl) {
 		this.imagen = imagenUrl;
 	}
 
