@@ -68,7 +68,7 @@ public class OfertaController {
 				System.out.println("------- Saving Oferta -------");
 				ofertaRepository.save(oferta);
 				System.out.println("------- Guardada -------");
-				return new ResponseEntity<>(HttpStatus.OK);
+				return new ResponseEntity<>("¡Oferta creada exitosamente!", HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(
 						"La fecha y hora del intercambio deben estar entre lunes y viernes de 08:00 a 20:00.",

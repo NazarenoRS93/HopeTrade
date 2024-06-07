@@ -9,8 +9,8 @@ import {DeleteRounded, EditNote, EditNoteRounded, RepeatRounded, Visibility} fro
 
 import axios from "axios";
 
-function Post(props) {
-    const {id, data, user} = props;
+function Post( props ) {
+    const {id, data, user, update} = props;
 
     const editPost = () => {
 
@@ -23,6 +23,7 @@ function Post(props) {
         } catch (error) {
             alert("Error eliminando publicación: "+error);
         }
+        update();
     }
     const addOferta = async (event) => {
         event.preventDefault();
@@ -44,17 +45,18 @@ function Post(props) {
         // Imagen comentada hasta que se implemente el form
         // formdata.append("imagen", await fileToBase64(imagen));
 
-        axios.post('http://localhost:8080/oferta/guardar', formdata, {
+        await axios.post('http://localhost:8080/oferta/guardar', formdata, {
             headers: {
                 'Content-Type': 'application/json'
             }}
         )
             .then(function (response) {
-                console.log("Oferta publicada");
+                console.log(response.data);
             })
             .catch(function (error) {
                 alert("Error: "+error.response.data);
             });
+        update();
     }
 
     return (

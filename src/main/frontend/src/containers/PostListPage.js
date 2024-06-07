@@ -41,6 +41,9 @@ function PostListPage() {
             // alert("Error obteniendo publicaciones: "+error);
         }
     }
+
+    // Funcion de prueba de pasaje a traves de props
+    const testCallback = () => console.log("Callback called");
     
     const fileToBase64 = (file) => {
         return new Promise((resolve, reject) => {
@@ -68,7 +71,7 @@ function PostListPage() {
         formdata.append("userID", user.id);
         formdata.append("imagen", await fileToBase64(form.imagen));
 
-        axios.post('http://localhost:8080/publicacion/add', formdata, {
+        await axios.post('http://localhost:8080/publicacion/add', formdata, {
             headers: {
                 'Content-Type': 'application/json'
             }}
@@ -85,7 +88,7 @@ function PostListPage() {
         <React.Fragment>
             <PostGrid>
             { publicaciones.map((publicacion) => (
-                <PostItem id={publicacion.id} data={publicacion} user={user}/>
+                <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPublicaciones}/>
             ))}
             </PostGrid>
         </React.Fragment>
