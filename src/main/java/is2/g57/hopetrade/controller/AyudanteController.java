@@ -107,26 +107,6 @@ public class AyudanteController {
 		}
 	}
 
-//	@PostMapping("/cambiar-pass")
-//	public ResponseEntity<?> CambiarContrasenia(@RequestBody CambiarContraseniaRequest cambiarContraseniaRequest) {
-//		String dni = cambiarContraseniaRequest.getDni();
-//		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByDni(dni);
-//
-//		if (ayudanteOp.isPresent()) {
-//			Ayudante ayudante = ayudanteOp.get();
-//			// Verificar que la antigua contraseña proporcionada sea correcta
-//			if (!ayudante.getPass().equals(cambiarContraseniaRequest.getAntiguaContrasenia())) {
-//				return new ResponseEntity<>("La contraseña antigua es incorrecta", HttpStatus.UNAUTHORIZED);
-//			}
-//			// Actualizar la contraseña solo si la antigua contraseña es correcta
-//			ayudante.setPass(cambiarContraseniaRequest.getNuevaContrasenia());
-//			this.ayudanteRepository.save(ayudante);
-//			return new ResponseEntity<>("Contraseña actualizada correctamente", HttpStatus.OK);
-//		} else {
-//			return new ResponseEntity<>("No se encontró ayudante con el DNI proporcionado", HttpStatus.NOT_FOUND);
-//		}
-//	}
-
 	@PostMapping("/guardar")
 	public ResponseEntity<?> GuardarAyudante(@RequestBody AyudanteRequest request) {
 
