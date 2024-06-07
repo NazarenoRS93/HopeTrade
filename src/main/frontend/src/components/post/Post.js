@@ -24,7 +24,10 @@ function Post(props) {
             alert("Error eliminando publicación: "+error);
         }
     }
-    const addIntercambio = () => {}
+    const addOferta = () => {
+
+
+    }
 
     return (
         <Card className="ItemGrid">
@@ -44,7 +47,7 @@ function Post(props) {
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
                             { (user.tipoUser === 0 && user.idUser !== data.userID) ?
-                                <Button variant="contained" color="success" onClick={addIntercambio}
+                                <Button variant="contained" color="success" onClick={addOferta}
                                         startIcon={<RepeatRounded color="primary"/>}>
                                     <Typography variant="button">Ofertar</Typography>
                                 </Button>

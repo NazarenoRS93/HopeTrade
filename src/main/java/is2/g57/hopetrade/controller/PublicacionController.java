@@ -272,21 +272,6 @@ public class PublicacionController {
 		return ResponseEntity.ok(publicacionMapper.toPublicacionDTO(oPublicacion.get()));
 	}
 
-  // Esto no deberia tener uso, y creo que ya no funciona con el formato actual de las imagenes. Queda por las dudas
-  @GetMapping("/image/{id}")
-  public ResponseEntity<Resource> getImagen(@PathVariable Long id) {
-    System.out.println(" -------- Fetching URL de id = " + id + " -------- ");
-    Publicacion pub = publicacionRepository.findById(id).get();
-    System.out.println(" -------- Recibido url de id = " + id + " URL = " + pub.getImagenUrl() + "-------- ");
-    Resource image = imageService.load(pub.getImagenUrl());
-    if (image == null) {
-      return ResponseEntity.notFound().build();
-    }
-    return ResponseEntity.ok()
-                .body(image);
-  }
-  
-
   @GetMapping("/user/{userID}")
     public @ResponseBody Iterable<PublicacionDTO> buscarPublicacionPorUserId(@PathVariable Long userID) {
         System.out.println("----- Fetching Publicaciones de id = " + userID + " ------");

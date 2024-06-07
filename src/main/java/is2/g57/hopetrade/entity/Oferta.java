@@ -59,6 +59,8 @@ public class Oferta {
     }
 
     public Oferta() {
+        this.fechaCreacion = LocalDateTime.now();
+        this.estado= true;
     }
 
     public Long getId() {
