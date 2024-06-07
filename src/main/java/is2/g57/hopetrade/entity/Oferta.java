@@ -58,7 +58,7 @@ public class Oferta {
         this.estado= true;
     }
 
-    public Oferta() {
+    public Oferta() { 
         this.fechaCreacion = LocalDateTime.now();
         this.estado= true;
     }

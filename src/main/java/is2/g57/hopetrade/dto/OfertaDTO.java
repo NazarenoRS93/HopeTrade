@@ -15,10 +15,10 @@ public class OfertaDTO {
 	private String respuesta;
 	private LocalDateTime fechaIntercambio;
 	private boolean estado;
-	private String imagenUrl;
-	private Publicacion Publicacion;
-	private Filial Filial;
-	private User User;
+	private String imagen;
+	private Long publicacionId;
+	private Long filialId;
+	private Long userId;
 
 	public Long getId() {
 		return id;
@@ -76,38 +76,37 @@ public class OfertaDTO {
 		this.estado = estado;
 	}
 
-	public String getImagenUrl() {
-		return imagenUrl;
+	public String getImagen() {
+		return imagen;
 	}
 
 	public void setImagenUrl(String imagenUrl) {
-		this.imagenUrl = imagenUrl;
+		this.imagen = imagenUrl;
 	}
 
-	public Publicacion getPublicacion() {
-		return Publicacion;
+	public Long getPublicacionId() {
+		return publicacionId;
 	}
 
-	public void setPublicacion(Publicacion publicacion) {
-		Publicacion = publicacion;
+	public void setPublicacionId(Long publicacionId) {
+		this.publicacionId = publicacionId;
 	}
 
-	public Filial getFilial() {
-		return Filial;
+	public Long getFilialId() {
+		return filialId;
 	}
 
-	public void setFilial(Filial filial) {
-		Filial = filial;
+	public void setFilialId(Long filialId) {
+		this.filialId = filialId;
 	}
 
-	public User getUser() {
-		return User;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUser(User user) {
-		User = user;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
-
-
+	
 }

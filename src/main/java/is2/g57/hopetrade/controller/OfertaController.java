@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import is2.g57.hopetrade.dto.OfertaDTO;
 import is2.g57.hopetrade.entity.Intercambio;
 import is2.g57.hopetrade.entity.Oferta;
 import is2.g57.hopetrade.entity.Publicacion;
+import is2.g57.hopetrade.mapper.OfertaMapper;
 import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.OfertaRepository;
 import is2.g57.hopetrade.services.ImageService;
@@ -33,16 +35,25 @@ public class OfertaController {
 	private OfertaRepository ofertaRepository;
 
 	@Autowired
+	private OfertaMapper ofertaMapper;
+
+	@Autowired
 	private ImageService imageService;
 	
 	@Autowired IntercambioRepository intercambioRepository;
 
 	@PostMapping("/guardar")
-	public ResponseEntity<?> guardarOferta(@RequestBody OfertaRequest ofertaRequest) {
+	public ResponseEntity<?> guardarOferta(@RequestBody OfertaDTO ofertaDTO) {
 
 		try {
 
-			LocalDateTime fecha = ofertaRequest.getFechaIntercambio();
+			// fecha valida para testeo (08-07-2024 08:00:00)
+			LocalDateTime fecha = LocalDateTime.of(2024, 07, 8, 9, 0, 0);
+			ofertaDTO.setFechaIntercambio(fecha);
+			
+			// Linea correcta para testear pasaje desde Frontend
+			// LocalDateTime fecha = ofertaDTO.getFechaIntercambio();
+
 			// Verificar que el día esté entre lunes y viernes
 			DayOfWeek dia = fecha.getDayOfWeek();
 			boolean esDiaLaborable = dia != DayOfWeek.SATURDAY && dia != DayOfWeek.SUNDAY;
@@ -52,8 +63,11 @@ public class OfertaController {
 			boolean enHorarioLaboral = hora >= 8 && hora < 20;
 
 			if (esDiaLaborable && enHorarioLaboral) {
-				Oferta oferta = new Oferta(ofertaRequest.getTexto(), fecha, ofertaRequest.getImagenUrl(), ofertaRequest.getPublicacion(),ofertaRequest.getFilial(),ofertaRequest.getUser());
+				// Oferta oferta = new Oferta(ofertaRequest.getTexto(), fecha, ofertaRequest.getImagenUrl(), ofertaRequest.getPublicacion(),ofertaRequest.getFilial(),ofertaRequest.getUser());
+				Oferta oferta = ofertaMapper.map(ofertaDTO);
+				System.out.println("------- Saving Oferta -------");
 				ofertaRepository.save(oferta);
+				System.out.println("------- Guardada -------");
 				return new ResponseEntity<>(HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>(
@@ -62,6 +76,7 @@ public class OfertaController {
 
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<>("Error al procesar la solicitud", HttpStatus.BAD_REQUEST);
 		}
 	}

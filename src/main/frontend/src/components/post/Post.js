@@ -24,9 +24,32 @@ function Post(props) {
             alert("Error eliminando publicación: "+error);
         }
     }
-    const addOferta = () => {
+    const addOferta = async (event) => {
+        event.preventDefault();
 
+        let userID = user.idUser;
+        var formdata = new FormData();
+        var texto = "test";
+        var fechaIntercambio = "2024-010-10 09:00:00.000000";
 
+        formdata.append("texto", texto);
+        formdata.append("publicacionId", id);
+        formdata.append("userId", userID);
+        formdata.append("filialId", 1);
+        // No pude hacer andar el formato. Esta hardcodeado en el controller, por ahora
+        // formdata.append("fechaIntercambio", fechaIntercambio);
+
+        axios.post('http://localhost:8080/oferta/guardar', formdata, {
+            headers: {
+                'Content-Type': 'application/json'
+            }}
+        )
+            .then(function (response) {
+                console.log("Oferta publicada");
+            })
+            .catch(function (error) {
+                alert("Error: "+error.response.data);
+            });
     }
 
     return (
