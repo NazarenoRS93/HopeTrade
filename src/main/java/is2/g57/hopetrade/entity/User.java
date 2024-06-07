@@ -148,6 +148,6 @@ public class User {
 	
 	
 	public String getFullName() {
-		return this.getNombre() + " " + this.getApellido();
+		return this.getApellido() + ", " + this.getNombre();
 	}
 }
