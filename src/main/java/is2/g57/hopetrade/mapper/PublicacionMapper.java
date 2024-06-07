@@ -6,9 +6,7 @@ import is2.g57.hopetrade.entity.Categoria;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.state.PublicacionStateDisponible;
 import is2.g57.hopetrade.services.ImageService;
-import is2.g57.hopetrade.repository.CategoriaRepository;
-import is2.g57.hopetrade.repository.PublicacionStateRepository;
-import is2.g57.hopetrade.repository.OfertaRepository;
+import is2.g57.hopetrade.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +22,10 @@ public class PublicacionMapper {
     private PublicacionStateRepository publicacionStateRepository;
     @Autowired
     private OfertaRepository ofertaRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+
 
     public PublicacionDTO newPublicacionDTO(Long userID, String titulo, String descripcion, String categoria, Long categoria_id, String estado, String image) {
         PublicacionDTO dto = new PublicacionDTO();
@@ -37,18 +39,7 @@ public class PublicacionMapper {
         return dto;
     }
 
-    public PublicacionDTO newPublicacionDTO(Long userID, String titulo, String descripcion, String image) {
-        PublicacionDTO dto = new PublicacionDTO();
-        dto.setUserID(userID);
-        dto.setTitulo(titulo);
-        dto.setDescripcion(descripcion);
-        dto.setImagen(image);
-        dto.setCategoria_Nombre("Otros");
-        dto.setEstado("Disponible");
-        return dto;
-    }
-
-    public PublicacionDTO toPublicacionDTO(Publicacion publicacion) {
+    public PublicacionDTO map(Publicacion publicacion) {
         PublicacionDTO dto = new PublicacionDTO();
         dto.setId(publicacion.getId());
         dto.setTitulo(publicacion.getTitulo());
@@ -57,6 +48,7 @@ public class PublicacionMapper {
         dto.setUltimaModificacion(publicacion.getUltimaModificacion());
         dto.setActive(publicacion.isActivo());
         dto.setUserID(publicacion.getUserID());
+        dto.setUserFullName(userRepository.findUserById(publicacion.getUserID()).get().getFullName());
         // Convert URL to Base 64 image
         dto.setImagen(imageService.loadBase64(publicacion.getImagenUrl()));
         dto.setCategoria_Nombre(publicacion.getCategoria().getNombre());

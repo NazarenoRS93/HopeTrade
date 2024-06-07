@@ -269,28 +269,28 @@ public class PublicacionController {
 		if(!oPublicacion.isPresent()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(publicacionMapper.toPublicacionDTO(oPublicacion.get()));
+		return ResponseEntity.ok(publicacionMapper.map(oPublicacion.get()));
 	}
 
   @GetMapping("/user/{userID}")
     public @ResponseBody Iterable<PublicacionDTO> buscarPublicacionPorUserId(@PathVariable Long userID) {
         System.out.println("----- Fetching Publicaciones de id = " + userID + " ------");
         return publicacionRepository.findAllByUserID(userID).stream()
-        .map(publicacionMapper::toPublicacionDTO)
+        .map(publicacionMapper::map)
         .collect(Collectors.toList());
     }
   @GetMapping("/user/{userID}/activas")
     public @ResponseBody Iterable<PublicacionDTO> buscarActivasPorUserId(@PathVariable Long userID) {
         System.out.println("----- Fetching Publicaciones Activas de id = " + userID + " ------");
         return publicacionRepository.findByUserIdAndStates(userID, "Disponible", "Reservado").stream()
-        .map(publicacionMapper::toPublicacionDTO)
+        .map(publicacionMapper::map)
         .collect(Collectors.toList());
     }
   @GetMapping("/user/{userID}/finalizadas")
     public @ResponseBody Iterable<PublicacionDTO> buscarFinalizadasPorUserId(@PathVariable Long userID) {
         System.out.println("----- Fetching Publicaciones Finalizadas de id = " + userID + " ------");
         return publicacionRepository.findByUserIdAndState(userID, "Finalizado").stream()
-          .map(publicacionMapper::toPublicacionDTO)
+          .map(publicacionMapper::map)
           .collect(Collectors.toList());
     }
     
@@ -299,7 +299,7 @@ public class PublicacionController {
   public @ResponseBody Iterable<PublicacionDTO> getAllPublicaciones() {
     System.out.println("----- Fetching Publicaciones ------");
     return publicacionRepository.findAll().stream()
-      .map(publicacionMapper::toPublicacionDTO)
+      .map(publicacionMapper::map)
       .collect(Collectors.toList());
   }
 
@@ -307,7 +307,7 @@ public class PublicacionController {
   public @ResponseBody Iterable<PublicacionDTO> getAllPublicacionesActivas() {
     System.out.println("----- Fetching Publicaciones Activas ------");
     return publicacionRepository.findByStates("Disponible", "Reservado").stream()
-    .map(publicacionMapper::toPublicacionDTO)
+    .map(publicacionMapper::map)
     .collect(Collectors.toList());
   }
 
@@ -315,7 +315,7 @@ public class PublicacionController {
   public @ResponseBody Iterable<PublicacionDTO> getAllPublicacionesFinalizadas() {
     System.out.println("----- Fetching Publicaciones Finalizadas ------");
     return publicacionRepository.findByState("Finalizado").stream()
-    .map(publicacionMapper::toPublicacionDTO)
+    .map(publicacionMapper::map)
     .collect(Collectors.toList());
   }
 
@@ -323,7 +323,7 @@ public class PublicacionController {
   public @ResponseBody Iterable<PublicacionDTO> getAllPublicacionesPorCategoria(@PathVariable Long idCategoria) {
     System.out.println("----- Fetching Publicaciones por categoria ------");
     return publicacionRepository.findByCategoriaID(idCategoria).stream()
-    .map(publicacionMapper::toPublicacionDTO)
+    .map(publicacionMapper::map)
     .collect(Collectors.toList());
   }
 }

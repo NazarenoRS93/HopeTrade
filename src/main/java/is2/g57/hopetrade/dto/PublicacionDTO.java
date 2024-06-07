@@ -16,6 +16,7 @@ public class PublicacionDTO {
     private String estado;
     private long estadoID;
     private Integer ofertas;
+    private String userFullName;
 
     public boolean getActive() { return active; }
     public LocalDateTime getFechaHoraCreacion() {
@@ -94,5 +95,12 @@ public class PublicacionDTO {
     }
     public Integer getOfertas() {
         return ofertas;
+    }
+
+    public String getUserFullName() {
+        return userFullName;
+    }
+    public void setUserFullName(String userFullName) {
+        this.userFullName = userFullName;
     }
 }

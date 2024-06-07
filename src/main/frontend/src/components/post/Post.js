@@ -63,6 +63,7 @@ function Post(props) {
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={9}>
                         <Typography variant="subtitle2">{data.titulo}</Typography>
+                        <Typography variant="h6"><strong>por: </strong>{data.userFullName}</Typography>
                         <hr/>
                         <Typography variant="h2">{data.descripcion}</Typography>
                         <hr/>
