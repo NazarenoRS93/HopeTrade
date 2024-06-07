@@ -14,6 +14,8 @@ import PostListPage from "./containers/PostListPage";
 import AddPostPage from "./containers/AddPostPage";
 import SelectFilialPage from "./containers/SelectFilialPage";
 import EditProfilePage from "./containers/EditProfilePage";
+import EditProfilePageAyudante from "./containers/EditProfilePageAyudante";
+import ChangePasswordPage from "./containers/ChangePasswordPage";
 
 const router = createBrowserRouter(
     [
@@ -60,6 +62,14 @@ const router = createBrowserRouter(
                 {
                     path: "/profile",  
                     element: <EditProfilePage/>
+                },
+                {
+                    path: "/administrador-profile",  
+                    element: <EditProfilePageAyudante/>
+                },
+                {
+                    path: "/cambiarContrasenia",  
+                    element: <ChangePasswordPage/>
                 },
             ]
         },

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import is2.g57.hopetrade.entity.Ayudante;
+import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.repository.AyudanteRepository;
 import is2.g57.hopetrade.services.MailService;
 
@@ -92,19 +93,13 @@ public class AyudanteController {
 		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findById(ayudanteRequest.getId_ayudante());
 		if (ayudanteOp.isPresent()) {
 			Ayudante ayudante = ayudanteOp.get();
-			if (ayudanteRequest.getEmail() != null) {
-				if (ayudanteRepository.findAyudanteByEmail(ayudanteRequest.getEmail()).isPresent()) {
-					return new ResponseEntity<>("El mail ya esta en uso", HttpStatus.BAD_REQUEST);
-				}
-				ayudante.setEmail(ayudanteRequest.getEmail());
-			}
-			if (ayudanteRequest.getNombre() != null) {
+			if (ayudanteRequest.getNombre() != "") {
 				ayudante.setNombre(ayudanteRequest.getNombre());
 			}
-			if (ayudanteRequest.getApellido() != null) {
+			if (ayudanteRequest.getApellido() != "") {
 				ayudante.setApellido(ayudanteRequest.getApellido());
 			}
-			// Guardar los cambios actualizados en la base de datos
+
 			this.ayudanteRepository.save(ayudante);
 			return new ResponseEntity<>("Ayudante actualizado correctamente", HttpStatus.OK);
 		} else {
@@ -112,25 +107,25 @@ public class AyudanteController {
 		}
 	}
 
-	@PostMapping("/cambiar-pass")
-	public ResponseEntity<?> CambiarContrasenia(@RequestBody CambiarContraseniaRequest cambiarContraseniaRequest) {
-		String dni = cambiarContraseniaRequest.getDni();
-		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByDni(dni);
-
-		if (ayudanteOp.isPresent()) {
-			Ayudante ayudante = ayudanteOp.get();
-			// Verificar que la antigua contraseña proporcionada sea correcta
-			if (!ayudante.getPass().equals(cambiarContraseniaRequest.getAntiguaContrasenia())) {
-				return new ResponseEntity<>("La contraseña antigua es incorrecta", HttpStatus.UNAUTHORIZED);
-			}
-			// Actualizar la contraseña solo si la antigua contraseña es correcta
-			ayudante.setPass(cambiarContraseniaRequest.getNuevaContrasenia());
-			this.ayudanteRepository.save(ayudante);
-			return new ResponseEntity<>("Contraseña actualizada correctamente", HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("No se encontró ayudante con el DNI proporcionado", HttpStatus.NOT_FOUND);
-		}
-	}
+//	@PostMapping("/cambiar-pass")
+//	public ResponseEntity<?> CambiarContrasenia(@RequestBody CambiarContraseniaRequest cambiarContraseniaRequest) {
+//		String dni = cambiarContraseniaRequest.getDni();
+//		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteByDni(dni);
+//
+//		if (ayudanteOp.isPresent()) {
+//			Ayudante ayudante = ayudanteOp.get();
+//			// Verificar que la antigua contraseña proporcionada sea correcta
+//			if (!ayudante.getPass().equals(cambiarContraseniaRequest.getAntiguaContrasenia())) {
+//				return new ResponseEntity<>("La contraseña antigua es incorrecta", HttpStatus.UNAUTHORIZED);
+//			}
+//			// Actualizar la contraseña solo si la antigua contraseña es correcta
+//			ayudante.setPass(cambiarContraseniaRequest.getNuevaContrasenia());
+//			this.ayudanteRepository.save(ayudante);
+//			return new ResponseEntity<>("Contraseña actualizada correctamente", HttpStatus.OK);
+//		} else {
+//			return new ResponseEntity<>("No se encontró ayudante con el DNI proporcionado", HttpStatus.NOT_FOUND);
+//		}
+//	}
 
 	@PostMapping("/guardar")
 	public ResponseEntity<?> GuardarAyudante(@RequestBody AyudanteRequest request) {
@@ -194,22 +189,39 @@ public class AyudanteController {
 	}
 
 	@PostMapping("/updatepassword")
-	public ResponseEntity<?> updatePass(@RequestBody AyudanteRequest request) {
-		Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(request.getId_ayudante());
-		if (ayudanteOp.isPresent()) {
-			Ayudante ayudante = ayudanteOp.get();
-			if (ayudante.getPass().equals(request.getPass())) {
-				return new ResponseEntity<>("Debes ingresar una contraseña diferente a la actual",
-						HttpStatus.BAD_REQUEST);
-			} else {
-				ayudante.setPass(request.getPass());
-				ayudanteRepository.save(ayudante);
-				return new ResponseEntity<>("Cambios guardados", HttpStatus.OK);
-			}
+	public ResponseEntity<?> updatePass(@RequestBody CambiarContraseniaRequest cambiarContraseniaRequest) {
+	    Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(cambiarContraseniaRequest.getId());
+	    
+	    if (!ayudanteOp.isPresent()) {
+	        return new ResponseEntity<>("Usuario no encontrado", HttpStatus.BAD_REQUEST);
+	    }
 
-		}
-		return new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST);
+	    Ayudante ayudante = ayudanteOp.get();
+	    String currentPassword = ayudante.getPass();
+	    String oldPassword = cambiarContraseniaRequest.getAntiguaContrasenia();
+	    String newPassword = cambiarContraseniaRequest.getNuevaContrasenia();
 
+	    ResponseEntity<?> validationResponse = validatePasswords(currentPassword, oldPassword, newPassword);
+	    if (validationResponse != null) {
+	        return validationResponse;
+	    }
+
+	    ayudante.setPass(newPassword);
+	    ayudanteRepository.save(ayudante);
+	    return new ResponseEntity<>("Cambios guardados", HttpStatus.OK);
+	}
+
+	private ResponseEntity<?> validatePasswords(String currentPassword, String oldPassword, String newPassword) {
+	    if (!currentPassword.equals(oldPassword)) {
+	        return new ResponseEntity<>("Debes ingresar tu contraseña actual.", HttpStatus.BAD_REQUEST);
+	    }
+	    if (newPassword == "" ) {
+	        return new ResponseEntity<>("Debes ingresar una nueva contraseña.", HttpStatus.BAD_REQUEST);
+	    }
+	    if (currentPassword.equals(newPassword)) {
+	        return new ResponseEntity<>("Debes ingresar una contraseña diferente a la actual.", HttpStatus.BAD_REQUEST);
+	    }
+	    return null;
 	}
 
 }

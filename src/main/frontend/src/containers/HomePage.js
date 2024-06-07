@@ -16,6 +16,7 @@ function HomePage() {
         const cookie = window.localStorage.getItem("user");
         if(cookie) {
             let user = JSON.parse(cookie);
+            console.log("Tipo User:", user.tipoUser);
             setUser(user);
         };
     }, [])
@@ -33,7 +34,14 @@ function HomePage() {
                     <HomeItem link="/add-post" data={addPostInfo} icon={<NoteAddRoundedIcon color="primary"/>}/>
                     : null
                 }
-                <HomeItem link="/profile" data={editProfileInfo} icon={<PersonRoundedIcon color="primary"/>}/>
+                {user?.tipoUser===0 ?
+                    <HomeItem link="/profile" data={editProfileInfo} icon={<PersonRoundedIcon color="primary"/>}/>
+                    : null
+                }
+                {user?.tipoUser===1 ?
+                    <HomeItem link="/administrador-profile" data={editProfileInfo} icon={<PersonRoundedIcon color="primary"/>}/>
+                    : null
+                }
             </HomeGrid>
         </React.Fragment>
     )

@@ -27,13 +27,26 @@ function Header() {
     }
 
     useEffect(() => {
-        const cookie = window.localStorage.getItem("user");
-        if(cookie) {
-            setUser(JSON.parse(cookie));
-        } else {
-            setUser(baseUser);
+        const loadUserFromStorage = () => {
+            const cookie = window.localStorage.getItem("user");
+            if (cookie) {
+                setUser(JSON.parse(cookie));
+            } else {
+                setUser(baseUser);
+            }
         };
-    }, [])
+
+        // Cargar el usuario al montar el componente
+        loadUserFromStorage();
+
+        // Escuchar el evento 'userUpdated' para actualizar el estado del usuario
+        window.addEventListener('userUpdated', loadUserFromStorage);
+
+        // Limpiar el evento al desmontar el componente
+        return () => {
+            window.removeEventListener('userUpdated', loadUserFromStorage);
+        };
+    }, []);
 
     return (
         <div className="header-cus">
