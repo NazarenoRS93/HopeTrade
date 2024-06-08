@@ -73,6 +73,7 @@ public class IntercambioController {
         // 3 - Se programa un intercambio desde la misma publicacion
         // 4 - Se confirma el intercambio
         // El resultado es que la oferta correspondiente al primer intercambio ( el cancelado ) se elimina, dejandolo sin referencia
+        // La solución sería marcar la oferta como protegida de alguna manera, para que no se elimine en procesos como este. O dejar de eliminarlas porque no importa dado el volumen de datos que manejamos.
 
         return ResponseEntity.ok().build();
     }
