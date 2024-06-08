@@ -13,12 +13,6 @@ import is2.g57.hopetrade.entity.state.PublicacionState;
 public interface PublicacionRepository extends JpaRepository<Publicacion, Integer> {
     List<Publicacion> findAllByUserID(Long userID);
 
-    Iterable<Publicacion> findByActiveTrue();
-    Iterable<Publicacion> findByActiveFalse();
-
-    Iterable<Publicacion> findByUserIDAndActiveTrue(Long userID);
-    Iterable<Publicacion> findByUserIDAndActiveFalse(Long userID);
-
     List<Publicacion> findByUserIDAndState(Long userID, PublicacionState state);
 
     Optional<Publicacion> findById(Long id);

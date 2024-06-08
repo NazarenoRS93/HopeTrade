@@ -25,20 +25,6 @@ public class PublicacionMapper {
     @Autowired
     private UserRepository userRepository;
 
-
-
-    public PublicacionDTO newPublicacionDTO(Long userID, String titulo, String descripcion, String categoria, Long categoria_id, String estado, String image) {
-        PublicacionDTO dto = new PublicacionDTO();
-        dto.setUserID(userID);
-        dto.setTitulo(titulo);
-        dto.setDescripcion(descripcion);
-        dto.setImagen(imageService.saveUnique(image));
-        dto.setCategoria_Nombre(categoria);
-        dto.setCategoria_ID(categoria_id);
-        dto.setEstado(estado);
-        return dto;
-    }
-
     public PublicacionDTO map(Publicacion publicacion) {
         PublicacionDTO dto = new PublicacionDTO();
         dto.setId(publicacion.getId());
@@ -72,7 +58,7 @@ public class PublicacionMapper {
         else {
             p.setCategoria(categoriaRepository.findById(publicacionDTO.getCategoria_ID()).get());
         }
-        p.setState(publicacionStateRepository.findById(1).get());
+        p.setState(publicacionStateRepository.findById(1L).get());
         return p;
     }
 
@@ -86,6 +72,9 @@ public class PublicacionMapper {
         if (publicacionDTO.getImagen() != null) {
             imageService.delete(publicacion.getImagenUrl());
             publicacion.setImagenUrl(imageService.saveUnique(publicacionDTO.getImagen()));
+        }
+        if (publicacionDTO.getEstadoID() != null) {
+            publicacion.setState(publicacionStateRepository.findById(publicacionDTO.getEstadoID()).get());
         }
         return publicacion;
     }

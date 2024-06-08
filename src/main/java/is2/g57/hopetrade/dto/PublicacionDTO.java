@@ -14,7 +14,7 @@ public class PublicacionDTO {
     private LocalDateTime fechaHoraCreacion;
     private LocalDateTime ultimaModificacion;
     private String estado;
-    private long estadoID;
+    private Long estadoID;
     private Integer ofertas;
     private String userFullName;
 
@@ -84,10 +84,10 @@ public class PublicacionDTO {
     public String getEstado() {
         return estado;
     }
-    public void setEstadoID(long estadoID) {
+    public void setEstadoID(Long estadoID) {
         this.estadoID = estadoID;
     }
-    public long getEstadoID() {
+    public Long getEstadoID() {
         return estadoID;
     }
     public void setOfertas(Integer ofertas) {
