@@ -17,7 +17,25 @@ const UpdateProfileService = {
         } catch (error) {
             throw error;
         }
-    }
+    },
+    
+    getAdministrativoById: async (id) => {
+        try {
+            const response = await axios.get(`/ayudante/${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+    
+    updateAdministrativoProfile: async (userData) => {
+        try {
+            const response = await axios.post('/ayudante/actualizar', userData);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default UpdateProfileService;
