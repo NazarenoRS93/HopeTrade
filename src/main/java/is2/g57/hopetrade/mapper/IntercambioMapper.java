@@ -8,8 +8,6 @@ import is2.g57.hopetrade.entity.Intercambio;
 import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.PublicacionRepository;
 
-import is2.g57.hopetrade.mapper.OfertaMapper;
-
 @Component
 public class IntercambioMapper {
 
@@ -28,7 +26,7 @@ public class IntercambioMapper {
     public IntercambioDTO map(Intercambio intercambio) {
         IntercambioDTO dto = new IntercambioDTO();
         dto.setId(intercambio.getId());
-        dto.setPublicacion(publicacionMapper.map(publicacionRepository.findById(intercambio.getPublicacionID()).get()));
+        dto.setPublicacion(publicacionMapper.map(intercambio.getPublicacion()));
         dto.setOferta(ofertaMapper.map(intercambio.getOferta()));
         dto.setObservacion(intercambio.getObservacion());
         dto.setEstadoID(1L);

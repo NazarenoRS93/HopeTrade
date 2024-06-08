@@ -40,4 +40,6 @@ public abstract class PublicacionState {
 
     public void confirmarIntercambio(Publicacion p) {}
 
+    public void publicar(Publicacion p) {}
+
 }

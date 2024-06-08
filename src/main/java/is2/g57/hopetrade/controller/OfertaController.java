@@ -119,7 +119,7 @@ public class OfertaController {
 			Oferta oferta = ofertaOp.get();
 			oferta.setEstado(true);
 		    this.ofertaRepository.save(oferta);
-		    Intercambio intercambio = new Intercambio(oferta.getPublicacion().getId(), oferta, "Pendiente");
+		    Intercambio intercambio = new Intercambio(oferta.getPublicacion(), oferta, "Pendiente");
 		    this.intercambioRepository.save(intercambio);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {

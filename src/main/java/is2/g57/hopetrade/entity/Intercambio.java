@@ -11,8 +11,9 @@ public class Intercambio implements Serializable {
 	@Column(name="id")
     private Long id;
 
-    @Column(name="id_publicacion")
-    private Long publicacionID;
+    @OneToOne
+    @JoinColumn(name = "id_publicacion", unique = true)
+    private Publicacion publicacion;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_oferta", unique = true)
@@ -31,20 +32,20 @@ public class Intercambio implements Serializable {
     
     
 
-    public Intercambio(Long publicacionID, Oferta oferta, String observacion) {
-		this.publicacionID = publicacionID;
+    public Intercambio(Publicacion publicacion, Oferta oferta, String observacion) {
+		this.publicacion = publicacion;
 		this.oferta = oferta;
 		this.observacion = observacion;
 	}
 
 
 
-	public Long getPublicacionID() {
-        return publicacionID;
+	public Publicacion getPublicacion() {
+        return publicacion;
     }
 
-    public void setPublicacionID(Long publicacionID) {
-        this.publicacionID = publicacionID;
+    public void setPublicacion(Publicacion publicacion) {
+        this.publicacion = publicacion;
     }
 
     public Oferta getOferta() {
@@ -65,5 +66,13 @@ public class Intercambio implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public void confirmar() {
+        // Estado interno
+    }
+
+    public void cancelar() {
+        // Estado interno
     }
 }

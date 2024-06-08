@@ -110,6 +110,10 @@ public class Publicacion implements Serializable{
         this.state.suspender(this);
     }
 
+    public void publicar(){
+        this.state.publicar(this);
+    }
+
     public void finalizar(){
         this.state.confirmarIntercambio(this);
     }
