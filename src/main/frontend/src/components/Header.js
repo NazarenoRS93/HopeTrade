@@ -97,7 +97,7 @@ function Header() {
                         </Item>
                         <Item sx={{textAlign: "right"}}>
                             {user?.isLogged ?
-                                <Typography variant="h5">Usuario: <strong>{user.apellido}, {user.nombre}</strong> | App Versión {user.appVersion}</Typography>
+                                <Typography variant="h5">¡Hola, <strong>{user.nombre}</strong>! | App Versión {user.appVersion}</Typography>
                             :
                                 <Typography variant="h5">App Versión {user.appVersion}</Typography>
                             }
