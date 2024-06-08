@@ -2,6 +2,7 @@ package is2.g57.hopetrade.controller;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,8 @@ public class OfertaController {
 	@Autowired
 	private ImageService imageService;
 	
-	@Autowired IntercambioRepository intercambioRepository;
+	@Autowired 
+	private IntercambioRepository intercambioRepository;
 
 	@PostMapping("/guardar")
 	public ResponseEntity<?> guardarOferta(@RequestBody OfertaDTO ofertaDTO) {
@@ -85,7 +87,7 @@ public class OfertaController {
 	public ResponseEntity<?> obtenerOfertaPorId(@PathVariable("id") Long ofertaId) {
 		Optional<Oferta> ofertaOp = this.ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
-			return new ResponseEntity<>(ofertaOp.get(), HttpStatus.OK);
+			return new ResponseEntity<>(ofertaMapper.map(ofertaOp.get()), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
 		}
@@ -93,20 +95,20 @@ public class OfertaController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public @ResponseBody Iterable<Oferta> buscarOfertaPorUserId(@PathVariable ("userId") Long userId) {
-		Iterable<Oferta> oferta = ofertaRepository.findAllByUserId(userId);
+	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorUserId(@PathVariable ("userId") Long userId) {
+		List<OfertaDTO> oferta = ofertaRepository.findAllByUserId(userId).stream().map(ofertaMapper::map).toList();
 		return oferta;
 	}
 
 	@GetMapping("/filial/{filialId}")
-	public @ResponseBody Iterable<Oferta> buscarOfertaPorFilialId(@PathVariable("filialId") Long filialId) {
-		Iterable<Oferta> oferta = ofertaRepository.findAllByFilialId(filialId);
+	public @ResponseBody List<OfertaDTO> buscarOfertaPorFilialId(@PathVariable("filialId") Long filialId) {
+		List<OfertaDTO> oferta = ofertaRepository.findAllByFilialId(filialId).stream().map(ofertaMapper::map).toList();
 		return oferta;
 	}
 
 	@GetMapping("/publicacion/{publicacionId}")
-	public @ResponseBody Iterable<Oferta> buscarOfertaPorPublicacionId(@PathVariable("publicacionId") Long publicacionId) {
-		Iterable<Oferta> oferta = ofertaRepository.findAllByPublicacionId(publicacionId);
+	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorPublicacionId(@PathVariable("publicacionId") Long publicacionId) {
+		List<OfertaDTO> oferta = ofertaRepository.findAllByPublicacionId(publicacionId).stream().map(ofertaMapper::map).toList();
 		return oferta;
 	}
 
@@ -126,30 +128,20 @@ public class OfertaController {
 	}
 
 	@PostMapping("/rechazar/{id}")
-	public ResponseEntity<?> rechazarOferta(@PathVariable("id") Long ofertaId, OfertaRequest ofertaRequest) {
+	public ResponseEntity<?> rechazarOferta(@PathVariable("id") Long ofertaId, @RequestBody String respuesta) {
 		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
 			oferta.setEstado(false);
+			if (respuesta != null) {
+				oferta.setRespuesta(respuesta);
+			}
 			this.ofertaRepository.save(oferta);
-			oferta.setRespuesta(ofertaRequest.getRespuesta());
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
 		}
 
-	}
-
-	@GetMapping("/image/{id}")
-	public ResponseEntity<Resource> getImagen(@PathVariable("id") Long id) {
-		System.out.println(" -------- Fetching URL de id = " + id + " -------- ");
-		Oferta of = ofertaRepository.findById(id).get();
-		System.out.println(" -------- Recibido url de id = " + id + " URL = " + of.getImagenUrl() + "-------- ");
-		Resource image = imageService.load(of.getImagenUrl());
-		if (image == null) {
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.ok().body(image);
 	}
 
 }

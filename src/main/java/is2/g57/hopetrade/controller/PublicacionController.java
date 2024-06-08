@@ -74,8 +74,6 @@ import is2.g57.hopetrade.entity.state.*;
     "imagen": string(base64)
     "categoria_ID": long
   }
-  activar: http://localhost:8080/publicacion/activar/{id}
-  desactivar: http://localhost:8080/publicacion/desactivar/{id}
  */
 
 @RestController
