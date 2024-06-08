@@ -169,7 +169,9 @@ public class PublicacionController {
     // Test publicacion esta activa (Esto deberia ser manejado por los states)
     if (!publicacion.isActivo()) return new ResponseEntity<>("La publicación no puede modificarse.", HttpStatus.BAD_REQUEST);
     
+
     // Test titulo
+    if (publicacionDTO.getTitulo().length() ==  0) publicacionDTO.setTitulo(null);
     if (publicacionDTO.getTitulo() != null){
     Iterable<Publicacion> pub = publicacionRepository.findAllByUserID(publicacionDTO.getUserID());
       for (Publicacion p : pub) {
@@ -181,17 +183,12 @@ public class PublicacionController {
         return new ResponseEntity<>("Ingrese un titulo de hasta 50 caracteres", HttpStatus.BAD_REQUEST);
       }
     }
+    if (publicacionDTO.getDescripcion().length() ==  0) publicacionDTO.setDescripcion(null);
     if (publicacionDTO.getDescripcion() != null){
       if (publicacionDTO.getDescripcion().length() > 240) {
         return new ResponseEntity<>("La descripcion puede tener hasta 240 caracteres", HttpStatus.BAD_REQUEST);
       }
     }
-
-    // Test categoría
-    if (! (publicacionDTO.getCategoria_ID() != null && publicacionDTO.getCategoria_ID() < 17 && publicacionDTO.getCategoria_ID() > 0)) {
-      return new ResponseEntity<>("Seleccione una categoría.", HttpStatus.BAD_REQUEST);
-    }
-
     // Update
     publicacion = publicacionMapper.updatePublicacion(publicacion, publicacionDTO);
 

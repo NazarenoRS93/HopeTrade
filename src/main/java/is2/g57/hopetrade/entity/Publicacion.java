@@ -40,9 +40,6 @@ public class Publicacion implements Serializable{
     @ManyToOne (cascade = CascadeType.DETACH)
     @JoinColumn(name = "ID_CATEGORIA")
     private Categoria categoria;
-    
-    @Column(name="active")
-    private boolean active;
 
     @ManyToOne (cascade = CascadeType.DETACH)
     @JoinColumn(name = "ID_ESTADO")
@@ -66,7 +63,6 @@ public class Publicacion implements Serializable{
     public Publicacion() {
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
-        this.active = true;
     }
 
     public Publicacion(PublicacionDTO publicacionDTO) {
@@ -75,7 +71,6 @@ public class Publicacion implements Serializable{
         this.descripcion = publicacionDTO.getDescripcion();
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
-        this.active = true;
         this.setState(new PublicacionStateDisponible());
     }
 
@@ -93,7 +88,7 @@ public class Publicacion implements Serializable{
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, titulo, descripcion, userID, categoria, active, imagenUrl, fechaHoraCreacion, ultimaModificacion);
+        return Objects.hash(id, titulo, descripcion, userID, categoria, imagenUrl, fechaHoraCreacion, ultimaModificacion);
     }
 
     public void update(PublicacionDTO publicacionDTO) {
@@ -118,17 +113,6 @@ public class Publicacion implements Serializable{
         this.state.confirmarIntercambio(this);
     }
 
-    public void desactivar(){
-        this.active = false;
-    }
-
-    public void activar(){
-        this.active = true;
-    }
-
-    public void eliminarPublicacion(){
-        this.active = false;
-    }
     // Setters y Getters
 
     public String getImagenUrl(){
