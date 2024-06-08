@@ -2,8 +2,8 @@ package is2.g57.hopetrade.dto;
 
 public class IntercambioDTO {
     private Long id;
-    private Long publicacionID;
-    private Long ofertaID;
+    private PublicacionDTO publicacion;
+    private OfertaDTO oferta;
     private String observacion;
     private Long estadoID;
     
@@ -13,17 +13,17 @@ public class IntercambioDTO {
     public void setId(Long id) {
         this.id = id;
     }
-    public Long getPublicacionID() {
-        return publicacionID;
+    public PublicacionDTO getPublicacion() {
+        return publicacion;
     }
-    public void setPublicacionID(Long publicacionID) {
-        this.publicacionID = publicacionID;
+    public void setPublicacion(PublicacionDTO publicacion) {
+        this.publicacion = publicacion;
     }
-    public Long getOfertaID() {
-        return ofertaID;
+    public OfertaDTO getOferta() {
+        return oferta;
     }
-    public void setOfertaID(Long ofertaID) {
-        this.ofertaID = ofertaID;
+    public void setOferta(OfertaDTO oferta) {
+        this.oferta = oferta;
     }
     public String getObservacion() {
         return observacion;
