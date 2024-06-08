@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -9,25 +9,19 @@ import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-import {defaultFormAddPost} from "../utils/utilConstants";
 import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
 import {MenuItem, Select} from "@mui/material";
-import PostItem from "../components/post/PostItem";
+import SessionContext from "../context/context";
 
 function AddPostPage() {
+    const {user,handleLogin} = useContext(SessionContext);
     // Render on start
     useEffect(() => {
         fetchCategorias();
-        const cookie = window.localStorage.getItem("user");
-        if(cookie) {
-            let user = JSON.parse(cookie);
-            setUser(user);
-        };
     }, []);
     const [categorias, setCategorias] = useState([])
     const reader = new FileReader();
 
-    const [user, setUser] = useState({});
     const [image, setImage] = useState([]);
     const [titulo, setTitulo] = useState("");
     const [desc, setDesc] = useState("");
@@ -75,7 +69,6 @@ function AddPostPage() {
         formdata.append("categoria_ID", cat);
         formdata.append("imagen", await fileToBase64(image));
         formdata.append("userID", userID);
-        console.log('PUBLICACION: ', {titulo, desc, userID, cat});
         axios.post('http://localhost:8080/publicacion/add', formdata, {
             headers: {
                 'Content-Type': 'application/json'
@@ -88,7 +81,6 @@ function AddPostPage() {
                 window.location.replace(href+"/home");
             })
             .catch(function (error) {
-                console.log(error.response.data);
                 alert(error.response.data);
             });
     }

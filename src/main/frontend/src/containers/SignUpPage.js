@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -15,8 +15,11 @@ import {colors} from "../utils/colors";
 import {defaultFormRegister} from "../utils/utilConstants";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import RegisterService from "../services/RegisterService";
+import SessionContext from "../context/context";
 
-function SignUpPage() {
+function SignUpPage(props) {
+    const {user} = useContext(SessionContext);
+
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormRegister);
 
@@ -40,9 +43,8 @@ function SignUpPage() {
     const register = async () => {
         RegisterService.register(form)
             .then((response) => {
-                const cookie = window.localStorage.getItem("user");
                 let ret;
-                if(cookie) {
+                if(user.isLogged) {
                     ret = "/home";
                 } else {
                     ret = "/login";

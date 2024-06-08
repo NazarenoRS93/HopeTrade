@@ -64,11 +64,11 @@ const router = createBrowserRouter(
                     element: <EditProfilePage/>
                 },
                 {
-                    path: "/administrador-profile",  
+                    path: "/administrador-profile",
                     element: <EditProfilePageAyudante/>
                 },
                 {
-                    path: "/cambiarContrasenia",  
+                    path: "/cambiarContrasenia",
                     element: <ChangePasswordPage/>
                 },
             ]

@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import axios from 'axios';
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import { colors } from "../utils/colors";
+import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
 import FilialService from "../services/FilialService";
+import SessionContext from "../context/context";
 
 function SelectFilialPage() {
+	const {user,handleLogin} = useContext(SessionContext);
+
 	const [filiales, setFiliales] = useState([]);
-	const [selectedFilial, setSelectedFilial] = useState('');
-	const [userId, setUserId] = useState(null);
+	const [selectedFilial, setSelectedFilial] = useState("");
 
 	useEffect(() => {
 		fetchFiliales();
-		const user = JSON.parse(window.localStorage.getItem("user"));
-		setUserId(user?.idUser);
 	}, []);
 
 	const fetchFiliales = async () => {
 		try {
 			const response = await axios.get('http://localhost:8080/filial/all');
 			setFiliales(response.data);
-			console.log(response.data);
 		} catch (error) {
 			alert("Error obteniendo filiales: " + error);
 		}
@@ -34,15 +33,12 @@ function SelectFilialPage() {
 	};
 
 	const handleSelect = async () => {
-		if (userId && selectedFilial) {
+		if (user.isLogged && selectedFilial) {
 			try {
-				const response = await FilialService.selectFilial(userId, selectedFilial);
-				const cookie = window.localStorage.getItem("user");
-				if(cookie) {
-					let user = JSON.parse(cookie);
-					user = {...user, filial: selectedFilial};
-					window.localStorage.setItem("user",JSON.stringify(user));
-				};
+				const response = await FilialService.selectFilial(user.idUser, selectedFilial);
+				let tempUserData = {...user, filial: selectedFilial};
+				handleLogin(tempUserData);
+				window.localStorage.setItem("user",JSON.stringify(tempUserData));
 				let href = window.location.href;
 	            href = href.substring(0, href.lastIndexOf('/'));
 	            window.location.replace(href+"/home");
@@ -55,16 +51,8 @@ function SelectFilialPage() {
 	};
 	
 	return (
-		<Box
-			sx={{
-				backgroundColor: colors.background,
-				flexDirection: "row",
-				alignItems: "center",
-				display: "flex",
-				width: "100%"
-			}}
-		>
-			<Typography variant="h4" gutterBottom>
+		<Stack spacing={2} direction="column">
+			<Typography variant="subtitle1">
 				Seleccionar Filial
 			</Typography>
 			<Select
@@ -82,10 +70,11 @@ function SelectFilialPage() {
 					</MenuItem>
 				))}
 			</Select>
-			<Button variant="contained" color="success" onClick={handleSelect}>
+			<Button variant="contained" color="success" startIcon={<TaskAltRoundedIcon color="primary" />}
+					onClick={handleSelect} disabled={selectedFilial !== ""}>
 				<Typography variant="button">Seleccionar</Typography>
 			</Button>
-		</Box>
+		</Stack>
 	);
 }
 

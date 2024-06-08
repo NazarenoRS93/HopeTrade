@@ -28,6 +28,18 @@ export const defaultFormAddPost = {
     fechaHoraCreacion: '',
     ultimaModificacion: ''
 };
+export const defaultFormAddOffer = {
+    id: null,
+    titulo: '',
+    descripcion: '',
+    userID: 0,
+    imagen: '',
+    catID: 0,
+    catName: '',
+    active: '',
+    fechaHoraCreacion: '',
+    ultimaModificacion: ''
+};
 export const defaultDialogData = {
     open: false,
     msg: '',
