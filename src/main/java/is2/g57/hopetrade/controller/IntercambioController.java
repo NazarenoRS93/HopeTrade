@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import is2.g57.hopetrade.entity.Filial;
 import is2.g57.hopetrade.entity.Intercambio;
 import is2.g57.hopetrade.entity.Oferta;
 import is2.g57.hopetrade.dto.IntercambioDTO;
 import is2.g57.hopetrade.mapper.IntercambioMapper;
+import is2.g57.hopetrade.repository.FilialRepository;
 import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.OfertaRepository;
 import is2.g57.hopetrade.repository.PublicacionRepository;
@@ -20,6 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -31,10 +36,19 @@ public class IntercambioController {
     private IntercambioMapper intercambioMapper;
     @Autowired
     private OfertaRepository ofertaRepository;
+    @Autowired
+    private FilialRepository filialRepository;
 
     @GetMapping(path="/all")
     public List<IntercambioDTO> getAll() {
         List<Intercambio> intercambios = intercambioRepository.findAll();
+        return intercambios.stream().map(intercambioMapper::map).collect(Collectors.toList());
+    }
+
+    @GetMapping("/filial/{filialId}")
+    public List<IntercambioDTO> getByFilial(@PathVariable Long filialId) {
+        Filial filial = filialRepository.findById(filialId).get();
+        List<Intercambio> intercambios = intercambioRepository.findAllByFilial(filial);
         return intercambios.stream().map(intercambioMapper::map).collect(Collectors.toList());
     }
     
