@@ -4,7 +4,7 @@ function PostGrid(props) {
     const { children } = props;
 
     return (
-        <Grid container spacing={2} className="FullWidthPage">
+        <Grid container spacing={2}>
             { children }
         </Grid>
     );

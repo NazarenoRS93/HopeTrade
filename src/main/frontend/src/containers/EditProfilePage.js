@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
+import { colors } from "../utils/colors";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import UpdateProfileService from "../services/UpdateProfileService";
-import {Stack} from "@mui/material";
-import SessionContext from "../context/context";
 
 function EditProfilePage() {
 	const initialFormState = {
@@ -109,41 +109,66 @@ function EditProfilePage() {
 		window.location.replace("/app/home");
 	};
 
-    return (
-        <React.Fragment>
-            <Stack spacing={2} direction="column">
-                <Typography variant="subtitle1">Editar Perfil</Typography>
-                <FormControl>
-                    <TextField onChange={(event) => { handleChange(event) }} value={form.nombre}
-                               placeholder="Nombre" type="text" variant="outlined" id="nombre"
-                    />
-                    <FormHelperText id="nombre-text">Ingrese su nombre</FormHelperText>
-                </FormControl>
-                <FormControl>
-                    <TextField onChange={(event) => { handleChange(event) }} value={form.apellido}
-                               placeholder="Apellido" type="text" variant="outlined" id="apellido"
-                    />
-                    <FormHelperText id="apellido-text">Ingrese su apellido</FormHelperText>
-                </FormControl>
-                <FormControl>
-                    <TextField onChange={(event) => { handleChange(event) }} value={form.email}
-                               placeholder="Email" type="email" variant="outlined" id="email"
-                    />
-                    <FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
-                </FormControl>
-                <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary" />}
-                        onClick={updateProfile}>
-                    <Typography variant="button">Guardar cambios</Typography>
-                </Button>
-                <Button variant="contained" color="primary" onClick={handleCancel}>
-                    Cancelar
-                </Button>
-                <Button variant="contained" color="primary">
-                    Cambiar Contraseña
-                </Button>
-            </Stack>
-        </React.Fragment>
-    );
+	const handleChangePassword = () => {
+		window.location.replace("/app/cambiarContrasenia")
+	};
+
+	return (
+		<React.Fragment>
+			<Box
+				sx={{
+					backgroundColor: colors.background,
+					flexDirection: "row",
+					alignItems: "center",
+					display: "flex",
+					width: "100%"
+				}}
+			>
+				<Box sx={{ flexGrow: 1 }} />
+				<Box>
+					<Box
+						sx={{
+							backgroundColor: colors.background,
+							flexDirection: "column",
+							alignItems: "center",
+							display: "flex"
+						}}
+					>
+						<Typography variant="subtitle1">Editar Perfil</Typography>
+						<FormControl>
+							<TextField onChange={(event) => { handleChange(event) }} value={form.nombre}
+								placeholder="Nombre" type="text" variant="outlined" id="nombre"
+							/>
+							<FormHelperText id="nombre-text">Ingrese su nombre</FormHelperText>
+						</FormControl>
+						<FormControl>
+							<TextField onChange={(event) => { handleChange(event) }} value={form.apellido}
+								placeholder="Apellido" type="text" variant="outlined" id="apellido"
+							/>
+							<FormHelperText id="apellido-text">Ingrese su apellido</FormHelperText>
+						</FormControl>
+						<FormControl>
+							<TextField onChange={(event) => { handleChange(event) }} value={form.email}
+								placeholder="Email" type="email" variant="outlined" id="email"
+							/>
+							<FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
+						</FormControl>
+						<Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary" />}
+							onClick={updateProfile}>
+							<Typography variant="button">Guardar cambios</Typography>
+						</Button>
+						<Button variant="contained" color="primary" onClick={handleCancel}>
+							Cancelar
+						</Button>
+						<Button variant="contained" color="primary" onClick={handleChangePassword}>
+							Cambiar Contraseña
+						</Button>
+					</Box>
+				</Box>
+				<Box sx={{ flexGrow: 1 }} />
+			</Box>
+		</React.Fragment>
+	);
 }
 
 export default EditProfilePage;

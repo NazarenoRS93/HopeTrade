@@ -1,17 +1,16 @@
-import React, {useContext} from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
 import {Avatar, CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {DeleteRounded, EditNoteRounded, RepeatRounded} from "@mui/icons-material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import {DeleteRounded, EditNote, EditNoteRounded, RepeatRounded, Visibility} from "@mui/icons-material";
 
 import axios from "axios";
-import SessionContext from "../../context/context";
 
-function Post(props) {
-    const {id, data, change, update, open} = props;
-    const {user} = useContext(SessionContext);
+function Post( props ) {
+    const {id, data, user, update} = props;
 
     const editPost = () => {
 
@@ -25,9 +24,6 @@ function Post(props) {
             alert("Error eliminando publicación: "+error);
         }
         update();
-    }
-    const openOferta = async (event) => {
-        change();
     }
     const addOferta = async (event) => {
         event.preventDefault();
@@ -83,16 +79,9 @@ function Post(props) {
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
                             { (user.tipoUser === 0 && user.idUser !== data.userID) ?
-                                <Button variant="contained" color="success" onClick={openOferta}
-                                        startIcon={<RepeatRounded color="primary"/>}>
-                                    <Typography variant="button">Ofertar</Typography>
-                                </Button>
-                                : null
-                            }
-                            { (user.tipoUser === 0 && user.idUser === data.userID) ?
                                 <Button variant="contained" color="success" onClick={addOferta}
                                         startIcon={<RepeatRounded color="primary"/>}>
-                                    <Typography variant="button">Ver ofertas</Typography>
+                                    <Typography variant="button">Ofertar</Typography>
                                 </Button>
                                 : null
                             }

@@ -1,27 +1,26 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import axios from "axios";
 import PostGrid from "../components/post/PostGrid";
 import PostItem from "../components/post/PostItem";
 import {defaultFormAddPost} from "../utils/utilConstants";
-import Typography from "@mui/material/Typography";
-import SessionContext from "../context/context";
-import AddOfferModal from "../components/offer/AddOfferModal";
 
 function PostListPage() {
-    const {user} = useContext(SessionContext);
     // Render on start
     useEffect(() => {
-        fetchPublicaciones(user.idUser);
+        const cookie = window.localStorage.getItem("user");
+        if(cookie) {
+            let usuario = JSON.parse(cookie);
+            setUser(usuario);
+            fetchPublicaciones(usuario.idUser);
+        }
     }, []);
 
     const reader = new FileReader();
+    const [user, setUser] = useState({});
     const [publicaciones, setPublicaciones] = useState([]);
-    const [form, setForm] = useState(defaultFormAddPost);
-    const [open,setOpen] = useState(false);
-    const change = () => {
-        setOpen(!open);
-    }
+    const [form, setForm] = useState(defaultFormAddPost)
+
     const fetchPublicaciones = async (idUser) => {
         try {
             let path = "/all/activas";
@@ -38,38 +37,47 @@ function PostListPage() {
             });
             setPublicaciones(data);
         } catch (error) {
-            alert("Error obteniendo publicaciones: "+error);
+            console.log("Error obteniendo publicaciones: " + error);
+            // alert("Error obteniendo publicaciones: "+error);
         }
     }
 
+    // Funcion de prueba de pasaje a traves de props
+    const testCallback = () => console.log("Callback called");
+    
     const fileToBase64 = (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
+
             reader.onload = () => {
                 const base64String = reader.result.split(',')[1];
                 resolve(base64String);
             };
+
             reader.onerror = (error) => {
                 reject(error);
             };
+
             reader.readAsDataURL(file);
         });
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         var formdata = new FormData();
         formdata.append("titulo", form.titulo);
         formdata.append("descripcion", form.descripcion);
         formdata.append("userID", user.id);
         formdata.append("imagen", await fileToBase64(form.imagen));
+
         await axios.post('http://localhost:8080/publicacion/add', formdata, {
             headers: {
                 'Content-Type': 'application/json'
             }}
         )
             .then(function (response) {
-                fetchPublicaciones(user.idUser);
+                fetchPublicaciones();
             })
             .catch(function (error) {
                 alert("Error: "+error.response.data);
@@ -78,18 +86,11 @@ function PostListPage() {
 
     return (
         <React.Fragment>
-            <AddOfferModal open={open} change={change}/>
             <PostGrid>
             { publicaciones.map((publicacion) => (
-                <PostItem id={publicacion.id} data={publicacion} change={change}
-                          update={fetchPublicaciones} open={open}/>
+                <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPublicaciones}/>
             ))}
             </PostGrid>
-            {
-                publicaciones.length === 0 ?
-                    <Typography variant="h1">No hay publicaciones</Typography>
-                    : null
-            }
         </React.Fragment>
     )
 }

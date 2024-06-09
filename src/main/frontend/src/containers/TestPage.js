@@ -1,6 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import '../App.css';
+import Typography from "@mui/material/Typography";
+import {UserContext} from "../context/userContext";
 import Box from "@mui/material/Box";
+import SearchIcon from '@mui/icons-material/Search';
+import Button from "@mui/material/Button";
 import Item from "../utils/Item";
 import {colors} from "../utils/colors";
 import axios from "axios";

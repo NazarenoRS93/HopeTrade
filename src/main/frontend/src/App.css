@@ -59,26 +59,6 @@
   width: 400px;
 }
 
-.FullWidthHeader {
-  width: 100%;
-  background-color: #e8e8e7;
-  text-align: right;
-  padding: 10px;
-  border-bottom-width: 1px;
-  border-bottom-color: #0c1a78;
-}
-.FullWidthPage {
-  width: 100%;
-  background-color: #e8e8e7;
-  text-align: center;
-  padding: 20px;
-}
-.FullWidthFooter {
-  width: 100%;
-  background-color: #e8e8e7;
-  text-align: center;
-  padding: 10px;
-}
 .AlignRight {
   justify-content: right;
 }
