@@ -69,7 +69,7 @@ public class UserDataLoader implements ApplicationRunner {
         System.out.println("-------   Cargando admin a BD   -------");
         if (ayudanteRepository.findAyudanteByEmail("admin@caritas.com").isEmpty()) {
             System.out.println("Cargando admin");
-            ayudanteRepository.save(new Ayudante("admin@caritas.com", "99999999", "12345", "admin", "admin"));
+            ayudanteRepository.save(new Ayudante("admin@caritas.com", "99999999", "admin", "admin", "admin"));
         }
 
         System.out.println("-------   Intentando cargar ayudantes a BD   -------");
