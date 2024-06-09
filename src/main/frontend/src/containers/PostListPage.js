@@ -25,7 +25,7 @@ function PostListPage() {
         try {
             let path = "/all/activas";
             if(window.location.href.includes("my-posts")) {
-                path = "/user/" + idUser + "/activas";
+                path = "/user/" + user.idUser + "/activas";
             }
             let url = "http://localhost:8080/publicacion"+path;
             const response = await axios.get(url);

@@ -96,6 +96,13 @@ function Post( props ) {
                                 </Button>
                                 : null
                             }
+                            { user.idUser === data.userID ?
+                                <Button variant="contained" color="secondary" onClick={editPost}
+                                        startIcon={<Visibility color="primary"/>}>
+                                    <Typography variant="button">Ver Ofertas</Typography>
+                                </Button>
+                                : null
+                            }
                             { (user.idUser === data.userID || user.tipoUser !== 0) ?
                                 <Button variant="contained" color="error" onClick={deletePost}
                                         startIcon={<DeleteRounded color="background2"/>}>
