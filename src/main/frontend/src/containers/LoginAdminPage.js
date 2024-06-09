@@ -27,6 +27,7 @@ function LoginAdminPage(props) {
     
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormLoginAdmin);
+    const [btnDisabled, setBtnDisabled] = useState(true);
 
     const handleChange = (e) => {
         let tempForm = {...form};
@@ -36,10 +37,17 @@ function LoginAdminPage(props) {
             default: break;
         }
         setForm(tempForm);
+        if (tempForm.email.trim() !== "" && tempForm.pass.trim() !== "") {
+            setBtnDisabled(false)
+        } else {
+            setBtnDisabled(true)
+        };
     }
+
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
+
     const login = async () => {
         LoginService.loginAdmin(form)
             .then((response) => {
@@ -113,7 +121,7 @@ function LoginAdminPage(props) {
                         </Item>
                         <Item>
                             <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}
-                                onClick={login}>
+                                onClick={login} disabled={btnDisabled}>
                                 <Typography variant="button">Ingresar</Typography>
                             </Button>
                         </Item>
