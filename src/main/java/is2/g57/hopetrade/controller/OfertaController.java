@@ -28,6 +28,7 @@ import is2.g57.hopetrade.mapper.OfertaMapper;
 import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.OfertaRepository;
 import is2.g57.hopetrade.services.ImageService;
+import is2.g57.hopetrade.services.MailService;
 
 @RestController
 @RequestMapping("/oferta")
@@ -44,6 +45,9 @@ public class OfertaController {
 	
 	@Autowired 
 	private IntercambioRepository intercambioRepository;
+	
+	@Autowired
+    private MailService emailService;
 
 	@PostMapping("/guardar")
 	public ResponseEntity<?> guardarOferta(@RequestBody OfertaDTO ofertaDTO) {
@@ -70,6 +74,7 @@ public class OfertaController {
 				Oferta oferta = ofertaMapper.map(ofertaDTO);
 				System.out.println("------- Saving Oferta -------");
 				ofertaRepository.save(oferta);
+				emailService.sendEmailOfertaRecibida(oferta);
 				System.out.println("------- Guardada -------");
 				return new ResponseEntity<>("¡Oferta creada exitosamente!", HttpStatus.CREATED);
 			} else {
@@ -122,6 +127,7 @@ public class OfertaController {
 		    this.ofertaRepository.save(oferta);
 		    Intercambio intercambio = new Intercambio(oferta.getPublicacion(), oferta, "Pendiente");
 		    this.intercambioRepository.save(intercambio);
+		    emailService.sendEmailOfertaAceptada(oferta);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
@@ -138,6 +144,7 @@ public class OfertaController {
 				oferta.setRespuesta(respuesta);
 			}
 			this.ofertaRepository.save(oferta);
+			emailService.sendEmailOfertaRechazada(oferta);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
@@ -147,6 +154,11 @@ public class OfertaController {
 
 	@DeleteMapping("/eliminar/{id}")
 	public ResponseEntity<?> eliminarOferta(@PathVariable("id") Long ofertaId) {
+		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
+		if (ofertaOp.isPresent()) {
+			Oferta oferta = ofertaOp.get();
+			emailService.sendEmailOfertaRechazada(oferta);
+		}
 		this.ofertaRepository.deleteById(ofertaId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
