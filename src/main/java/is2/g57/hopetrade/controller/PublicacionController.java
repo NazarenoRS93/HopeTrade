@@ -16,12 +16,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import is2.g57.hopetrade.repository.OfertaRepository;
 import is2.g57.hopetrade.repository.PublicacionRepository;
 import is2.g57.hopetrade.repository.PublicacionStateRepository;
 import is2.g57.hopetrade.services.ImageService;
+import is2.g57.hopetrade.dto.OfertaDTO;
 import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
+import is2.g57.hopetrade.mapper.OfertaMapper;
 import is2.g57.hopetrade.mapper.PublicacionMapper;
 
 import is2.g57.hopetrade.entity.state.*;
@@ -90,6 +93,12 @@ public class PublicacionController {
 
   @Autowired 
   private PublicacionStateRepository publicacionStateRepository;
+
+  @Autowired
+  private OfertaRepository ofertaRepository;
+  
+  @Autowired
+  private OfertaMapper ofertaMapper;
   
   private ResponseEntity<?> PublicacionTest(PublicacionDTO PublicacionDTO) {
     
@@ -266,6 +275,11 @@ public class PublicacionController {
 		}
 		return ResponseEntity.ok(publicacionMapper.map(oPublicacion.get()));
 	}
+
+  @GetMapping("/{id}/ofertas")
+  public @ResponseBody Iterable<OfertaDTO> buscarOfertasPorPublicacionId(@PathVariable Long id) {
+    return ofertaRepository.findAllByPublicacionId(id).stream().map(ofertaMapper::map).collect(Collectors.toList());
+  }
 
   @GetMapping("/user/{userID}")
     public @ResponseBody Iterable<PublicacionDTO> buscarPublicacionPorUserId(@PathVariable Long userID) {

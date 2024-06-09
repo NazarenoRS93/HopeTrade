@@ -16,6 +16,7 @@ import SelectFilialPage from "./containers/SelectFilialPage";
 import EditProfilePage from "./containers/EditProfilePage";
 import EditProfilePageAyudante from "./containers/EditProfilePageAyudante";
 import ChangePasswordPage from "./containers/ChangePasswordPage";
+import InspectPostPage from "./containers/InspectPostPage";
 
 const router = createBrowserRouter(
     [
@@ -50,6 +51,10 @@ const router = createBrowserRouter(
                 {
                     path: "/add-post",
                     element: <AddPostPage/>
+                },
+                {
+                    path: "/inspect-post",
+                    element: <InspectPostPage/>
                 },
                 {
                     path: "/test",

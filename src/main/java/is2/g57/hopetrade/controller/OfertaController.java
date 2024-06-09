@@ -83,7 +83,7 @@ public class OfertaController {
 		}
 	}
 
-	@GetMapping("/ObtenerPorId/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> obtenerOfertaPorId(@PathVariable("id") Long ofertaId) {
 		Optional<Oferta> ofertaOp = this.ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
