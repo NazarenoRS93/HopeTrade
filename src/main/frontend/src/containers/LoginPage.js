@@ -29,6 +29,7 @@ function LoginPage() {
             default: break;
         }
         setForm(tempForm);
+        
         if (tempForm.dni.trim() !== "" && tempForm.pass.trim() !== "") {
             setBtnDisabled(false)
         } else {
