@@ -16,6 +16,7 @@ import is2.g57.hopetrade.repository.FilialRepository;
 import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.OfertaRepository;
 import is2.g57.hopetrade.repository.PublicacionRepository;
+import is2.g57.hopetrade.services.MailService;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +39,8 @@ public class IntercambioController {
     private OfertaRepository ofertaRepository;
     @Autowired
     private FilialRepository filialRepository;
+	@Autowired
+    private MailService emailService;
 
     @GetMapping(path="/all")
     public List<IntercambioDTO> getAll() {
@@ -67,7 +70,9 @@ public class IntercambioController {
 
         // Eliminar ofertas de publicacion excepto la oferta del intercambio
         List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(intercambio.getPublicacion().getId());
+        emailService.sendEmailIntercambioRealizado(ofertas);
         ofertas.remove(intercambio.getOferta());
+      
         ofertaRepository.deleteAll(ofertas);
         
         intercambioRepository.save(intercambio);
