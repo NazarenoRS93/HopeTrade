@@ -4,6 +4,9 @@ import axios from "axios";
 import PostGrid from "../components/post/PostGrid";
 import PostItem from "../components/post/PostItem";
 import {defaultFormAddPost} from "../utils/utilConstants";
+import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
+import MenuItem from '@mui/material/MenuItem';
 
 function PostListPage() {
     // Render on start
@@ -12,16 +15,20 @@ function PostListPage() {
         if(cookie) {
             let usuario = JSON.parse(cookie);
             setUser(usuario);
-            fetchPublicaciones(usuario.idUser);
+            fetchPublicaciones(usuario.idUser, 0);
         }
+        fetchCategorias();
     }, []);
 
     const reader = new FileReader();
     const [user, setUser] = useState({});
     const [publicaciones, setPublicaciones] = useState([]);
+    const [categorias, setCategorias] = useState([]);
+    const [selectedCategoria, setSelectedCategoria] = useState([]);
+    const [states, setStates] = useState([]);
     const [form, setForm] = useState(defaultFormAddPost)
 
-    const fetchPublicaciones = async (idUser) => {
+    const fetchPublicaciones = async (idUser, cat) => {
         try {
             let path = "/all/activas";
             if(window.location.href.includes("my-posts")) {
@@ -29,12 +36,19 @@ function PostListPage() {
             }
             let url = "http://localhost:8080/publicacion"+path;
             const response = await axios.get(url);
-            const data = response.data.map(publicacion => {
+            let data = response.data.map(publicacion => {
                 return {
                     ...publicacion,
                     imagenUrl: `data:image/jpeg;base64,${publicacion.imagen}`
                 };
+
             });
+            if(cat != 0) {
+                console.log("CATEGORIA:"+ cat);
+                data = data.filter(function (publicacion) {
+                    return publicacion.categoria_ID == cat;
+                });
+            }
             setPublicaciones(data);
         } catch (error) {
             console.log("Error obteniendo publicaciones: " + error);
@@ -42,54 +56,41 @@ function PostListPage() {
         }
     }
 
+    const fetchCategorias = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/categoria/all');
+            setCategorias(response.data);
+        } catch (error) {
+            alert("Error obteniendo categorías: "+error);
+        }
+    }
     const onUpdate = () => {
-        fetchPublicaciones(user.idUser);
+        fetchPublicaciones(user.idUser, selectedCategoria);
     }
 
-    // Funcion de prueba de pasaje a traves de props
-    const testCallback = () => console.log("Callback called");
-    
-    const fileToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                const base64String = reader.result.split(',')[1];
-                resolve(base64String);
-            };
-
-            reader.onerror = (error) => {
-                reject(error);
-            };
-
-            reader.readAsDataURL(file);
-        });
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        var formdata = new FormData();
-        formdata.append("titulo", form.titulo);
-        formdata.append("descripcion", form.descripcion);
-        formdata.append("userID", user.id);
-        formdata.append("imagen", await fileToBase64(form.imagen));
-
-        await axios.post('http://localhost:8080/publicacion/add', formdata, {
-            headers: {
-                'Content-Type': 'application/json'
-            }}
-        )
-            .then(function (response) {
-                fetchPublicaciones();
-            })
-            .catch(function (error) {
-                alert("Error: "+error.response.data);
-            });
+    const handleChange = (event) => {
+        setSelectedCategoria(event.target.value);
+        fetchPublicaciones(user.idUser, event.target.value);
     }
 
     return (
+        
         <React.Fragment>
+			<Select
+				value={selectedCategoria}
+				onChange={handleChange}
+				defaultValue="0"
+				sx={{ minWidth: 200, marginBottom: 2 }}
+			>   
+				<MenuItem value="0">
+					Todos
+				</MenuItem>
+				{categorias.map((categoria) => (
+					<MenuItem key={categoria.id} value={categoria.id}>
+						{categoria.nombre}
+					</MenuItem>
+				))}
+			</Select>
             <PostGrid>
             { publicaciones.map((publicacion) => (
                 <PostItem id={publicacion.id} data={publicacion} user={user} update={onUpdate}/>
