@@ -92,7 +92,7 @@ function PostListPage() {
         <React.Fragment>
             <PostGrid>
             { publicaciones.map((publicacion) => (
-                <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPublicaciones}/>
+                <PostItem id={publicacion.id} data={publicacion} user={user} update={onUpdate}/>
             ))}
             </PostGrid>
         </React.Fragment>
