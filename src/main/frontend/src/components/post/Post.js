@@ -5,6 +5,7 @@ import {Avatar, CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import LogoutIcon from "@mui/icons-material/Logout";
+import {Link} from "react-router-dom";
 import {DeleteRounded, EditNote, EditNoteRounded, RepeatRounded, Visibility} from "@mui/icons-material";
 
 import axios from "axios";
@@ -97,10 +98,12 @@ function Post( props ) {
                                 : null
                             }
                             { user.idUser === data.userID ?
+                                <Link to={"/inspect-post/"+id}> 
                                 <Button variant="contained" color="secondary" onClick={editPost}
                                         startIcon={<Visibility color="primary"/>}>
                                     <Typography variant="button">Ver Ofertas</Typography>
-                                </Button>
+                                </Button> 
+                                </Link>
                                 : null
                             }
                             { (user.idUser === data.userID || user.tipoUser !== 0) ?

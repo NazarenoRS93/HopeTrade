@@ -25,7 +25,7 @@ function PostListPage() {
         try {
             let path = "/all/activas";
             if(window.location.href.includes("my-posts")) {
-                path = "/user/" + user.idUser + "/activas";
+                path = "/user/" + idUser + "/activas";
             }
             let url = "http://localhost:8080/publicacion"+path;
             const response = await axios.get(url);
@@ -40,6 +40,10 @@ function PostListPage() {
             console.log("Error obteniendo publicaciones: " + error);
             // alert("Error obteniendo publicaciones: "+error);
         }
+    }
+
+    const onUpdate = () => {
+        fetchPublicaciones(user.idUser);
     }
 
     // Funcion de prueba de pasaje a traves de props

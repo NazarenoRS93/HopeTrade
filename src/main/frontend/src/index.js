@@ -53,7 +53,7 @@ const router = createBrowserRouter(
                     element: <AddPostPage/>
                 },
                 {
-                    path: "/inspect-post",
+                    path: "/inspect-post/:id",
                     element: <InspectPostPage/>
                 },
                 {
