@@ -67,7 +67,7 @@ public class OfertaController {
 				return new ResponseEntity<>("¡Oferta creada exitosamente!", HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(
-						"La fecha y hora del intercambio deben estar entre lunes y viernes de 08:00 a 20:00.",
+						"La fecha y hora del intercambio debe ser de lunes a viernes y de 08:00 a 20:00.",
 						HttpStatus.BAD_REQUEST);
 
 			}
