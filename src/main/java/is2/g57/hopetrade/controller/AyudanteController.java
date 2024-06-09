@@ -192,16 +192,16 @@ public class AyudanteController {
 	}
 
 	private ResponseEntity<?> validatePasswords(String currentPassword, String oldPassword, String newPassword) {
+		 if (newPassword.equals("") || currentPassword.equals("") ) {
+		        return new ResponseEntity<>("Debes llenar todos los campos", HttpStatus.BAD_REQUEST);
+		 }
 	    if (!currentPassword.equals(oldPassword)) {
-	        return new ResponseEntity<>("Debes ingresar tu contraseña actual.", HttpStatus.BAD_REQUEST);
+	        return new ResponseEntity<>("La contraseña antigua no coincide.", HttpStatus.BAD_REQUEST);
 	    }
-	    if (newPassword == "" ) {
-	        return new ResponseEntity<>("Debes ingresar una nueva contraseña.", HttpStatus.BAD_REQUEST);
-	    }
+	   
 	    if (currentPassword.equals(newPassword)) {
 	        return new ResponseEntity<>("Debes ingresar una contraseña diferente a la actual.", HttpStatus.BAD_REQUEST);
 	    }
 	    return null;
 	}
-
 }
