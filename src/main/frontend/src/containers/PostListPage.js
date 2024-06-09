@@ -42,6 +42,10 @@ function PostListPage() {
         }
     }
 
+    const onUpdate = () => {
+        fetchPublicaciones(user.idUser);
+    }
+
     // Funcion de prueba de pasaje a traves de props
     const testCallback = () => console.log("Callback called");
     
@@ -88,7 +92,7 @@ function PostListPage() {
         <React.Fragment>
             <PostGrid>
             { publicaciones.map((publicacion) => (
-                <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPublicaciones}/>
+                <PostItem id={publicacion.id} data={publicacion} user={user} update={onUpdate}/>
             ))}
             </PostGrid>
         </React.Fragment>

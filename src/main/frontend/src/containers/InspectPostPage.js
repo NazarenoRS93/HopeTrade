@@ -7,13 +7,17 @@ import OfertaGrid from "../components/oferta/OfertaGrid";
 import OfertaItem from "../components/oferta/OfertaItem";
 import {defaultFormAddPost} from "../utils/utilConstants";
 import Typography from "@mui/material/Typography";
+import {Link, useParams} from "react-router-dom";
 // import SessionContext from "../context/context";
 // import AddOfferModal from "../components/offer/AddOfferModal";
 
 function InspectPostPage() {
     // const {user} = useContext(SessionContext);
     // Render on start
+
+    const params = useParams();
     useEffect(() => {
+
         const cookie = window.localStorage.getItem("user");
         if(cookie) {
             let usuario = JSON.parse(cookie);
@@ -30,7 +34,7 @@ function InspectPostPage() {
 
     const fetchPost = async () => {
         try {
-            let id = 13;
+            let id = params.id;
             let url = "http://localhost:8080/publicacion/"+id;
             const response = await axios.get(url);
             const data = response.data;
@@ -45,7 +49,7 @@ function InspectPostPage() {
         try {
             // id = post.id;
             // TEST
-            let id = 13;
+            let id = params.id;
             let url = "http://localhost:8080/publicacion/"+id+"/ofertas";
             const response = await axios.get(url);
             setOfertas(response.data);
