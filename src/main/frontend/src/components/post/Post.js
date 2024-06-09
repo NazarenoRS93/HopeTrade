@@ -28,40 +28,10 @@ function Post( props ) {
     }
     const addOferta = async (event) => {
         event.preventDefault();
-
-        let userID = user.idUser;
-        var formdata = new FormData();
-
-        // Valores genericos de prueba para no usar form
-        var titulo = "Oferta de prueba";
-        var descripcion = "Lorem ipsum isque bla bla bla";
-        var fechaIntercambio = "2024-010-10 09:00:00.000000";
-        var filialID = Math.floor(Math.random() * 5) + 1;
-
-        formdata.append("titulo", titulo);
-        formdata.append("descripcion", descripcion);
-        formdata.append("publicacionId", id);
-        formdata.append("userId", userID);
-
-        formdata.append("filialId", filialID);
-        // No pude hacer andar el formato. Esta hardcodeado en el controller, por ahora
-        // formdata.append("fechaIntercambio", fechaIntercambio);
-
-        // Imagen comentada hasta que se implemente el form
-        // formdata.append("imagen", await fileToBase64(imagen));
-
-        await axios.post('http://localhost:8080/oferta/guardar', formdata, {
-            headers: {
-                'Content-Type': 'application/json'
-            }}
-        )
-            .then(function (response) {
-                console.log(response.data);
-            })
-            .catch(function (error) {
-                alert("Error: "+error.response.data);
-            });
-        update();
+        window.localStorage.setItem("pubId", id);
+        let href = window.location.href;
+        href = href.substring(0, href.lastIndexOf('/'));
+        window.location.replace(href+"/add-oferta");
     }
 
     return (

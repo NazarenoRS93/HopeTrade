@@ -60,13 +60,9 @@ public class OfertaMapper {
         oferta.setPublicacion(publicacionRepository.findById(dto.getPublicacionId()).get());
         oferta.setFilial(filialRepository.findById(dto.getFilialId()).get());
         oferta.setUser(userRepository.findById(dto.getUserId()).get());
-
-        // Convert Base 64 image to URL
-        // Si el DTO contiene imagen, guardarla
         if (dto.getImagen() != null) {
             oferta.setImagenUrl(imageService.saveUnique(dto.getImagen()));
-        }
-        else { 
+        } else {
             System.out.println("No hay imagen");
         }
         return oferta;

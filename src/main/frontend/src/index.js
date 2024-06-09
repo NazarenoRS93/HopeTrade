@@ -8,6 +8,7 @@ import LoginPage from "./containers/LoginPage";
 import SignUpPage from "./containers/SignUpPage";
 import HomePage from "./containers/HomePage";
 import LoginAdminPage from "./containers/LoginAdminPage";
+import AddOfertaPage from "./containers/AddOfertaPage";
 import TestPage from "./containers/TestPage";
 import axios from "axios";
 import PostListPage from "./containers/PostListPage";
@@ -51,6 +52,10 @@ const router = createBrowserRouter(
                 {
                     path: "/add-post",
                     element: <AddPostPage/>
+                },
+                {
+                    path: "/add-oferta",
+                    element: <AddOfertaPage/>
                 },
                 {
                     path: "/inspect-post/:id",

@@ -53,29 +53,17 @@ public class OfertaController {
 	public ResponseEntity<?> guardarOferta(@RequestBody OfertaDTO ofertaDTO) {
 
 		try {
-
-			// fecha valida para testeo (08-07-2024 08:00:00)
-			LocalDateTime fecha = LocalDateTime.of(2024, 07, 8, 9, 0, 0);
-			ofertaDTO.setFechaIntercambio(fecha);
-			
-			// Linea correcta para testear pasaje desde Frontend
-			// LocalDateTime fecha = ofertaDTO.getFechaIntercambio();
-
+			LocalDateTime fecha = ofertaDTO.getFechaIntercambio();
 			// Verificar que el día esté entre lunes y viernes
 			DayOfWeek dia = fecha.getDayOfWeek();
 			boolean esDiaLaborable = dia != DayOfWeek.SATURDAY && dia != DayOfWeek.SUNDAY;
-
 			// Verificar que la hora esté entre las 08:00 y las 20:00
 			int hora = fecha.getHour();
 			boolean enHorarioLaboral = hora >= 8 && hora < 20;
-
 			if (esDiaLaborable && enHorarioLaboral) {
-				// Oferta oferta = new Oferta(ofertaRequest.getTexto(), fecha, ofertaRequest.getImagenUrl(), ofertaRequest.getPublicacion(),ofertaRequest.getFilial(),ofertaRequest.getUser());
 				Oferta oferta = ofertaMapper.map(ofertaDTO);
-				System.out.println("------- Saving Oferta -------");
 				ofertaRepository.save(oferta);
 				emailService.sendEmailOfertaRecibida(oferta);
-				System.out.println("------- Guardada -------");
 				return new ResponseEntity<>("¡Oferta creada exitosamente!", HttpStatus.CREATED);
 			} else {
 				return new ResponseEntity<>(
