@@ -1,31 +1,42 @@
 import React, {useContext, useEffect, useState} from "react";
 import '../App.css';
 import axios from "axios";
-import PostGrid from "../components/post/PostGrid";
 import PostItem from "../components/post/PostItem";
+import Post from "../components/post/Post";
+import OfertaGrid from "../components/oferta/OfertaGrid";
+import OfertaItem from "../components/oferta/OfertaItem";
 import {defaultFormAddPost} from "../utils/utilConstants";
 import Typography from "@mui/material/Typography";
-import SessionContext from "../context/context";
-import AddOfferModal from "../components/offer/AddOfferModal";
+// import SessionContext from "../context/context";
+// import AddOfferModal from "../components/offer/AddOfferModal";
 
 function InspectPostPage() {
     // const {user} = useContext(SessionContext);
     // Render on start
     useEffect(() => {
-        fetchPost();
+        const cookie = window.localStorage.getItem("user");
+        if(cookie) {
+            let usuario = JSON.parse(cookie);
+            setUser(usuario);
+            fetchPost();
+        }
     }, []);
 
 
     const reader = new FileReader();
     const [ofertas, setOfertas] = useState([]);
     const [publicacion, setPost] = useState([]);
+    const [user, setUser] = useState({});
 
     const fetchPost = async () => {
         try {
-            let id = 1;
-            let url = "http://localhost:8080/publicacion/{id}";
+            let id = 13;
+            let url = "http://localhost:8080/publicacion/"+id;
             const response = await axios.get(url);
-            setPost(response.data);
+            const data = response.data;
+            data.imagenUrl = `data:image/jpeg;base64,${data.imagen}`
+            setPost(data);
+            fetchOfertas();
         } catch (error) {
             alert("Error obteniendo publicacion: "+error);
         }
@@ -34,34 +45,34 @@ function InspectPostPage() {
         try {
             // id = post.id;
             // TEST
-            let id = 1;
-            let url = "http://localhost:8080/publicacion/{id}/ofertas";
+            let id = 13;
+            let url = "http://localhost:8080/publicacion/"+id+"/ofertas";
             const response = await axios.get(url);
             setOfertas(response.data);
+            console.log(ofertas);
         } catch (error) {
             alert("Error obteniendo ofertas: "+error);
         }
     }
 
-    const fileToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64String = reader.result.split(',')[1];
-                resolve(base64String);
-            };
-            reader.onerror = (error) => {
-                reject(error);
-            };
-            reader.readAsDataURL(file);
-        });
-    };
+    const rechazarOferta = async (id) => {
+        console.log("Eliminando oferta con ID:", id);
+        try {
+            await axios.delete("http://localhost:8080/oferta/eliminar/"+id);
+        } catch (error) {
+            console.log("Error eliminando oferta: "+error);
+        }
+        fetchOfertas();
+    }
     
     return (
         <React.Fragment>
-            <Typography variant="h1">No hay publicaciones</Typography>
-            <PostItem id={publicacion.id} data={publicacion}
-                          update={fetchOfertas}/>
+            <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPost}/>
+            <OfertaGrid>
+                { ofertas.map((oferta) => (
+                    <OfertaItem id={oferta.id} data={oferta} user={user} update={fetchOfertas} rechazar={rechazarOferta}/>
+                ))}
+            </OfertaGrid>
         </React.Fragment>
     )
 }

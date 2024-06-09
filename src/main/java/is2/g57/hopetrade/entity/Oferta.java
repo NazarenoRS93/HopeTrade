@@ -14,8 +14,11 @@ public class Oferta {
     @Column(name = "id_oferta")
     private Long id;
 
-    @Column(name = "texto", nullable = false, length = 250)
-    private String texto;
+    @Column(name = "titulo", nullable = false, length = 50)
+    private String titulo;
+
+    @Column(name = "descripcion", nullable = false, length = 250)
+    private String descripcion;
 
     @Column(name = "creacion", nullable = false)
     private LocalDateTime fechaCreacion;
@@ -48,7 +51,7 @@ public class Oferta {
     private User user;
 
     public Oferta(String texto, LocalDateTime fechaIntercambio, String imagenUrl, Publicacion publicacion, Filial filial, User user) {
-        this.texto = texto;
+        this.descripcion = texto;
         this.fechaCreacion = LocalDateTime.now();
         this.fechaIntercambio = fechaIntercambio;
         this.imagenUrl = imagenUrl;
@@ -71,12 +74,20 @@ public class Oferta {
         this.id = id;
     }
 
-    public String getTexto() {
-        return texto;
+    public String getTitulo() {
+        return titulo;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public LocalDateTime getFechaCreacion() {

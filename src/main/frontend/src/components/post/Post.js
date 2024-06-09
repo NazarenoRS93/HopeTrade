@@ -32,13 +32,17 @@ function Post( props ) {
         var formdata = new FormData();
 
         // Valores genericos de prueba para no usar form
-        var texto = "test";
+        var titulo = "Oferta de prueba";
+        var descripcion = "Lorem ipsum isque bla bla bla";
         var fechaIntercambio = "2024-010-10 09:00:00.000000";
+        var filialID = Math.floor(Math.random() * 5) + 1;
 
-        formdata.append("texto", texto);
+        formdata.append("titulo", titulo);
+        formdata.append("descripcion", descripcion);
         formdata.append("publicacionId", id);
         formdata.append("userId", userID);
-        formdata.append("filialId", 1);
+
+        formdata.append("filialId", filialID);
         // No pude hacer andar el formato. Esta hardcodeado en el controller, por ahora
         // formdata.append("fechaIntercambio", fechaIntercambio);
 

@@ -9,7 +9,8 @@ import is2.g57.hopetrade.controller.OfertaController;
 
 public class OfertaDTO {
 	private Long id;
-	private String texto;
+	private String titulo;
+	private String descripcion;
 	private LocalDateTime fechaCreacion;
 	private LocalDateTime fechaModificacion;
 	private String respuesta;
@@ -18,7 +19,9 @@ public class OfertaDTO {
 	private String imagen;
 	private Long publicacionId;
 	private Long filialId;
+	private String filialNombre;
 	private Long userId;
+	private String userFullName;
 
 	public Long getId() {
 		return id;
@@ -28,12 +31,20 @@ public class OfertaDTO {
 		this.id = id;
 	}
 
-	public String getTexto() {
-		return texto;
+	public String getTitulo() {
+		return titulo;
+	}	
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
-	public void setTexto(String texto) {
-		this.texto = texto;
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public LocalDateTime getFechaCreacion() {
@@ -108,5 +119,20 @@ public class OfertaDTO {
 		this.userId = userId;
 	}
 
-	
+	public String getUserFullName() {
+		return userFullName;
+	}
+
+	public void setUserFullName(String userFullName) {
+		this.userFullName = userFullName;
+	}
+
+	public String getFilialNombre() {
+		return filialNombre;
+	}
+
+	public void setFilialNombre(String filialNombre) {
+		this.filialNombre = filialNombre;
+	}
+
 }

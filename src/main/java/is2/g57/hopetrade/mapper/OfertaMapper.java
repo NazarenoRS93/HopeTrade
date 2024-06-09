@@ -29,10 +29,13 @@ public class OfertaMapper {
     public OfertaDTO map(Oferta oferta) {
         OfertaDTO dto = new OfertaDTO();
         dto.setId(oferta.getId());
-        dto.setTexto(oferta.getTexto());
+        dto.setTitulo(oferta.getTitulo());
+        dto.setDescripcion(oferta.getDescripcion());
         dto.setPublicacionId(oferta.getPublicacion().getId());
         dto.setFilialId(oferta.getFilial().getId());
+        dto.setFilialNombre(oferta.getFilial().getNombre());
         dto.setUserId(oferta.getUser().getId());
+        dto.setUserFullName(oferta.getUser().getFullName());
         dto.setFechaIntercambio(oferta.getFechaIntercambio());
         dto.setFechaCreacion(oferta.getFechaCreacion());
         dto.setRespuesta(oferta.getRespuesta());
@@ -51,7 +54,8 @@ public class OfertaMapper {
 
     public Oferta map(OfertaDTO dto) {
         Oferta oferta = new Oferta();
-        oferta.setTexto(dto.getTexto());
+        oferta.setTitulo(dto.getTitulo());
+        oferta.setDescripcion(dto.getDescripcion());
         oferta.setFechaIntercambio(dto.getFechaIntercambio());
         oferta.setPublicacion(publicacionRepository.findById(dto.getPublicacionId()).get());
         oferta.setFilial(filialRepository.findById(dto.getFilialId()).get());
