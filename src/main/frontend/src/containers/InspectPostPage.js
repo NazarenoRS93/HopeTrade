@@ -49,7 +49,7 @@ function InspectPostPage() {
         try {
             // id = post.id;
             // TEST
-            let id = 13;
+            let id = params.id;
             let url = "http://localhost:8080/publicacion/"+id+"/ofertas";
             const response = await axios.get(url);
             setOfertas(response.data);

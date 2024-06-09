@@ -97,7 +97,7 @@ function Post( props ) {
                                 </Button>
                                 : null
                             }
-                            { user.idUser === data.userID ?
+                            { user.idUser === data.userID && !window.location.href.includes("/inspect-post") ?
                                 <Link to={"/inspect-post/"+id}> 
                                 <Button variant="contained" color="secondary" onClick={editPost}
                                         startIcon={<Visibility color="primary"/>}>
