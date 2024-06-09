@@ -59,7 +59,7 @@ public class MailService {
 	public void sendEmailOfertaRechazada(Oferta oferta) {
 
 		String subject = "Oferta rechazada";
-		String text = "Hola " + oferta.getUser().getNombre() + ",\n\n" + "Te informamos que tu oferta fue rechazada"
+		String text = "Hola " + oferta.getUser().getNombre() + ",\n\n" + "Te informamos que tu oferta para la publicacion: " + oferta.getPublicacion().getTitulo() +" fue rechazada"
 				+ "\n" + "Motivo: " + oferta.getRespuesta() + "\n\n" + "Saludos";
 
 		SimpleMailMessage message = new SimpleMailMessage();
