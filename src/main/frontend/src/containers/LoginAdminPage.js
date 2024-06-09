@@ -91,7 +91,7 @@ function LoginAdminPage(props) {
                         }}
                     >
                         <Item>
-                            <Typography variant="subtitle1">Ingresar como Administrador</Typography>
+                            <Typography variant="subtitle1">Ingresar como Ayudante / Administrador</Typography>
                         </Item>
                         <Item>
                             <FormControl>
