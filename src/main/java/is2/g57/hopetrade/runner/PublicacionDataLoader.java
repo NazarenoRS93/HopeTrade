@@ -23,6 +23,7 @@ import is2.g57.hopetrade.dto.PublicacionDTO;
 import is2.g57.hopetrade.repository.PublicacionRepository;
 import is2.g57.hopetrade.services.ImageService;
 
+
 @Component
 public class PublicacionDataLoader implements ApplicationRunner{
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import is2.g57.hopetrade.entity.Filial;
 import is2.g57.hopetrade.entity.Intercambio;
 import is2.g57.hopetrade.entity.Oferta;
+import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.dto.IntercambioDTO;
 import is2.g57.hopetrade.mapper.IntercambioMapper;
 import is2.g57.hopetrade.repository.FilialRepository;
@@ -42,6 +43,8 @@ public class IntercambioController {
     private FilialRepository filialRepository;
 	@Autowired
     private MailService emailService;
+    @Autowired
+    private PublicacionRepository publicacionRepository;
 
     @GetMapping(path="/all")
     public List<IntercambioDTO> getAll() {
@@ -89,10 +92,14 @@ public class IntercambioController {
     @PutMapping("cancelar/{id}")
     public ResponseEntity<?> cancelarIntercambio(@PathVariable String id) {
         Intercambio intercambio = intercambioRepository.findById(Long.parseLong(id)).get();
+        Publicacion publicacion = intercambio.getPublicacion();
+        publicacion.publicar();
+        publicacionRepository.save(publicacion);
+
         intercambioRepository.delete(intercambio);
         // intercambio.cancelar();
         // intercambioRepository.save(intercambio);
-        intercambio.getPublicacion().publicar();
+        
         
         // Nota, esta el caso borde de que pase esto
         // 1 - Se programa un intercambio
