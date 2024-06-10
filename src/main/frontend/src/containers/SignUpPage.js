@@ -19,6 +19,7 @@ import RegisterService from "../services/RegisterService";
 function SignUpPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormRegister);
+    const [btnDisabled, setBtnDisabled] = useState(true);
 
     const handleChange = (e) => {
         let tempForm = {...form};
@@ -32,7 +33,14 @@ function SignUpPage() {
             default: break;
         }
         setForm(tempForm);
+        if (tempForm.nombre.trim() !== "" && tempForm.apellido.trim() !== "" && tempForm.dni.trim() !== "" &&
+            tempForm.fecha_nacimiento.trim() !== "" && tempForm.email.trim() !== "" && tempForm.pass.trim() !== "") {
+            setBtnDisabled(false)
+        } else {
+            setBtnDisabled(true)
+        };
     }
+
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
@@ -93,23 +101,26 @@ function SignUpPage() {
                                 <Item>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.nombre}
-                                                   placeholder="Nombre" type="text" variant="outlined" id="nombre"
+                                                   type="text" variant="outlined" id="nombre"
+                                                   required label="Nombre"
                                         />
-                                        <FormHelperText id="email-text">Ingrese su nombre</FormHelperText>
+                                        <FormHelperText id="nombre-text">Ingrese su nombre</FormHelperText>
                                     </FormControl>
                                 </Item>
                                 <Item>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.apellido}
-                                                   placeholder="Apellido" type="text" variant="outlined" id="apellido"
+                                                   type="text" variant="outlined" id="apellido"
+                                                   required label="Apellido"
                                         />
-                                        <FormHelperText id="email-text">Ingrese su apellido</FormHelperText>
+                                        <FormHelperText id="apellido-text">Ingrese su apellido</FormHelperText>
                                     </FormControl>
                                 </Item>
                                 <Item>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.dni}
-                                                   placeholder="DNI" type="number" variant="outlined" id="dni"
+                                                   type="number" variant="outlined" id="dni"
+                                                   required label="DNI"
                                         />
                                         <FormHelperText id="dni-text">Ingrese su n° de documento sin puntos</FormHelperText>
                                     </FormControl>
@@ -128,15 +139,17 @@ function SignUpPage() {
                                 <Item>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.fecha_nacimiento}
-                                                   placeholder="Fecha de nacimiento" type="date" variant="outlined" id="fecha_nacimiento"
+                                                   type="date" variant="outlined" id="fecha_nacimiento"
+                                                   required 
                                         />
-                                        <FormHelperText id="email-text">Ingrese su fecha de nacimiento</FormHelperText>
+                                        <FormHelperText id="fecha-nacimiento-text">Ingrese su fecha de nacimiento</FormHelperText>
                                     </FormControl>
                                 </Item>
                                 <Item>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.email}
-                                                   placeholder="Email" type="email" variant="outlined" id="email"
+                                                   type="email" variant="outlined" id="email"
+                                                   required label="Email"
                                         />
                                         <FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
                                     </FormControl>
@@ -144,7 +157,7 @@ function SignUpPage() {
                                 <Item>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.pass}
-                                                   placeholder="Contraseña" variant="outlined" id="pass"
+                                                   label="Contraseña" variant="outlined" id="pass" required
                                                    type={showPassword ? "text" : "password"}
                                                    InputProps={{
                                                        endAdornment: (
@@ -165,7 +178,7 @@ function SignUpPage() {
                         </Item>
                         <Item>
                             <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary"/>}
-                                    onClick={register}>
+                                    onClick={register} disabled={btnDisabled}>
                                 <Typography variant="button">Registrar</Typography>
                             </Button>
                         </Item>
