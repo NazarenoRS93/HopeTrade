@@ -30,18 +30,27 @@ function Exchange() {
     const [user, setUser] = useState({});
 
     const cancelar = (id) => {
-        let url = "http://localhost:8080/intercambio/cancelar/"+id;
-        axios.put(url);
-        // ir a Home
-        window.location.href = "/app/home";
+        try {
+            let url = "http://localhost:8080/intercambio/cancelar/"+id;
+            axios.put(url);
+            window.location.href = "/app/home";
+        } catch (error) {
+            alert("Error cancelando intercambio: "+error);
+            fetch();
+        }
     }
 
     const confirmar = (id) => {
-        let url = "http://localhost:8080/intercambio/confirmar/"+id;
-        axios.put(url);
-        // ir a Home
-        window.location.href = "/app/home";
+        try {
+            let url = "http://localhost:8080/intercambio/cancelar/"+id;
+            axios.put(url);
+            window.location.href = "/app/home";
+        } catch (error) {
+            alert("Error cancelando intercambio: "+error);
+            fetch();
+        }
     }
+
 
     const fetch = async () => {
         try {

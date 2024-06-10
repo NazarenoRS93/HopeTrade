@@ -89,8 +89,9 @@ public class IntercambioController {
     @PutMapping("cancelar/{id}")
     public ResponseEntity<?> cancelarIntercambio(@PathVariable String id) {
         Intercambio intercambio = intercambioRepository.findById(Long.parseLong(id)).get();
-        intercambio.cancelar();
-        intercambioRepository.save(intercambio);
+        intercambioRepository.delete(intercambio);
+        // intercambio.cancelar();
+        // intercambioRepository.save(intercambio);
         intercambio.getPublicacion().publicar();
         
         // Nota, esta el caso borde de que pase esto

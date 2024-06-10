@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
+@Async
 public class MailService {
 
 	@Autowired
@@ -23,7 +24,6 @@ public class MailService {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Async
 	public void sendEmail(Ayudante ayudante) {
 		String subject = "Registro Exitoso";
 		String text = "Hola " + ayudante.getNombre() + ",\n\n"
@@ -38,7 +38,6 @@ public class MailService {
 		mailSender.send(message);
 	}
 
-	@Async
 	public void sendEmailOfertaRecibida(Oferta oferta) {
 		Optional<User> userOp = this.userRepository.findById(oferta.getPublicacion().getUserID());
 		if (userOp.isPresent()) {
@@ -103,6 +102,7 @@ public class MailService {
 		}
 	}
 
+	@Async
 	public void sendEmailIntercambioRealizado(List<Oferta> ofertas) {
 		String subject = "Oferta rechazada";
 		for (Oferta of : ofertas) {

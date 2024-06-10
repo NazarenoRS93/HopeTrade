@@ -124,14 +124,14 @@ function AddOfertaPage() {
                 }}
             >
                 <Item>
-                    <Typography variant="subtitle1">Registrar Publicación</Typography>
+                    <Typography variant="subtitle1">Ofertar</Typography>
                 </Item>
                 <Item>
                     <FormControl>
                         <TextField onChange={(event)=> {handleChange(event)}}
                                    placeholder="Título" type="text" variant="outlined" name="titulo" className="AddPostForm"
                         />
-                        <FormHelperText id="titulo-text">Ingrese el título de su publicación</FormHelperText>
+                        <FormHelperText id="titulo-text">Ingrese el título de su oferta</FormHelperText>
                     </FormControl>
                 </Item>
                 <Item>
@@ -139,7 +139,7 @@ function AddOfertaPage() {
                         <TextField onChange={(event)=> {handleChange(event)}} className="AddPostForm"
                                    placeholder="Descripción" multiline={true} rows={4} type="text" variant="outlined" name="descripcion"
                         />
-                        <FormHelperText id="descripcion-text">Describa el producto publicado</FormHelperText>
+                        <FormHelperText id="descripcion-text">Describa el producto ofertado</FormHelperText>
                     </FormControl>
                 </Item>
                 <Item>
