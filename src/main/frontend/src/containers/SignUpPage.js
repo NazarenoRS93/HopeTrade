@@ -20,6 +20,7 @@ function SignUpPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormRegister);
     const [btnDisabled, setBtnDisabled] = useState(true);
+    const cookie = window.localStorage.getItem("user");
 
     const handleChange = (e) => {
         let tempForm = {...form};
@@ -34,7 +35,7 @@ function SignUpPage() {
         }
         setForm(tempForm);
         if (tempForm.nombre.trim() !== "" && tempForm.apellido.trim() !== "" && tempForm.dni.trim() !== "" &&
-            tempForm.fecha_nacimiento.trim() !== "" && tempForm.email.trim() !== "" && tempForm.pass.trim() !== "") {
+            (tempForm.fecha_nacimiento.trim() !== "" || cookie) && tempForm.email.trim() !== "" && tempForm.pass.trim() !== "") {
             setBtnDisabled(false)
         } else {
             setBtnDisabled(true)
@@ -48,14 +49,16 @@ function SignUpPage() {
     const register = async () => {
         RegisterService.register(form)
             .then((response) => {
-                const cookie = window.localStorage.getItem("user");
                 let ret;
                 if(cookie) {
+                    // si existe la cookie es porque está logueado el admin e ingresó por "registrar ayudante"
                     ret = "/home";
+                    alert("¡Ayudante registrado exitosamente!");
                 } else {
+                    // en este caso se ingresó a "registrarse" (usuario general)
                     ret = "/login";
+                    alert("¡Usuario creado con éxito!");
                 };
-                alert("¡Usuario creado con éxito!");
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
                 window.location.replace(href+ret);
@@ -87,7 +90,7 @@ function SignUpPage() {
                         }}
                     >
                         <Item>
-                            <Typography variant="subtitle1">¡Registrate!</Typography>
+                            <Typography variant="subtitle1">{cookie ? "¡Registra un Ayudante!" : "¡Registrate!"}</Typography>
                         </Item>
                         <Item>
                             <Box
@@ -136,6 +139,7 @@ function SignUpPage() {
                                     display: "flex"
                                 }}
                             >
+                            { !cookie ?
                                 <Item>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.fecha_nacimiento}
@@ -145,6 +149,8 @@ function SignUpPage() {
                                         <FormHelperText id="fecha-nacimiento-text">Ingrese su fecha de nacimiento</FormHelperText>
                                     </FormControl>
                                 </Item>
+                                : <p></p>
+                            }
                                 <Item>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.email}
