@@ -53,13 +53,13 @@ function PostListPage() {
                     return publicacion.categoria_ID == cat;
                 });
             }
-            if (data.length > 0) setHayPublis(true);
-            else setHayPublis(false);
-            if (!window.location.href.includes("my-posts")) {
+            if (!window.location.href.includes("my-posts") && user.tipoUser === 0) {
                 data = data.filter(function (publicacion) {
                     return publicacion.estado == "Disponible";  
                 });
             }
+            if (data.length > 0) setHayPublis(true);
+            else setHayPublis(false);
             setPublicaciones(data);
         } catch (error) {
             console.log("Error obteniendo publicaciones: " + error);
