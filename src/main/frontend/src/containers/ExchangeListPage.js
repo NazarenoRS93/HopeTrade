@@ -64,7 +64,7 @@ function ExchangeListPage() {
             axios.put(url);
             fetchIntercambios();
         } catch (error) {
-            alert("Error cancelando intercambio: "+error);
+            console.log("Error cancelando intercambio: "+error);
             fetchIntercambios();
         }
     }
