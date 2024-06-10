@@ -53,7 +53,6 @@ function InspectPostPage() {
             let url = "http://localhost:8080/publicacion/"+id+"/ofertas";
             const response = await axios.get(url);
             setOfertas(response.data);
-            console.log(ofertas);
         } catch (error) {
             alert("Error obteniendo ofertas: "+error);
         }
@@ -63,10 +62,21 @@ function InspectPostPage() {
         console.log("Eliminando oferta con ID:", id);
         try {
             await axios.delete("http://localhost:8080/oferta/eliminar/"+id);
+            fetchOfertas();
         } catch (error) {
             console.log("Error eliminando oferta: "+error);
         }
         fetchOfertas();
+    }
+
+    const aceptarOferta = async (id) => {
+        console.log("Aceptando oferta con ID:", id);
+        try {
+            await axios.put("http://localhost:8080/oferta/aceptar/"+id);
+        } catch (error) {
+            console.log("Error aceptando oferta: "+error);
+        }
+        fetchPost();
     }
     
     return (
@@ -74,7 +84,7 @@ function InspectPostPage() {
             <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPost}/>
             <OfertaGrid>
                 { ofertas.map((oferta) => (
-                    <OfertaItem id={oferta.id} data={oferta} user={user} update={fetchOfertas} rechazar={rechazarOferta}/>
+                    <OfertaItem id={oferta.id} data={oferta} publicacion={publicacion} user={user} update={fetchOfertas} rechazar={rechazarOferta} aceptar={aceptarOferta}/>
                 ))}
             </OfertaGrid>
         </React.Fragment>

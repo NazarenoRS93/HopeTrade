@@ -11,6 +11,10 @@ public interface IntercambioRepository extends JpaRepository<Intercambio, Intege
 
     Optional<Intercambio> findById(Long id);
 
+    Optional<Intercambio> findByOfertaId(Long id);
+
+    Optional<Intercambio> findByPublicacionId(Long id);
+
     // JOIN with oferta.filial
     @Query ("SELECT i FROM Intercambio i WHERE i.oferta.filial = :filial")
     List<Intercambio> findAllByFilial(Filial filial);

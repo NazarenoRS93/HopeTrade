@@ -4,7 +4,7 @@ export const viewPostsInfo = {
 }
 export const editProfileInfo = {
     title: "Editar perfil",
-    description: "Revise sus datos y edite los mismos."
+    description: "Revise y edite sus datos."
 }
 export const myPostsInfo = {
     title: "Mis publicaciones",
@@ -18,5 +18,10 @@ export const addPostInfo = {
 export const listUsersInfo = {
     title: "Listar usuarios",
     description: "Vea y administre los usuarios del sistema."
+}
+
+export const listExchangesInfo = {
+    title: "Listar intercambios ",
+    description: "Vea y administre los intercambios pendientes del sistema."
 }
 

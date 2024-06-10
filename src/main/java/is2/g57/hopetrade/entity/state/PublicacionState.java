@@ -38,6 +38,8 @@ public abstract class PublicacionState {
 
     public void rechazarOferta(Publicacion p) {}
 
+    public void reservar(Publicacion p) {}
+
     public void confirmarIntercambio(Publicacion p) {}
 
     public void publicar(Publicacion p) {}

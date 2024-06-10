@@ -18,6 +18,8 @@ import EditProfilePage from "./containers/EditProfilePage";
 import EditProfilePageAyudante from "./containers/EditProfilePageAyudante";
 import ChangePasswordPage from "./containers/ChangePasswordPage";
 import InspectPostPage from "./containers/InspectPostPage";
+import Exchange from "./containers/ExchangePage";
+import ExchangeListPage from "./containers/ExchangeListPage";
 
 const router = createBrowserRouter(
     [
@@ -60,6 +62,14 @@ const router = createBrowserRouter(
                 {
                     path: "/inspect-post/:id",
                     element: <InspectPostPage/>
+                },
+                {
+                    path: "/exchange/:id",
+                    element: <Exchange/>
+                },
+                {
+                    path: "/exchanges",
+                    element: <ExchangeListPage/>
                 },
                 {
                     path: "/test",

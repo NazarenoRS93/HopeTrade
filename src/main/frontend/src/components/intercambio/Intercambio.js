@@ -9,8 +9,8 @@ import {DeleteRounded, EditNote, EditNoteRounded, RepeatRounded, Visibility} fro
 
 import axios from "axios";
 
-function Oferta( props ) {
-    const {id, publicacion, data, user, update, rechazar, aceptar} = props;
+function Intercambio( props ) {
+    const {id, publicacion, oferta, user, data, confirmar, cancelar} = props;
 
     const nada = () => {
         console.log(data);
@@ -18,11 +18,11 @@ function Oferta( props ) {
     };
 
     const onAccept = async () => {
-        aceptar(id);
+        confirmar(id);
     }
 
-    const onRechazar = async () => {
-        rechazar(id);
+    const onCancel = async () => {
+        cancelar(id);
     }
 
     return (
@@ -30,29 +30,40 @@ function Oferta( props ) {
             <CardContent>
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={9}>
-                        <Typography variant="subtitle2">Oferta {data.id}: {data.titulo}</Typography>
-                        <Typography variant="h6"><strong>por: </strong>{data.userFullName}</Typography>
+                        <Typography variant="subtitle2">{publicacion.titulo}</Typography>
+                        <Typography variant="h6"><strong>por: </strong>{publicacion.userFullName}</Typography>
                         <hr/>
-                        <Typography variant="h2">{data.descripcion} asdasdaddas</Typography>
+                        <Typography variant="h2">{publicacion.descripcion}</Typography>
                         <hr/>
-                        <Typography variant="h6">en <strong>{data.filialNombre}</strong> </Typography> 
-                        <Typography variant="h6"> Fecha propuesta: {data.fechaIntercambio} </Typography>
+                        <Typography variant="h6"><strong>Categoria: </strong>{publicacion.categoria_Nombre}</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Avatar src={publicacion.imagenUrl} variant="rounded" sx={{ width:"150px",height:"150px"}} />
+                    </Grid>
+                    <Grid item xs={9}>
+                        <Typography variant="subtitle2">Oferta: {oferta.titulo}</Typography>
+                        <Typography variant="h6"><strong>por: </strong>{oferta.userFullName}</Typography>
+                        <hr/>
+                        <Typography variant="h2">{oferta.descripcion} asdasdaddas</Typography>
+                        <hr/>
+                        <Typography variant="h6">en <strong>{oferta.filialNombre}</strong> </Typography> 
+                        <Typography variant="h6"> Fecha propuesta: {oferta.fechaIntercambio} </Typography>
                     </Grid>
                     {/*<Grid item xs={3}>
                         <Avatar src={data.imagenUrl} variant="rounded" sx={{ width:"150px",height:"150px"}} />
                     </Grid> */}
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
-                            { (publicacion.estado === "Disponible") ?
+                            { (user.tipoUser !== 0) ?
                                     <Button variant="contained" color="success" onClick={onAccept}
                                         startIcon={<RepeatRounded color="primary"/>}>
-                                    <Typography variant="button">Aceptar</Typography>
+                                    <Typography variant="button"> Confirmar Intercambio </Typography>
                                     </Button>
                                     : null
                             }
-                            <Button variant="contained" color="error" onClick={onRechazar}
+                            <Button variant="contained" color="error" onClick={onCancel}
                                     startIcon={<DeleteRounded color="background2"/>}>
-                                <Typography variant="button2">Rechazar</Typography>
+                                <Typography variant="button2"> Cancelar Intercambio </Typography>
                             </Button>
                         </Stack>
                     </Grid>
@@ -62,7 +73,7 @@ function Oferta( props ) {
     );
 }
 
-Oferta.propTypes = {
+Intercambio.propTypes = {
     /**
      * The system prop that allows defining system overrides as well as additional CSS styles.
      */
@@ -75,4 +86,4 @@ Oferta.propTypes = {
     ]),
 };
 
-export default Oferta;
+export default Intercambio;

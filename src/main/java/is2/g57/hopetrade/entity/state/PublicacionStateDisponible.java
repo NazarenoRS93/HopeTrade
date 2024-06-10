@@ -35,6 +35,10 @@ public class PublicacionStateDisponible extends PublicacionState {
         // rechazar oferta
     }
 
+    public void reservar(Publicacion p) {
+        p.setState(new PublicacionStateReservado());
+    }
+
     public void suspender(Publicacion p) {
         p.setState(new PublicacionStateSuspendido());
     }

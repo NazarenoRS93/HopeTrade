@@ -1,6 +1,7 @@
 package is2.g57.hopetrade.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,12 @@ public class IntercambioController {
     public IntercambioDTO getById(@PathVariable Long id) {
         Intercambio intercambio = intercambioRepository.findById(id).get();
         return intercambioMapper.map(intercambio);
+    }
+
+    @GetMapping("/publicacion/{publicacionId}")
+    public IntercambioDTO getByPublicacion(@PathVariable Long publicacionId) {
+        Optional<Intercambio> intercambio = intercambioRepository.findByPublicacionId(publicacionId);
+        return intercambioMapper.map(intercambio.get());
     }
 
     @PutMapping("confirmar/{id}")

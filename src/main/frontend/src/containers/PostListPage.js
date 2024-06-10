@@ -55,6 +55,11 @@ function PostListPage() {
             }
             if (data.length > 0) setHayPublis(true);
             else setHayPublis(false);
+            if (!window.location.href.includes("my-posts")) {
+                data = data.filter(function (publicacion) {
+                    return publicacion.estado == "Disponible";  
+                });
+            }
             setPublicaciones(data);
         } catch (error) {
             console.log("Error obteniendo publicaciones: " + error);

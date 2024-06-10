@@ -27,6 +27,7 @@ import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.mapper.OfertaMapper;
 import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.OfertaRepository;
+import is2.g57.hopetrade.repository.PublicacionRepository;
 import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.services.MailService;
 
@@ -45,6 +46,9 @@ public class OfertaController {
 	
 	@Autowired 
 	private IntercambioRepository intercambioRepository;
+
+	@Autowired
+	private PublicacionRepository publicacionRepository;
 	
 	@Autowired
     private MailService emailService;
@@ -106,8 +110,9 @@ public class OfertaController {
 		return oferta;
 	}
 
-	@PostMapping("/aceptar/{id}")
+	@PutMapping("/aceptar/{id}")
 	public ResponseEntity<?> aceptarOferta(@PathVariable("id") Long ofertaId) {
+		System.out.println("ACEPTANDING");
 		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
@@ -116,6 +121,9 @@ public class OfertaController {
 		    Intercambio intercambio = new Intercambio(oferta.getPublicacion(), oferta, "Pendiente");
 		    this.intercambioRepository.save(intercambio);
 		    emailService.sendEmailOfertaAceptada(oferta);
+			Publicacion publicacion = publicacionRepository.findById(oferta.getPublicacion().getId()).get();
+			publicacion.reservar();
+			publicacionRepository.save(publicacion);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
@@ -130,6 +138,9 @@ public class OfertaController {
 			oferta.setEstado(false);
 			if (respuesta != null) {
 				oferta.setRespuesta(respuesta);
+			}
+			else {
+				oferta.setRespuesta("[PLACEHOLDER]");
 			}
 			this.ofertaRepository.save(oferta);
 			emailService.sendEmailOfertaRechazada(oferta);

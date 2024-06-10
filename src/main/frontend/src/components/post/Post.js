@@ -53,21 +53,21 @@ function Post( props ) {
                     </Grid>
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
-                            { (user.tipoUser === 0 && user.idUser !== data.userID) ?
+                            { (user.tipoUser === 0 && user.idUser !== data.userID && data.estado === "Disponible") ?
                                 <Button variant="contained" color="success" onClick={addOferta}
                                         startIcon={<RepeatRounded color="primary"/>}>
                                     <Typography variant="button">Ofertar</Typography>
                                 </Button>
                                 : null
                             }
-                            { user.idUser === data.userID ?
+                            { user.idUser === data.userID && data.estado === "Disponible" ?
                                 <Button variant="contained" color="secondary" onClick={editPost}
                                         startIcon={<EditNoteRounded color="primary"/>}>
                                     <Typography variant="button">Editar</Typography>
                                 </Button>
                                 : null
                             }
-                            { user.idUser === data.userID && !window.location.href.includes("/inspect-post") ?
+                            { user.idUser === data.userID && data.estado === "Disponible" && !window.location.href.includes("/inspect-post") ?
                                 <Link to={"/inspect-post/"+id}> 
                                 <Button variant="contained" color="secondary" onClick={editPost}
                                         startIcon={<Visibility color="primary"/>}>
@@ -76,6 +76,15 @@ function Post( props ) {
                                 </Link>
                                 : null
                             }
+                              { user.idUser === data.userID && data.estado === "Reservado" && !window.location.href.includes("/exchange") ?
+                                <Link to={"/exchange/"+id}> 
+                                <Button variant="contained" color="secondary" onClick={editPost}
+                                        startIcon={<Visibility color="primary"/>}>
+                                    <Typography variant="button">Ver Intercambio</Typography>
+                                </Button> 
+                                </Link>
+                                : null
+                            }                          
                             { (user.idUser === data.userID || user.tipoUser !== 0) ?
                                 <Button variant="contained" color="error" onClick={deletePost}
                                         startIcon={<DeleteRounded color="background2"/>}>

@@ -113,6 +113,10 @@ public class Publicacion implements Serializable{
         this.state.confirmarIntercambio(this);
     }
 
+    public void reservar(){
+        this.state.reservar(this);
+    }
+
     // Setters y Getters
 
     public String getImagenUrl(){
