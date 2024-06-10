@@ -73,7 +73,7 @@ function ExchangeListPage() {
         
         <React.Fragment>
             <PostGrid>
-            { intercambios.map((intercambio) => (
+            {  intercambios?.map((intercambio) => (
                 <IntercambioItem id={intercambio.id} data={intercambio} publicacion={intercambio.publicacion} oferta={intercambio.oferta} user={user} cancelar={cancelar} confirmar={confirmar}/>
             ))}
             </PostGrid>
