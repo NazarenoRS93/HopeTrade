@@ -7,11 +7,13 @@ import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
 import { colors } from "../utils/colors";
 import FilialService from "../services/FilialService";
+import Item from '../utils/Item';
 
 function SelectFilialPage() {
 	const [filiales, setFiliales] = useState([]);
 	const [selectedFilial, setSelectedFilial] = useState('');
 	const [userId, setUserId] = useState(null);
+	const [btnDisabled, setBtnDisabled] = useState(true);
 
 	useEffect(() => {
 		fetchFiliales();
@@ -31,6 +33,7 @@ function SelectFilialPage() {
 
 	const handleChange = (event) => {
 		setSelectedFilial(event.target.value);
+		setBtnDisabled(event.target.value.toString() === "")
 	};
 
 	const handleSelect = async () => {
@@ -40,7 +43,9 @@ function SelectFilialPage() {
 				const cookie = window.localStorage.getItem("user");
 				if(cookie) {
 					let user = JSON.parse(cookie);
-					user = {...user, filial: selectedFilial};
+					//Se obtiene el objeto de la filial seleccionada
+					let laFilial = filiales.find((element) => element.id === selectedFilial);
+					user = {...user, filial: selectedFilial, desc_filial: laFilial.direccion + " (" + laFilial.nombre + ")"};
 					window.localStorage.setItem("user",JSON.stringify(user));
 				};
 				let href = window.location.href;
@@ -64,27 +69,28 @@ function SelectFilialPage() {
 				width: "100%"
 			}}
 		>
-			<Typography variant="h4" gutterBottom>
-				Seleccionar Filial
-			</Typography>
-			<Select
-				value={selectedFilial}
-				onChange={handleChange}
-				displayEmpty
-				sx={{ minWidth: 200, marginBottom: 2 }}
-			>
-				<MenuItem value="" disabled>
-					Seleccione una filial
-				</MenuItem>
-				{filiales.map((filial) => (
-					<MenuItem key={filial.id} value={filial.id}>
-						{filial.nombre}
+			<Item>
+				<Select
+					value={selectedFilial}
+					onChange={handleChange}
+					displayEmpty
+					sx={{ minWidth: 200, marginBottom: 2 }}
+				>
+					<MenuItem value="" disabled>
+						Seleccione una filial
 					</MenuItem>
-				))}
-			</Select>
-			<Button variant="contained" color="success" onClick={handleSelect}>
-				<Typography variant="button">Seleccionar</Typography>
-			</Button>
+					{filiales.map((filial) => (
+						<MenuItem key={filial.id} value={filial.id}>
+							{filial.direccion + " (" + filial.nombre + ")"}
+						</MenuItem>
+					))}
+				</Select>
+			</Item>
+			<Item>
+				<Button sx={{flexDirection: "column"}} variant="contained" color="success" onClick={handleSelect} disabled={btnDisabled}>
+					<Typography variant="button">Seleccionar</Typography>
+				</Button>
+			</Item>
 		</Box>
 	);
 }

@@ -49,5 +49,6 @@ export const baseUser = {
     idUser: 0,
     nombre: "",
     tipoUser: "",
-    filial: ""
+    filial: "",
+    desc_filial: ""
 }

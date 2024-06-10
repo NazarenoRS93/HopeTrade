@@ -75,7 +75,7 @@ function Header() {
                             <Stack spacing={2} direction="row">
                                 {(user?.isLogged && user.tipoUser===2) ?
                                     <Link to="/register">
-                                        <Button variant="contained" color="secondary" startIcon={<LogoutIcon color="primary"/>}>
+                                        <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary"/>}>
                                             <Typography variant="button">Registrar ayudante</Typography>
                                         </Button>
                                     </Link>
@@ -101,7 +101,7 @@ function Header() {
                                         </Button>
                                     </Link>
                                     :
-                                    <Button variant="contained" color="error" startIcon={<PersonAddAltRoundedIcon color="background2"/>}
+                                    <Button variant="contained" color="error" startIcon={<LogoutIcon color="background2"/>}
                                             onClick={logout}>
                                         <Typography variant="button2">Cerrar sesión</Typography>
                                     </Button>
