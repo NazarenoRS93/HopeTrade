@@ -28,6 +28,7 @@ function InspectPostPage() {
 
 
     const reader = new FileReader();
+    const [hayOfertas, setHayOfertas] = useState(false);
     const [ofertas, setOfertas] = useState([]);
     const [publicacion, setPost] = useState([]);
     const [user, setUser] = useState({});
@@ -53,6 +54,8 @@ function InspectPostPage() {
             let url = "http://localhost:8080/publicacion/"+id+"/ofertas";
             const response = await axios.get(url);
             setOfertas(response.data);
+            if (response.data.length > 0) setHayOfertas(true);
+            else setHayOfertas(false);
         } catch (error) {
             alert("Error obteniendo ofertas: "+error);
         }
@@ -86,7 +89,14 @@ function InspectPostPage() {
                 { ofertas.map((oferta) => (
                     <OfertaItem id={oferta.id} data={oferta} publicacion={publicacion} user={user} update={fetchOfertas} rechazar={rechazarOferta} aceptar={aceptarOferta}/>
                 ))}
-            </OfertaGrid>
+            </OfertaGrid>            
+            { !hayOfertas ?
+                <div style={{textAlign: "center", paddingTop: "30px", paddingBottom: "50px"}}>
+                    <Typography variant="h1">No se encontraron ofertas.</Typography>
+                </div>
+                : null
+            }
+
         </React.Fragment>
     )
 }
