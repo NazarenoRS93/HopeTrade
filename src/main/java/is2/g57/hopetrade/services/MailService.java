@@ -73,7 +73,7 @@ public class MailService {
 		String text = "Hola " + oferta.getUser().getNombre() + ",\n\n"
 				+ "Te informamos que tu oferta fue aceptada, a continacion esta el detalle del intercambio" + "\n"
 				+ "Horario: " + oferta.getFechaIntercambio() + "\n" + "Filial: " + oferta.getFilial().getNombre() + "\n"
-				+ "Direccion" + oferta.getFilial().getDireccion() + "\n\n" + "Saludos";
+				+ "Direccion: " + oferta.getFilial().getDireccion() + "\n\n" + "Saludos";
 
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(oferta.getUser().getEmail());
@@ -90,7 +90,7 @@ public class MailService {
 			String subject = "Intercambio programado";
 			String text = "Hola " + user.getNombre() + ",\n\n" + "Te informamos que los detalles del intercambio:"
 					+ "\n" + "Horario: " + oferta.getFechaIntercambio() + "\n" + "Filial: "
-					+ oferta.getFilial().getNombre() + "\n" + "Direccion" + oferta.getFilial().getDireccion() + "\n\n"
+					+ oferta.getFilial().getNombre() + "\n" + "Direccion: " + oferta.getFilial().getDireccion() + "\n\n"
 					+ "Saludos";
 
 			SimpleMailMessage message = new SimpleMailMessage();
@@ -116,5 +116,18 @@ public class MailService {
 			mailSender.send(message);
 		}
 
+	}
+	
+	public void sendEmailAyudanteBaja (Ayudante ayudante) {
+		String subject = "Cuenta dada de baja";
+		String text = "Hola " + ayudante.getNombre() + ",\n\n"
+				+ "Te informamos que tu cuenta de ayudante fue dada de baja" + ",\n"
+				+ "gracias por colaborar con el equipo de hopetrade" + ",\n\n"
+				+ "Saludos.";
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(ayudante.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
 	}
 }
