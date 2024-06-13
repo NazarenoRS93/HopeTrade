@@ -48,3 +48,13 @@
     transform: rotate(360deg);
   }
 }
+
+.ItemGrid {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.AddPostForm {
+  width: 400px;
+}

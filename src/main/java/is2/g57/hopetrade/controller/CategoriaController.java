@@ -10,14 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import is2.g57.hopetrade.entity.Categoria;
 import is2.g57.hopetrade.repository.CategoriaRepository;
-
-
-/*  Controlador de categorias
-
-    Interfaz:
-    GET All: http://localhost:8080/publicacion/all
-    GET por ID: http://localhost:8080/publicacion/{id}
- */
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaController {
@@ -28,6 +20,7 @@ public class CategoriaController {
     @GetMapping("/all")
     public ResponseEntity<?> ObtenerCategorias() {
         List<Categoria> categorias = this.categoriaRepository.findAll();
+        categorias.sort((o1, o2) -> o1.getId().compareTo(o2.getId()));
         return new ResponseEntity<>(categorias, HttpStatus.OK);
     }
 

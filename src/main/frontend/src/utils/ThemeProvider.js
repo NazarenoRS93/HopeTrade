@@ -48,14 +48,23 @@ export const themeV5 = createThemeV5({
             color: colors.background2,
             fontWeight: "bold"
         },
+        h1: {
+            fontSize: 16,
+            color: colors.darkBlue,
+            fontWeight: "bold"
+        },
         h2: {
             fontSize: 16,
             color: colors.darkBlue
         },
-        h6: {
+        h5: {
             fontSize: 14,
             color: colors.darkBlue,
             fontWeight: "bold"
+        },
+        h6: {
+            fontSize: 14,
+            color: colors.darkBlue
         },
     },
     shape: {

@@ -1,18 +1,18 @@
 package is2.g57.hopetrade.controller;
 
 public class CambiarContraseniaRequest {
-    private String dni;
+    private Long id;
     private String antiguaContrasenia;
     private String nuevaContrasenia;
 
     // Getters y setters
 
-    public String getDni() {
-        return dni;
+    public Long getId() {
+        return id;
     }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getAntiguaContrasenia() {

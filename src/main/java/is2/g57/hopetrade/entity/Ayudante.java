@@ -32,10 +32,10 @@ public class Ayudante {
 	@Column(name = "activo")
 	private boolean activo;
 	
-	    @ManyToOne
-	    @JoinColumn(name = "filial_id")
-	    @JsonBackReference
-	    private Filial filial;
+	@ManyToOne
+	@JoinColumn(name = "filial_id")
+	@JsonBackReference
+	private Filial filial;
 
 	
 	

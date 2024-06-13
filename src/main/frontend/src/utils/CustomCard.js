@@ -8,7 +8,7 @@ function CustomCard(props) {
     const { data, icon } = props;
 
     return (
-        <Card>
+        <Card className="ItemGrid">
             <CardContent>
                 <Typography variant="subtitle2">
                     {icon}&nbsp;{data.title}

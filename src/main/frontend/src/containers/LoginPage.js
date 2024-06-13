@@ -16,14 +16,10 @@ import {colors} from "../utils/colors";
 import {baseUser, defaultFormLogin} from "../utils/utilConstants";
 import LoginService from "../services/LoginService";
 
-function LoginPage(props) {
-    const {
-        dialog,
-        setDialog
-    } = props;
-
+function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormLogin);
+    const [btnDisabled, setBtnDisabled] = useState(true);
 
     const handleChange = (e) => {
         let tempForm = {...form};
@@ -33,9 +29,17 @@ function LoginPage(props) {
             default: break;
         }
         setForm(tempForm);
+        
+        if (tempForm.dni.trim() !== "" && tempForm.pass.trim() !== "") {
+            setBtnDisabled(false)
+        } else {
+            setBtnDisabled(true)
+        };
     }
+
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
+
     }
     const login = async () => {
         LoginService.loginUser(form)
@@ -43,7 +47,7 @@ function LoginPage(props) {
                 let tempUser = {...response.data};
                 let tempData =
                     { ...baseUser, isLogged:true, idUser:tempUser.id,
-                        nombre:tempUser.nombre, tipoUser: tempUser.tipo };
+                        nombre:tempUser.nombre, apellido:tempUser.apellido, tipoUser: tempUser.tipo };
                 window.localStorage.setItem("user",JSON.stringify(tempData));
                 console.log(response.data);
                 let href = window.location.href;
@@ -107,7 +111,7 @@ function LoginPage(props) {
                         </Item>
                         <Item>
                             <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}
-                                    onClick={login}>
+                                    onClick={login} disabled={btnDisabled} >
                                 <Typography variant="button">Ingresar</Typography>
                             </Button>
                         </Item>

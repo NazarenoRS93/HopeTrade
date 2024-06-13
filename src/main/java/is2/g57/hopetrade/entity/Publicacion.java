@@ -3,13 +3,14 @@ package is2.g57.hopetrade.entity;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import is2.g57.hopetrade.controller.PublicacionDTO;
-import is2.g57.hopetrade.services.ImageService;
+import is2.g57.hopetrade.dto.PublicacionDTO;
+import is2.g57.hopetrade.entity.state.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,7 +23,7 @@ public class Publicacion implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+    @Column(name="id")
     private Long id;
 
     @Column(name="titulo", length = 50)
@@ -35,9 +36,14 @@ public class Publicacion implements Serializable{
     
     @Column(name="userid")
     private Long userID;
-    
-    @Column(name="active")
-    private boolean active;
+
+    @ManyToOne (cascade = CascadeType.DETACH)
+    @JoinColumn(name = "ID_CATEGORIA")
+    private Categoria categoria;
+
+    @ManyToOne (cascade = CascadeType.DETACH)
+    @JoinColumn(name = "ID_ESTADO")
+    private PublicacionState state;
     
     @Column(name="imagen_url")
     private String imagenUrl;
@@ -47,54 +53,68 @@ public class Publicacion implements Serializable{
     private LocalDateTime fechaHoraCreacion;
     @Column(name="ultimaModificacion")
     private LocalDateTime ultimaModificacion;
+    
+    @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+  	 @JsonManagedReference
+  	   private List<Oferta> ofertas;
+    
+    
     // Constructores
     public Publicacion() {
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
-        this.active = true;
     }
 
-    public Publicacion(PublicacionDTO publicacionDTO, String imagenUrl) {
+    public Publicacion(PublicacionDTO publicacionDTO) {
         this.userID = publicacionDTO.getUserID();
         this.titulo = publicacionDTO.getTitulo();
         this.descripcion = publicacionDTO.getDescripcion();
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
         this.ultimaModificacion = java.time.LocalDateTime.now();
-        this.active = true;
-        this.imagenUrl = imagenUrl;
+        this.setState(new PublicacionStateDisponible());
     }
 
     // Metodos varios
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Publicacion that = (Publicacion) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(titulo, that.titulo) &&
+                Objects.equals(userID, that.userID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, descripcion, userID, categoria, imagenUrl, fechaHoraCreacion, ultimaModificacion);
+    }
 
     public void update(PublicacionDTO publicacionDTO) {
-        this.titulo = publicacionDTO.getTitulo();
-        this.descripcion = publicacionDTO.getDescripcion();
+        if (publicacionDTO.getTitulo() != null) this.titulo = publicacionDTO.getTitulo();
+        if (publicacionDTO.getDescripcion() != null) this.descripcion = publicacionDTO.getDescripcion();
         this.ultimaModificacion = java.time.LocalDateTime.now();
     }
 
-    public void desactivar(){
-        this.active = false;
+    public void eliminar(){
+        this.state.eliminar(this);
     }
 
-    public void activar(){
-        this.active = true;
+    public void suspender(){
+        this.state.suspender(this);
     }
 
-    public void eliminarPublicacion(){
-        this.active = false;
+    public void publicar(){
+        this.state.publicar(this);
     }
-    public PublicacionDTO export() {
-        PublicacionDTO ret = new PublicacionDTO();
 
-        ret.setId(this.getId());
-        ret.setUserID(this.userID);
-        ret.setTitulo(this.titulo);
-        ret.setDescripcion(this.descripcion);
-        ret.setFechaHoraCreacion(this.getFechaHoraCreacion());
-        ret.setUltimaModificacion(this.getUltimaModificacion());
-        ret.setActive(this.isActivo());
+    public void finalizar(){
+        this.state.confirmarIntercambio(this);
+    }
 
-        return ret;
+    public void reservar(){
+        this.state.reservar(this);
     }
 
     // Setters y Getters
@@ -143,11 +163,33 @@ public class Publicacion implements Serializable{
     }
 
     public boolean isActivo() {
-        return this.active;
+        if (this.getState().getNombre().equals("Disponible")) {
+            return true;
+        }
+        if (this.getState().getNombre().equals("Reservada")) {
+            return true;
+        }
+        return false;
     }
 
     public void setUserID(long i) {
         this.userID = i;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public PublicacionState getState(){
+        return state;
+    }
+
+    public void setState(PublicacionState state){
+        this.state = state;
     }
 
 }

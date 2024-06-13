@@ -16,6 +16,18 @@ export const defaultFormRegister = {
     email: '',
     pass: ''
 };
+export const defaultFormAddPost = {
+    id: null,
+    titulo: '',
+    descripcion: '',
+    userID: 0,
+    imagen: '',
+    catID: 0,
+    catName: '',
+    active: '',
+    fechaHoraCreacion: '',
+    ultimaModificacion: ''
+};
 export const defaultDialogData = {
     open: false,
     msg: '',
@@ -37,5 +49,6 @@ export const baseUser = {
     idUser: 0,
     nombre: "",
     tipoUser: "",
-    filial: ""
+    filial: "",
+    desc_filial: ""
 }

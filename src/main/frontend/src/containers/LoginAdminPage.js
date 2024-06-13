@@ -15,15 +15,19 @@ import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
 import {baseUser, defaultFormLoginAdmin} from "../utils/utilConstants";
 import LoginService from "../services/LoginService";
+import { useNavigate } from "react-router-dom";
 
 function LoginAdminPage(props) {
     const {
         dialog,
         setDialog
     } = props;
-
+    
+     const navigate = useNavigate();
+    
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormLoginAdmin);
+    const [btnDisabled, setBtnDisabled] = useState(true);
 
     const handleChange = (e) => {
         let tempForm = {...form};
@@ -33,22 +37,33 @@ function LoginAdminPage(props) {
             default: break;
         }
         setForm(tempForm);
+        if (tempForm.email.trim() !== "" && tempForm.pass.trim() !== "") {
+            setBtnDisabled(false)
+        } else {
+            setBtnDisabled(true)
+        };
     }
+
     const handleShowPassword = () => {
         setShowPassword(!showPassword)
     }
+
     const login = async () => {
         LoginService.loginAdmin(form)
             .then((response) => {
                 let tempUser = {...response.data};
-                let tempData=
+                let tempData =
                     { ...baseUser, isLogged:true, idUser:tempUser.id,
                         nombre:tempUser.nombre, tipoUser: tempUser.tipo };
                 window.localStorage.setItem("user",JSON.stringify(tempData));
                 console.log(response.data);
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
-                window.location.replace(href+"/home");
+                let path = "/home";
+                if (tempUser.tipo === 1) {
+                    path = "/select-filial";
+                }
+                window.location.replace(href+path)
             })
             .catch((err) => {
                 alert(err.response.data.responseMsg);
@@ -66,7 +81,6 @@ function LoginAdminPage(props) {
                     width: "100%"
                 }}
             >
-                <Item sx={{ flexGrow: 1 }} />
                 <Item>
                     <Box
                         sx={{
@@ -77,7 +91,7 @@ function LoginAdminPage(props) {
                         }}
                     >
                         <Item>
-                            <Typography variant="subtitle1">Ingresar como Administrador</Typography>
+                            <Typography variant="subtitle1">Ingresar como Ayudante / Administrador</Typography>
                         </Item>
                         <Item>
                             <FormControl>
@@ -107,13 +121,12 @@ function LoginAdminPage(props) {
                         </Item>
                         <Item>
                             <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}
-                                onClick={login}>
+                                onClick={login} disabled={btnDisabled}>
                                 <Typography variant="button">Ingresar</Typography>
                             </Button>
                         </Item>
                     </Box>
                 </Item>
-                <Item sx={{ flexGrow: 1 }}/>
             </Box>
         </React.Fragment>
     )
