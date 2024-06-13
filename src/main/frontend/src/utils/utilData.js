@@ -25,3 +25,7 @@ export const listExchangesInfo = {
     description: "Vea y administre los intercambios pendientes del sistema."
 }
 
+export const profileUserInfo = {
+    title: "Ver Perfil",
+    description: "Vea los datos de su perfil."
+}

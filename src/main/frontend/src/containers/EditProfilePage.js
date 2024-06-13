@@ -19,6 +19,7 @@ function EditProfilePage() {
 	};
 
 	const [form, setForm] = useState(initialFormState);
+	const [originalForm, setOriginalForm] = useState(initialFormState);
 	const [userId, setUserId] = useState(null);
 
 	useEffect(() => {
@@ -34,6 +35,13 @@ function EditProfilePage() {
 					const userData = await UpdateProfileService.getUserById(userId);
 					console.log("User Data:", userData); // Debug
 					setForm({
+						id: userData.id,
+						nombre: userData.nombre,
+						apellido: userData.apellido,
+						email: userData.email,
+						pass: ""
+					});
+					setOriginalForm({
 						id: userData.id,
 						nombre: userData.nombre,
 						apellido: userData.apellido,
@@ -63,7 +71,6 @@ function EditProfilePage() {
 		setForm(tempForm);
 	};
 
-
 	const updateProfile = async () => {
 		if (userId) {
 			try {
@@ -80,6 +87,7 @@ function EditProfilePage() {
 					apellido: form.apellido,
 					email: form.email
 				});
+				
 				console.log("Profile updated:", {
 					id: userId,
 					nombre: form.nombre,
@@ -94,9 +102,11 @@ function EditProfilePage() {
 				// Emitir un evento de actualización
 				const event = new Event('userUpdated');
 				window.dispatchEvent(event);
-				alert("¡Perfil actualizado con éxito!");
+				alert("¡Perfil editado exitosamente.!");
+				window.location.replace("/app/verperfil");
 				// Limpiar el formulario después de guardar cambios
 				setForm(initialFormState);
+				setOriginalForm(initialFormState);
 			} catch (error) {
 				alert(error.response.data);
 			}
@@ -111,6 +121,14 @@ function EditProfilePage() {
 
 	const handleChangePassword = () => {
 		window.location.replace("/app/cambiarContrasenia")
+	};
+
+	const hasChanges = () => {
+		return (
+			form.nombre !== originalForm.nombre ||
+			form.apellido !== originalForm.apellido ||
+			form.email !== originalForm.email
+		);
 	};
 
 	return (
@@ -153,8 +171,13 @@ function EditProfilePage() {
 							/>
 							<FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
 						</FormControl>
-						<Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary" />}
-							onClick={updateProfile}>
+						<Button
+							variant="contained"
+							color="secondary"
+							startIcon={<PersonAddAltRoundedIcon color="primary" />}
+							onClick={updateProfile}
+							disabled={!hasChanges()}
+						>
 							<Typography variant="button">Guardar cambios</Typography>
 						</Button>
 						<Button variant="contained" color="primary" onClick={handleCancel}>

@@ -7,7 +7,7 @@ import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import FindInPageRoundedIcon from '@mui/icons-material/FindInPageRounded';
 import HomeGrid from "../components/home/HomeGrid";
 import HomeItem from "../components/home/HomeItem";
-import {addPostInfo, editProfileInfo, listUsersInfo, myPostsInfo, viewPostsInfo, listExchangesInfo} from "../utils/utilData";
+import {addPostInfo, editProfileInfo, listUsersInfo, myPostsInfo, viewPostsInfo, listExchangesInfo,profileUserInfo} from "../utils/utilData";
 
 function HomePage() {
     const [user, setUser] = useState({});
@@ -35,8 +35,10 @@ function HomePage() {
                     : null
                 }
                 {user?.tipoUser===0 ?
-                    <HomeItem link="/profile" data={editProfileInfo} icon={<PersonRoundedIcon color="primary"/>}/>
-                    : null
+					<HomeItem link="/verperfil" data={profileUserInfo} icon={<PersonRoundedIcon color="primary"/>}/>
+					                    : null
+//                    <HomeItem link="/profile" data={editProfileInfo} icon={<PersonRoundedIcon color="primary"/>}/>
+//                    : null
                 }
                 {user?.tipoUser===1 ?
                     <HomeItem link="/exchanges" data={listExchangesInfo} icon={<PersonRoundedIcon color="primary"/>}/>
