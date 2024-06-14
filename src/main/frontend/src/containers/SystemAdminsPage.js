@@ -132,8 +132,13 @@ function SystemAdminsPage() {
                                     <Button
                                         variant="contained"
                                         color="secondary"
-                                        sx={{ backgroundColor: 'red', marginLeft: 'auto' }}
+                                        sx={{
+                                            backgroundColor: 'red',
+                                            marginLeft: 'auto',
+                                            ...(user.activo ? {} : { backgroundColor: 'grey', pointerEvents: 'none' })
+                                        }}
                                         onClick={() => handleDelete(user.id)}
+                                        disabled={!user.activo}
                                     >
                                         Eliminar Cuenta
                                     </Button>
