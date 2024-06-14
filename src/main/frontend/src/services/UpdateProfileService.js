@@ -45,6 +45,15 @@ const UpdateProfileService = {
 			throw error;
 		}
 	},
+
+	deleteAyudante: async (id) => {
+	       try {
+	           const response = await axios.post(`/ayudante/deleteayudante/${id}`);
+	           return response.data;
+	       } catch (error) {
+	           throw error;
+	       }
+	   },
 };
 
 export default UpdateProfileService;
