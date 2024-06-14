@@ -99,7 +99,7 @@ function EditProfilePageAyudante() {
   };
 
   const handleCancel = () => {
-    window.location.replace("/app/home");
+    window.location.replace("/app/verperfiladministrativo");
   };
 
   const handleChangePassword = () => {

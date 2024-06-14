@@ -21,6 +21,8 @@ import InspectPostPage from "./containers/InspectPostPage";
 import Exchange from "./containers/ExchangePage";
 import ExchangeListPage from "./containers/ExchangeListPage";
 import ProfilePage from "./containers/ProfilePage";
+import AdministradorProfilePage from "./containers/AdministradorProfilePage";
+import SystemAdminsPage from "./containers/SystemAdminsPage";
 
 const router = createBrowserRouter(
 	[
@@ -95,6 +97,14 @@ const router = createBrowserRouter(
 				{
 					path: "/verperfil",
 					element: <ProfilePage />
+				},
+				{
+					path: "/verperfiladministrativo",
+					element: <AdministradorProfilePage />
+				},
+				{
+					path: "/adminusers",
+					element: <SystemAdminsPage />
 				},
 			]
 		},
