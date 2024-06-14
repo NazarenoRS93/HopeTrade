@@ -79,7 +79,7 @@ function AdministradorProfilePage() {
 						}}
 					>
 						<Item>
-							<Typography variant="subtitle1">Perfil del Usuario</Typography>
+							<Typography variant="subtitle1">Perfil del Ayudante</Typography>
 						</Item>
 						<Item>
 							<Box
