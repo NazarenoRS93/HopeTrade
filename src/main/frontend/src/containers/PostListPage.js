@@ -12,17 +12,8 @@ import FormControl from "@mui/material/FormControl";
 import {FormLabel, Stack} from "@mui/material";
 
 function PostListPage() {
-    // Render on start
-    useEffect(() => {
-        const cookie = window.localStorage.getItem("user");
-        if(cookie) {
-            let usuario = JSON.parse(cookie);
-            setUser(usuario);
-            fetchPublicaciones(usuario.idUser, 0);
-        }
-        fetchCategorias();
-    }, []);
-
+    
+    const [isReady, setIsReady] = useState(false);
     const reader = new FileReader();
     const [user, setUser] = useState({});
     const [publicaciones, setPublicaciones] = useState([]);
@@ -31,6 +22,37 @@ function PostListPage() {
     const [selectedCategoria, setSelectedCategoria] = useState(0);
     const [states, setStates] = useState([]);
     const [form, setForm] = useState(defaultFormAddPost)
+    
+    // Render on start
+    useEffect(() => {
+        const cookie = window.localStorage.getItem("user");
+        if(cookie) {
+            let usuario = JSON.parse(cookie);
+            setUser(usuario);
+        }
+        fetchCategorias();
+    }, []);
+
+    useEffect(() => {
+        const customEffect = async () => {
+            try {
+                fetchPublicaciones(user.idUser, 0);
+        }
+            catch {
+                return null;
+            }
+        };
+        customEffect();
+    }, []);
+
+    useEffect(() => {
+        if (null === isReady) {
+            return;
+        }
+        fetchPublicaciones(user.idUser, selectedCategoria);
+    }, [isReady, selectedCategoria]);
+
+
 
     const fetchPublicaciones = async (idUser, cat) => {
         try {
@@ -61,6 +83,7 @@ function PostListPage() {
             if (data.length > 0) setHayPublis(true);
             else setHayPublis(false);
             setPublicaciones(data);
+            setIsReady(true);
         } catch (error) {
             console.log("Error obteniendo publicaciones: " + error);
             // alert("Error obteniendo publicaciones: "+error);
