@@ -13,7 +13,10 @@ function Post( props ) {
     const {id, data, user, update} = props;
 
     const editPost = () => {
-
+        window.localStorage.setItem("pubId", id);
+        let href = window.location.href;
+        href = href.substring(0, href.lastIndexOf('/'));
+        window.location.replace(href+"/edit-post");
     }
     const deletePost = async () => {
         console.log("Eliminando publicación con ID:", id);

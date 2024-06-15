@@ -13,6 +13,7 @@ import TestPage from "./containers/TestPage";
 import axios from "axios";
 import PostListPage from "./containers/PostListPage";
 import AddPostPage from "./containers/AddPostPage";
+import EditPostPage from "./containers/EditPostPage";
 import SelectFilialPage from "./containers/SelectFilialPage";
 import EditProfilePage from "./containers/EditProfilePage";
 import EditProfilePageAyudante from "./containers/EditProfilePageAyudante";
@@ -57,6 +58,10 @@ const router = createBrowserRouter(
 				{
 					path: "/add-post",
 					element: <AddPostPage />
+				},
+				{
+					path: "/edit-post",
+					element: <EditPostPage />
 				},
 				{
 					path: "/add-oferta",
