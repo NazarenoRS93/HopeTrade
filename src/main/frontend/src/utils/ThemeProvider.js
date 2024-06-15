@@ -66,6 +66,10 @@ export const themeV5 = createThemeV5({
             fontSize: 14,
             color: colors.darkBlue
         },
+        footer: {
+            fontSize: 13,
+            color: colors.darkBlue
+        },
     },
     shape: {
         borderRadius: 10,

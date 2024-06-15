@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import { colors } from "../utils/colors";
+import {colors} from "../utils/colors";
 import FilialService from "../services/FilialService";
 import Item from '../utils/Item';
 import { defaultGateway } from '../utils/utilConstants';

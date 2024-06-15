@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -6,9 +6,9 @@ import TextField from "@mui/material/TextField";
 import Item from "../utils/Item";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
-import Button from "@mui/material/Button";  // Import Button component
-import { colors } from "../utils/colors";
-import UpdateProfileService from "../services/UpdateProfileService";  // Ensure you have this service
+import Button from "@mui/material/Button"; // Import Button component
+import {colors} from "../utils/colors";
+import UpdateProfileService from "../services/UpdateProfileService"; // Ensure you have this service
 
 function AdministradorProfilePage() {
 	const initialFormState = {

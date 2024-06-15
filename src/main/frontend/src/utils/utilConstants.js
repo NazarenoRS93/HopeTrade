@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const defaultGateway = "http://localhost:8080";
 export const defaultFormLogin = {
     dni: '',
@@ -28,11 +30,6 @@ export const defaultFormAddPost = {
     fechaHoraCreacion: '',
     ultimaModificacion: ''
 };
-export const defaultDialogData = {
-    open: false,
-    msg: '',
-    path: ''
-};
 export const defaultBaseName = "localhost:3000/app";
 
 export const defaultHeaders = {
@@ -52,3 +49,18 @@ export const baseUser = {
     filial: "",
     desc_filial: ""
 }
+
+export const nextDay = dayjs().day() > 4 ? dayjs().endOf("week").add(2,"days") : dayjs().add(1,"day");
+export const nextMonth = dayjs().add(1,"month");
+export const startTime = dayjs().set("hour",8).startOf("hour");
+export const endTime = dayjs().set("hour",19).set("minute",30);
+
+export const defDateTime = nextDay.set("hour",12).startOf("hour");
+export const defaultFormAddOferta = {
+    image: null,
+    titulo: "",
+    desc: "",
+    cat: 0,
+    fil: 0,
+    fecha: defDateTime
+};

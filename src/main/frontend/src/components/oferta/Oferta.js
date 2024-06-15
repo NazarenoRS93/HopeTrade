@@ -1,13 +1,10 @@
 import React from "react";
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
-import {Avatar, CardContent, Grid, Stack} from "@mui/material";
+import {CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import LogoutIcon from "@mui/icons-material/Logout";
-import {DeleteRounded, EditNote, EditNoteRounded, RepeatRounded, Visibility} from "@mui/icons-material";
-
-import axios from "axios";
+import {DeleteRounded, RepeatRounded} from "@mui/icons-material";
 
 function Oferta( props ) {
     const {id, publicacion, data, user, update, rechazar, aceptar} = props;

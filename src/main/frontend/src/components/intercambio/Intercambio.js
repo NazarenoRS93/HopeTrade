@@ -4,10 +4,7 @@ import PropTypes from "prop-types";
 import {Avatar, CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import LogoutIcon from "@mui/icons-material/Logout";
-import {DeleteRounded, EditNote, EditNoteRounded, RepeatRounded, Visibility} from "@mui/icons-material";
-
-import axios from "axios";
+import {DeleteRounded, RepeatRounded} from "@mui/icons-material";
 
 function Intercambio( props ) {
     const {id, publicacion, oferta, user, data, confirmar, cancelar} = props;

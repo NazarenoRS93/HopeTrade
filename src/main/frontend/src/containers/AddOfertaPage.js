@@ -1,18 +1,17 @@
 import React, {useEffect, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Item from "../utils/Item";
-import {colors} from "../utils/colors";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-import {defaultFormAddPost} from "../utils/utilConstants";
 import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
-import {MenuItem, Select} from "@mui/material";
-import PostItem from "../components/post/PostItem";
+import {MenuItem, Select, Stack} from "@mui/material";
+import Grid from "@mui/material/Grid";
+import {DateTimePicker} from "@mui/x-date-pickers";
+import {isWeekend} from "../utils/utilMethods";
+import {defaultFormAddOferta, defDateTime, endTime, nextDay, nextMonth, startTime} from "../utils/utilConstants";
 
 function AddOfertaPage() {
     // Render on start
@@ -25,18 +24,20 @@ function AddOfertaPage() {
             setUser(user);
         };
     }, []);
+    const [form, setForm] = useState(defaultFormAddOferta);
     const [categorias, setCategorias] = useState([])
     const [filiales, setFiliales] = useState([]);
     const [selectedFilial, setSelectedFilial] = useState('');
     const reader = new FileReader();
 
     const [user, setUser] = useState({});
-    const [image, setImage] = useState([]);
+    const [image, setImage] = useState(null);
     const [titulo, setTitulo] = useState("");
     const [desc, setDesc] = useState("");
     const [cat, setCat] = useState(0);
     const [fil, setFil] = useState(0);
-    const [fecha, setFecha] = useState(Date());
+    const [fecha, setFecha] = useState(defDateTime);
+    const [btnDisabled, setBtnDisabled] = useState(true);
 
     const fetchCategorias = async () => {
         try {
@@ -57,16 +58,24 @@ function AddOfertaPage() {
         }
     };
 
+    const validar = (form) => {
+        if(form.titulo.trim()!=="" && form.desc.trim()!=="" && form.cat !== 0 && form.fil !== 0 && form.image !== null) {
+            setBtnDisabled(false);
+        } else setBtnDisabled(true);
+    }
     const handleChange = async (e) => {
+        let tempForm = form;
         switch (e.target.name) {
-            case "titulo": setTitulo(e.target.value); break;
-            case "descripcion": setDesc(e.target.value); break;
-            case "categoria": setCat(e.target.value); break;
-            case "imagen": setImage(e.target.files[0]); break;
-            case "filial": setFil(e.target.value); break;
-            case "fechaHora": setFecha(e.target.value); break;
+            case "titulo": tempForm = {...tempForm, titulo: e.target.value}; break;
+            case "descripcion": tempForm = {...tempForm, desc: e.target.value}; break;
+            case "categoria": tempForm = {...tempForm, cat: e.target.value}; break;
+            case "imagen": tempForm = {...tempForm, image: e.target.files[0]}; break;
+            case "filial": tempForm = {...tempForm, fil: e.target.value}; break;
+            case "fechaHora": tempForm = {...tempForm, fecha: e.$d}; break;
             default: break;
         }
+        setForm(tempForm);
+        validar(tempForm);
     }
     const fileToBase64 = (file) => {
         return new Promise((resolve, reject) => {
@@ -87,14 +96,14 @@ function AddOfertaPage() {
         let pubId = window.localStorage.getItem("pubId");
         let userId = user.idUser;
         var formdata = new FormData();
-        formdata.append("titulo", titulo);
-        formdata.append("descripcion", desc);
+        formdata.append("titulo", form.titulo);
+        formdata.append("descripcion", form.desc);
         formdata.append("publicacionId", pubId);
         formdata.append("userId", userId);
-        formdata.append("filialId", fil);
-        formdata.append("categoriaId", cat);
-        formdata.append("fechaIntercambio", fecha);
-        formdata.append("imagen", await fileToBase64(image));
+        formdata.append("filialId", form.fil);
+        formdata.append("categoriaId", form.cat);
+        formdata.append("fechaIntercambio", form.fecha.toISOString());
+        formdata.append("imagen", await fileToBase64(form.image));
 
         await axios.post('http://localhost:8080/oferta/guardar', formdata, {
             headers: {
@@ -115,84 +124,70 @@ function AddOfertaPage() {
 
     return (
         <React.Fragment>
-            <Box
-                sx={{
-                    backgroundColor: colors.background,
-                    flexDirection: "column",
-                    alignItems: "center",
-                    display: "flex"
-                }}
-            >
-                <Item>
+            <Grid container spacing={2} className="FullWidthPage">
+                <Grid item xs={12}>
                     <Typography variant="subtitle1">Ofertar</Typography>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}}
-                                   placeholder="Título" type="text" variant="outlined" name="titulo" className="AddPostForm"
-                        />
-                        <FormHelperText id="titulo-text">Ingrese el título de su oferta</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}} className="AddPostForm"
-                                   placeholder="Descripción" multiline={true} rows={4} type="text" variant="outlined" name="descripcion"
-                        />
-                        <FormHelperText id="descripcion-text">Describa el producto ofertado</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <Select
-                            className="AddPostForm"
-                            onChange={(event)=> {handleChange(event)}}
-                            name="categoria" placeholder="Categoría"
-                        >
-                            { categorias.map((categoria) => (
-                                <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
-                            ))}
-                        </Select>
-                        <FormHelperText id="categoria-text">Seleccione la categoría del producto ofertado</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}}
-                                   placeholder="Imagen" type="file" variant="outlined" name="imagen" className="AddPostForm"
-                        />
-                        <FormHelperText id="descripcion-text">Agregue una foto del producto ofertado</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <Select
-                            className="AddPostForm"
-                            onChange={(event)=> {handleChange(event)}}
-                            name="filial" placeholder="Filial"
-                        >
-                            { filiales.map((filial) => (
-                                <MenuItem value={filial.id}>{filial.nombre}</MenuItem>
-                            ))}
-                        </Select>
-                        <FormHelperText id="filial-text">Seleccione la filial para realizar el intercambio</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}} className="AddPostForm"
-                                   placeholder="Fecha/Hora" type="datetime-local" variant="outlined" name="fechaHora"
-                        />
-                        <FormHelperText id="fechaHora-text">Proponga fecha y hora para el intercambio</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <Button variant="contained" color="success" startIcon={<PostAddRoundedIcon color="primary"/>}
-                            onClick={addOferta}>
-                        <Typography variant="button">Realizar oferta</Typography>
-                    </Button>
-                </Item>
-            </Box>
+                </Grid>
+                <Grid item xs={4}>
+                    <Stack spacing={2} direction="column">
+                        <FormControl>
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       type="text" placeholder="Título" variant="outlined" name="titulo"
+                            />
+                            <FormHelperText id="titulo-text">Ingrese el título de su oferta</FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <TextField onChange={(event)=> {handleChange(event)}} variant="outlined"
+                                       placeholder="Descripción" multiline={true} rows={4} type="text" name="descripcion"
+                            />
+                            <FormHelperText id="descripcion-text">Describa el producto ofertado</FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <Select onChange={(event)=> {handleChange(event)}}
+                                    name="categoria" placeholder="Categoría"
+                            >
+                                { categorias.map((categoria) => (
+                                    <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText id="categoria-text">Seleccione la categoría del producto ofertado</FormHelperText>
+                        </FormControl>
+                    </Stack>
+                </Grid>
+                <Grid item xs={4}>
+                    <Stack spacing={2} direction="column">
+                        <FormControl>
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       placeholder="Imagen" type="file" variant="outlined" name="imagen"
+                            />
+                            <FormHelperText id="imagen-text">Agregue una foto del producto ofertado</FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <Select onChange={(event)=> {handleChange(event)}}
+                                    name="filial" placeholder="Filial"
+                            >
+                                { filiales.map((filial) => (
+                                    <MenuItem value={filial.id}>{filial.nombre}</MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText id="filial-text">Seleccione la filial para realizar el intercambio</FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <DateTimePicker onChange={(event)=> {handleChange({...event, target: {name:"fechaHora"}})}}
+                                                   variant="outlined" name="fechaHora" defaultValue={defDateTime}
+                                                   minDate={nextDay} maxDate={nextMonth} timeSteps={{minutes: 30}}
+                                                   minTime={startTime} maxTime={endTime} shouldDisableDate={isWeekend}
+                                                   slotProps={{ textField: { readOnly: true } }}
+                            />
+                            <FormHelperText id="fechaHora-text">Proponga fecha y hora para el intercambio</FormHelperText>
+                        </FormControl>
+                        <Button variant="contained" color="success" onClick={addOferta} disabled={btnDisabled}
+                                startIcon={<PostAddRoundedIcon color="primary"/>}>
+                            <Typography variant="button">Realizar oferta</Typography>
+                        </Button>
+                    </Stack>
+                </Grid>
+            </Grid>
         </React.Fragment>
     )
 }

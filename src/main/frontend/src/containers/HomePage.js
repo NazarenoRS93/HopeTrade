@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
@@ -7,7 +7,14 @@ import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import FindInPageRoundedIcon from '@mui/icons-material/FindInPageRounded';
 import HomeGrid from "../components/home/HomeGrid";
 import HomeItem from "../components/home/HomeItem";
-import { addPostInfo, editProfileInfo, listUsersInfo, myPostsInfo, viewPostsInfo, listExchangesInfo, profileUserInfo, listAdminInfo } from "../utils/utilData";
+import {
+    addPostInfo,
+    listAdminInfo,
+    listExchangesInfo,
+    myPostsInfo,
+    profileUserInfo,
+    viewPostsInfo
+} from "../utils/utilData";
 
 function HomePage() {
 	const [user, setUser] = useState({});

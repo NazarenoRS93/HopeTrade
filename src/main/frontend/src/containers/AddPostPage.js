@@ -9,10 +9,9 @@ import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
-import {defaultFormAddPost} from "../utils/utilConstants";
 import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
-import {MenuItem, Select} from "@mui/material";
-import PostItem from "../components/post/PostItem";
+import {MenuItem, Select, Stack} from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 function AddPostPage() {
     // Render on start
@@ -95,62 +94,53 @@ function AddPostPage() {
 
     return (
         <React.Fragment>
-            <Box
-                sx={{
-                    backgroundColor: colors.background,
-                    flexDirection: "column",
-                    alignItems: "center",
-                    display: "flex"
-                }}
-            >
-                <Item>
+            <Grid container spacing={2} className="FullWidthPage">
+                <Grid item xs={12}>
                     <Typography variant="subtitle1">Registrar Publicación</Typography>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}}
-                                   placeholder="Título" type="text" variant="outlined" name="titulo" className="AddPostForm"
-                        />
-                        <FormHelperText id="titulo-text">Ingrese el título de su publicación</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}} className="AddPostForm"
-                                   placeholder="Descripción" multiline={true} rows={4} type="text" variant="outlined" name="descripcion"
-                        />
-                        <FormHelperText id="descripcion-text">Describa el producto publicado</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <Select
-                            className="AddPostForm"
-                            onChange={(event)=> {handleChange(event)}}
-                            name="categoria" placeholder="Categoría"
-                        >
-                            { categorias.map((categoria) => (
-                                <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
-                            ))}
-                        </Select>
-                        <FormHelperText id="categoria-text">Seleccione la categoría del producto publicado</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}}
-                                   placeholder="Imagen" type="file" variant="outlined" name="imagen" className="AddPostForm"
-                        />
-                        <FormHelperText id="descripcion-text">Agregue una foto del producto publicado</FormHelperText>
-                    </FormControl>
-                </Item>
-                <Item>
-                    <Button variant="contained" color="success" startIcon={<PostAddRoundedIcon color="primary"/>}
-                            onClick={addPost}>
-                        <Typography variant="button">Publicar</Typography>
-                    </Button>
-                </Item>
-            </Box>
+                </Grid>
+                <Grid item xs={4}>
+                    <Stack spacing={2} direction="column">
+                        <FormControl>
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       placeholder="Título" type="text" variant="outlined" name="titulo" className="AddPostForm"
+                            />
+                            <FormHelperText id="titulo-text">Ingrese el título de su publicación</FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <TextField onChange={(event)=> {handleChange(event)}} className="AddPostForm"
+                                       placeholder="Descripción" multiline={true} rows={4} type="text" variant="outlined" name="descripcion"
+                            />
+                            <FormHelperText id="descripcion-text">Describa el producto publicado</FormHelperText>
+                        </FormControl>
+                    </Stack>
+                </Grid>
+                <Grid item xs={4}>
+                    <Stack spacing={2} direction="column">
+                        <FormControl>
+                            <Select
+                                className="AddPostForm"
+                                onChange={(event)=> {handleChange(event)}}
+                                name="categoria" placeholder="Categoría"
+                            >
+                                { categorias.map((categoria) => (
+                                    <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText id="categoria-text">Seleccione la categoría del producto publicado</FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       placeholder="Imagen" type="file" variant="outlined" name="imagen" className="AddPostForm"
+                            />
+                            <FormHelperText id="descripcion-text">Agregue una foto del producto publicado</FormHelperText>
+                        </FormControl>
+                        <Button variant="contained" color="success" startIcon={<PostAddRoundedIcon color="primary"/>}
+                                onClick={addPost}>
+                            <Typography variant="button">Publicar</Typography>
+                        </Button>
+                    </Stack>
+                </Grid>
+            </Grid>
         </React.Fragment>
     )
 }

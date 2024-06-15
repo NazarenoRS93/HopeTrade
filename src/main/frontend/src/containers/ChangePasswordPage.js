@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import FormHelperText from "@mui/material/FormHelperText";
 import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-import { colors } from "../utils/colors";
+import {colors} from "../utils/colors";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import ChangePasswordService from "../services/ChangePasswordService";
 import UpdateProfileService from "../services/UpdateProfileService";

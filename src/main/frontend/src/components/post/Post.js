@@ -4,9 +4,8 @@ import PropTypes from "prop-types";
 import {Avatar, CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import LogoutIcon from "@mui/icons-material/Logout";
 import {Link} from "react-router-dom";
-import {DeleteRounded, EditNote, EditNoteRounded, RepeatRounded, Visibility} from "@mui/icons-material";
+import {DeleteRounded, EditNoteRounded, RepeatRounded, Visibility} from "@mui/icons-material";
 
 import axios from "axios";
 

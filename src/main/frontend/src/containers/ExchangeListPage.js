@@ -2,11 +2,7 @@ import React, {useEffect, useState} from "react";
 import '../App.css';
 import axios from "axios";
 import PostGrid from "../components/post/PostGrid";
-import PostItem from "../components/post/PostItem";
 import {defaultFormAddPost} from "../utils/utilConstants";
-import Select from '@mui/material/Select';
-import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
 import IntercambioItem from "../components/intercambio/IntercambioItem";
 
 function ExchangeListPage() {

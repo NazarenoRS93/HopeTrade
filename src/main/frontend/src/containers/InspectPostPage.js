@@ -1,13 +1,11 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import axios from "axios";
 import PostItem from "../components/post/PostItem";
-import Post from "../components/post/Post";
 import OfertaGrid from "../components/oferta/OfertaGrid";
 import OfertaItem from "../components/oferta/OfertaItem";
-import {defaultFormAddPost} from "../utils/utilConstants";
 import Typography from "@mui/material/Typography";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 // import SessionContext from "../context/context";
 // import AddOfferModal from "../components/offer/AddOfferModal";
 

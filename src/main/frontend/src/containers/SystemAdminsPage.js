@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Item from "../utils/Item";
 import Button from "@mui/material/Button";
-import { colors } from "../utils/colors";
+import {colors} from "../utils/colors";
 import UpdateProfileService from "../services/UpdateProfileService";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
