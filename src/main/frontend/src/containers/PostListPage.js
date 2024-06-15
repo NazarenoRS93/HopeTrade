@@ -13,8 +13,8 @@ import {FormLabel, Stack} from "@mui/material";
 
 function PostListPage() {
     
-    const [isReady, setIsReady] = useState(false);
     const reader = new FileReader();
+    const [ready, setReady] = useState(null);
     const [user, setUser] = useState({});
     const [publicaciones, setPublicaciones] = useState([]);
     const [hayPublis, setHayPublis] = useState(true);
@@ -22,7 +22,7 @@ function PostListPage() {
     const [selectedCategoria, setSelectedCategoria] = useState(0);
     const [states, setStates] = useState([]);
     const [form, setForm] = useState(defaultFormAddPost)
-    
+
     // Render on start
     useEffect(() => {
         const cookie = window.localStorage.getItem("user");
@@ -34,25 +34,8 @@ function PostListPage() {
     }, []);
 
     useEffect(() => {
-        const customEffect = async () => {
-            try {
-                fetchPublicaciones(user.idUser, 0);
-        }
-            catch {
-                return null;
-            }
-        };
-        customEffect();
-    }, []);
-
-    useEffect(() => {
-        if (null === isReady) {
-            return;
-        }
-        fetchPublicaciones(user.idUser, selectedCategoria);
-    }, [isReady, selectedCategoria]);
-
-
+        fetchPublicaciones(user.id, selectedCategoria);
+    }, [user, selectedCategoria]);
 
     const fetchPublicaciones = async (idUser, cat) => {
         try {
@@ -83,7 +66,6 @@ function PostListPage() {
             if (data.length > 0) setHayPublis(true);
             else setHayPublis(false);
             setPublicaciones(data);
-            setIsReady(true);
         } catch (error) {
             console.log("Error obteniendo publicaciones: " + error);
             // alert("Error obteniendo publicaciones: "+error);
