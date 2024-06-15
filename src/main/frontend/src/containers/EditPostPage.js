@@ -98,7 +98,7 @@ function EditPostPage() {
         <React.Fragment>
             <Grid container spacing={2} className="FullWidthPage">
                 <Grid item xs={12}>
-                    <Typography variant="subtitle1">Registrar Publicación</Typography>
+                    <Typography variant="subtitle1">Editar Publicación</Typography>
                 </Grid>
                 <Grid item xs={4}>
                     <Stack spacing={2} direction="column">
