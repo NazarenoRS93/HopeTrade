@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { colors } from "../utils/colors";
 import FilialService from "../services/FilialService";
 import Item from '../utils/Item';
+import { defaultGateway } from '../utils/utilConstants';
 
 function SelectFilialPage() {
 	const [filiales, setFiliales] = useState([]);
@@ -23,7 +24,7 @@ function SelectFilialPage() {
 
 	const fetchFiliales = async () => {
 		try {
-			const response = await axios.get('http://localhost:8080/filial/all');
+			const response = await axios.get(defaultGateway + '/filial/all');
 			setFiliales(response.data);
 			console.log(response.data);
 		} catch (error) {

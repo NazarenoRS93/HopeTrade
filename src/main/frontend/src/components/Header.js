@@ -48,6 +48,22 @@ function Header() {
         };
     }, []);
 
+    function EtiquetaVersion({userInfo}) {
+        let sEtiqueta = '';
+        if (userInfo.isLogged) {
+            // si el usuario está logueado se toma su nombre
+            sEtiqueta = '¡Hola, <strong>' + userInfo.nombre + '</strong>! | ';
+            // solo si el rol es ayudante y hay una filial seleccionada se toma su descripción
+            if (userInfo.tipoUser === 1 && userInfo.desc_filial !== "") {
+                sEtiqueta += 'Filial: <strong>' + userInfo.desc_filial + '</strong> | ';
+            }
+        };
+        sEtiqueta += 'App Versión ' + userInfo.appVersion;
+        return (
+            <Typography variant="h5" dangerouslySetInnerHTML={{ __html: sEtiqueta }}></Typography>
+        );
+    }
+
     return (
         <div className="header-cus">
             <Box
@@ -109,11 +125,9 @@ function Header() {
                             </Stack>
                         </Item>
                         <Item sx={{textAlign: "right"}}>
-                            {user?.isLogged ?
-                                <Typography variant="h5">¡Hola, <strong>{user.nombre}</strong>! | App Versión {user.appVersion}</Typography>
-                            :
-                                <Typography variant="h5">App Versión {user.appVersion}</Typography>
-                            }
+                            <EtiquetaVersion  
+                                userInfo={user}
+                            />
                         </Item>
                     </Box>
                 </Item>
