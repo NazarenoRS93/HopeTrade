@@ -7,17 +7,11 @@
   background-color: #e8e8e7;
 }
 
-.Header-cus {
-  height: 15%;
-  width: 100%;
-  position: fixed;
-  padding: 5px;
-}
-
 .ItemGrid {
   display: flex;
   align-items: stretch;
   justify-content: stretch;
+  text-align: left;
 }
 
 .AddPostForm {
@@ -30,15 +24,16 @@
   align-items: center;
   justify-content: center;
   text-align: right;
-  padding: 10px 20px 20px 0px;
+  padding: 0px 20px 15px 0px;
 }
 .FullWidthPage {
   width: 100%;
+  min-height: 450px;
   background-color: #e8e8e7;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  text-align: center;
-  padding: 20px;
+  text-align: left;
+  padding: 30px 20px;
 }
 .FullWidthFooter {
   width: 100%;

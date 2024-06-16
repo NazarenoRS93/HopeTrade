@@ -132,20 +132,23 @@ function AddOfertaPage() {
                     <Stack spacing={2} direction="column">
                         <FormControl>
                             <TextField onChange={(event)=> {handleChange(event)}}
-                                       type="text" placeholder="Título" variant="outlined" name="titulo"
+                                       type="text" variant="outlined" name="titulo"
                             />
                             <FormHelperText id="titulo-text">Ingrese el título de su oferta</FormHelperText>
                         </FormControl>
                         <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} variant="outlined"
-                                       placeholder="Descripción" multiline={true} rows={4} type="text" name="descripcion"
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       multiline={true} rows={4} type="text" name="descripcion" variant="outlined"
                             />
                             <FormHelperText id="descripcion-text">Describa el producto ofertado</FormHelperText>
                         </FormControl>
                         <FormControl>
                             <Select onChange={(event)=> {handleChange(event)}}
-                                    name="categoria" placeholder="Categoría"
+                                    name="categoria" value={form.cat}
                             >
+                                <MenuItem value={0} disabled>
+                                    Seleccione una categoría
+                                </MenuItem>
                                 { categorias.map((categoria) => (
                                     <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
                                 ))}
@@ -158,31 +161,34 @@ function AddOfertaPage() {
                     <Stack spacing={2} direction="column">
                         <FormControl>
                             <TextField onChange={(event)=> {handleChange(event)}}
-                                       placeholder="Imagen" type="file" variant="outlined" name="imagen"
+                                       type="file" variant="outlined" name="imagen"
                             />
                             <FormHelperText id="imagen-text">Agregue una foto del producto ofertado</FormHelperText>
                         </FormControl>
                         <FormControl>
                             <Select onChange={(event)=> {handleChange(event)}}
-                                    name="filial" placeholder="Filial"
+                                    name="filial" value={form.fil} variant="outlined"
                             >
+                                <MenuItem value={0} disabled>
+                                    Seleccione una filial
+                                </MenuItem>
                                 { filiales.map((filial) => (
-                                    <MenuItem value={filial.id}>{filial.nombre}</MenuItem>
+                                    <MenuItem value={filial.id}>{filial.nombre} ({filial.direccion})</MenuItem>
                                 ))}
                             </Select>
-                            <FormHelperText id="filial-text">Seleccione la filial para realizar el intercambio</FormHelperText>
+                            <FormHelperText id="filial-text">Seleccione la filial donde desea realizar el intercambio</FormHelperText>
                         </FormControl>
                         <FormControl>
                             <DateTimePicker onChange={(event)=> {handleChange({...event, target: {name:"fechaHora"}})}}
-                                                   variant="outlined" name="fechaHora" defaultValue={defDateTime}
-                                                   minDate={nextDay} maxDate={nextMonth} timeSteps={{minutes: 30}}
-                                                   minTime={startTime} maxTime={endTime} shouldDisableDate={isWeekend}
-                                                   slotProps={{ textField: { readOnly: true } }}
+                                            variant="outlined" name="fechaHora" defaultValue={defDateTime}
+                                            minDate={nextDay} maxDate={nextMonth} timeSteps={{minutes: 30}}
+                                            minTime={startTime} maxTime={endTime} shouldDisableDate={isWeekend}
+                                            slotProps={{ textField: { readOnly: true } }}
                             />
-                            <FormHelperText id="fechaHora-text">Proponga fecha y hora para el intercambio</FormHelperText>
+                            <FormHelperText id="fechaHora-text">Indique fecha y hora deseadas para realizar el intercambio</FormHelperText>
                         </FormControl>
-                        <Button variant="contained" color="success" onClick={addOferta} disabled={btnDisabled}
-                                startIcon={<PostAddRoundedIcon color="primary"/>}>
+                        <Button startIcon={<PostAddRoundedIcon color="primary"/>} disabled={btnDisabled}
+                                variant="contained" color="success" onClick={addOferta}>
                             <Typography variant="button">Realizar oferta</Typography>
                         </Button>
                     </Stack>

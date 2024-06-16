@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Item from "../utils/Item";
-import {colors} from "../utils/colors";
 import axios from "axios";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
@@ -12,6 +9,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
 import {MenuItem, Select, Stack} from "@mui/material";
 import Grid from "@mui/material/Grid";
+import {defaultFormAddPost} from "../utils/utilConstants";
 
 function AddPostPage() {
     // Render on start
@@ -23,14 +21,12 @@ function AddPostPage() {
             setUser(user);
         };
     }, []);
+    const [form, setForm] = useState(defaultFormAddPost);
     const [categorias, setCategorias] = useState([])
     const reader = new FileReader();
 
     const [user, setUser] = useState({});
-    const [image, setImage] = useState([]);
-    const [titulo, setTitulo] = useState("");
-    const [desc, setDesc] = useState("");
-    const [cat, setCat] = useState(0);
+    const [btnDisabled, setBtnDisabled] = useState(true);
 
     const fetchCategorias = async () => {
         try {
@@ -42,14 +38,22 @@ function AddPostPage() {
         }
     }
 
+    const validar = (form) => {
+        if(form.titulo.trim()!=="" && form.desc.trim()!=="" && form.cat !== 0 && form.image !== null) {
+            setBtnDisabled(false);
+        } else setBtnDisabled(true);
+    }
     const handleChange = async (e) => {
+        let tempForm = form;
         switch (e.target.name) {
-            case "titulo": setTitulo(e.target.value); break;
-            case "descripcion": setDesc(e.target.value); break;
-            case "categoria": setCat(e.target.value); break;
-            case "imagen": setImage(e.target.files[0]); break;
+            case "titulo": tempForm = {...tempForm, titulo: e.target.value}; break;
+            case "descripcion": tempForm = {...tempForm, desc: e.target.value}; break;
+            case "categoria": tempForm = {...tempForm, cat: e.target.value}; break;
+            case "imagen": tempForm = {...tempForm, image: e.target.files[0]}; break;
             default: break;
         }
+        setForm(tempForm);
+        validar(tempForm);
     }
     const fileToBase64 = (file) => {
         return new Promise((resolve, reject) => {
@@ -69,12 +73,11 @@ function AddPostPage() {
         event.preventDefault();
         let userID = user.idUser;
         var formdata = new FormData();
-        formdata.append("titulo", titulo);
-        formdata.append("descripcion", desc);
-        formdata.append("categoria_ID", cat);
-        formdata.append("imagen", await fileToBase64(image));
+        formdata.append("titulo", form.titulo);
+        formdata.append("descripcion", form.desc);
+        formdata.append("categoria_ID", form.cat);
+        formdata.append("imagen", await fileToBase64(form.image));
         formdata.append("userID", userID);
-        console.log('PUBLICACION: ', {titulo, desc, userID, cat});
         axios.post('http://localhost:8080/publicacion/add', formdata, {
             headers: {
                 'Content-Type': 'application/json'
@@ -102,13 +105,13 @@ function AddPostPage() {
                     <Stack spacing={2} direction="column">
                         <FormControl>
                             <TextField onChange={(event)=> {handleChange(event)}}
-                                       placeholder="Título" type="text" variant="outlined" name="titulo" className="AddPostForm"
+                                       type="text" variant="outlined" name="titulo"
                             />
                             <FormHelperText id="titulo-text">Ingrese el título de su publicación</FormHelperText>
                         </FormControl>
                         <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} className="AddPostForm"
-                                       placeholder="Descripción" multiline={true} rows={4} type="text" variant="outlined" name="descripcion"
+                            <TextField onChange={(event)=> {handleChange(event)}} name="descripcion"
+                                       multiline={true} rows={4} type="text" variant="outlined"
                             />
                             <FormHelperText id="descripcion-text">Describa el producto publicado</FormHelperText>
                         </FormControl>
@@ -117,11 +120,12 @@ function AddPostPage() {
                 <Grid item xs={4}>
                     <Stack spacing={2} direction="column">
                         <FormControl>
-                            <Select
-                                className="AddPostForm"
-                                onChange={(event)=> {handleChange(event)}}
-                                name="categoria" placeholder="Categoría"
+                            <Select onChange={(event)=> {handleChange(event)}}
+                                    value={form.cat} name="categoria" variant="outlined"
                             >
+                                <MenuItem value={0} disabled>
+                                    Seleccione una categoría
+                                </MenuItem>
                                 { categorias.map((categoria) => (
                                     <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
                                 ))}
@@ -130,12 +134,12 @@ function AddPostPage() {
                         </FormControl>
                         <FormControl>
                             <TextField onChange={(event)=> {handleChange(event)}}
-                                       placeholder="Imagen" type="file" variant="outlined" name="imagen" className="AddPostForm"
+                                       type="file" variant="outlined" name="imagen"
                             />
                             <FormHelperText id="descripcion-text">Agregue una foto del producto publicado</FormHelperText>
                         </FormControl>
-                        <Button variant="contained" color="success" startIcon={<PostAddRoundedIcon color="primary"/>}
-                                onClick={addPost}>
+                        <Button startIcon={<PostAddRoundedIcon color="primary"/>} disabled={btnDisabled}
+                                variant="contained" color="success" onClick={addPost}>
                             <Typography variant="button">Publicar</Typography>
                         </Button>
                     </Stack>

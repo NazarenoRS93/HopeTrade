@@ -70,14 +70,14 @@ function LoginAdminPage(props) {
                 <Grid item xs={3}>
                     <Stack spacing={2} direction="column">
                         <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.email}
-                                       placeholder="Email" type="email" variant="outlined" id="email"
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       value={form.email} type="email" variant="outlined" id="email"
                             />
                             <FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
                         </FormControl>
                         <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.pass}
-                                       placeholder="Contraseña" variant="outlined" id="pass"
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       value={form.pass} variant="outlined" id="pass"
                                        type={showPassword ? "text" : "password"}
                                        InputProps={{
                                            endAdornment: (

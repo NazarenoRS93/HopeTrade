@@ -10,9 +10,10 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import {FormLabel, Stack} from "@mui/material";
+import Grid from "@mui/material/Grid";
 
 function PostListPage() {
-    
+
     const reader = new FileReader();
     const [ready, setReady] = useState(null);
     const [user, setUser] = useState({});
@@ -20,8 +21,6 @@ function PostListPage() {
     const [hayPublis, setHayPublis] = useState(true);
     const [categorias, setCategorias] = useState([]);
     const [selectedCategoria, setSelectedCategoria] = useState(0);
-    const [states, setStates] = useState([]);
-    const [form, setForm] = useState(defaultFormAddPost)
 
     // Render on start
     useEffect(() => {
@@ -60,7 +59,7 @@ function PostListPage() {
             }
             if (!window.location.href.includes("my-posts") && user.tipoUser === 0) {
                 data = data.filter(function (publicacion) {
-                    return publicacion.estado == "Disponible";  
+                    return publicacion.estado == "Disponible";
                 });
             }
             if (data.length > 0) setHayPublis(true);
@@ -92,38 +91,45 @@ function PostListPage() {
     return (
 
         <React.Fragment>
-            <Stack spacing={2} direction="row" justifyContent="center" sx={{paddingBottom: "30px"}}>
-                <FormControl>
-                    <FormLabel>Categoría</FormLabel>
-                    <Select
-                        value={selectedCategoria}
-                        onChange={handleChange}
-                        defaultValue="0"
-                        sx={{ minWidth: 250 }}
-                    >
-                        <MenuItem value="0">
-                            Todos
-                        </MenuItem>
-                        {categorias.map((categoria) => (
-                            <MenuItem key={categoria.id} value={categoria.id}>
-                                {categoria.nombre}
-                            </MenuItem>
+            <Grid container spacing={4} className="FullWidthPage">
+                <Grid item xs={12}>
+                    <Stack spacing={2} direction="row" justifyContent="center">
+                        <FormControl>
+                            <Select
+                                value={selectedCategoria}
+                                onChange={handleChange}
+                                defaultValue="0"
+                                sx={{ minWidth: 250 }}
+                            >
+                                <MenuItem value="0">
+                                    Todos
+                                </MenuItem>
+                                {categorias.map((categoria) => (
+                                    <MenuItem key={categoria.id} value={categoria.id}>
+                                        {categoria.nombre}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            <FormHelperText id="categoria-text">Filtre por categoría</FormHelperText>
+                        </FormControl>
+                    </Stack>
+                </Grid>
+                <Grid item xs={12}>
+                    <PostGrid>
+                        { publicaciones.map((publicacion) => (
+                            <PostItem id={publicacion.id} data={publicacion} user={user} update={onUpdate}/>
                         ))}
-                    </Select>
-                    <FormHelperText id="categoria-text">Filtre por categoría</FormHelperText>
-                </FormControl>
-            </Stack>
-            <PostGrid>
-                { publicaciones.map((publicacion) => (
-                    <PostItem id={publicacion.id} data={publicacion} user={user} update={onUpdate}/>
-                ))}
-            </PostGrid>
-            { !hayPublis ?
-                <div style={{textAlign: "center", paddingTop: "30px", paddingBottom: "50px"}}>
-                    <Typography variant="h1">No se encontraron publicaciones.</Typography>
-                </div>
-                : null
-            }
+                    </PostGrid>
+                </Grid>
+                <Grid item xs={12}>
+                    { !hayPublis ?
+                        <div style={{textAlign: "center", paddingTop: "30px", paddingBottom: "50px"}}>
+                            <Typography variant="h1">No se encontraron publicaciones.</Typography>
+                        </div>
+                        : null
+                    }
+                </Grid>
+            </Grid>
         </React.Fragment>
     )
 }

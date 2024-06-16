@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -9,12 +9,11 @@ import FormHelperText from "@mui/material/FormHelperText";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import Item from "../utils/Item";
 import FormControl from "@mui/material/FormControl";
-import {colors} from "../utils/colors";
 import {defaultFormRegister} from "../utils/utilConstants";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import RegisterService from "../services/RegisterService";
+import Grid from "@mui/material/Grid";
 
 function SignUpPage() {
     const [showPassword, setShowPassword] = useState(false);
@@ -70,128 +69,78 @@ function SignUpPage() {
 
     return (
         <React.Fragment>
-            <Box
-                sx={{
-                    backgroundColor: colors.background,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    display: "flex",
-                    width: "100%"
-                }}
-            >
-                <Item sx={{ flexGrow: 1 }} />
-                <Item>
-                    <Box
-                        sx={{
-                            backgroundColor: colors.background,
-                            flexDirection: "column",
-                            alignItems: "center",
-                            display: "flex"
-                        }}
-                    >
-                        <Item>
-                            <Typography variant="subtitle1">{cookie ? "¡Registra un Ayudante!" : "¡Registrate!"}</Typography>
-                        </Item>
-                        <Item>
-                            <Box
-                                sx={{
-                                    backgroundColor: colors.background,
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    display: "flex"
-                                }}
-                            >
-                                <Item>
-                                    <FormControl>
-                                        <TextField onChange={(event)=> {handleChange(event)}} value={form.nombre}
-                                                   type="text" variant="outlined" id="nombre"
-                                                   required label="Nombre"
-                                        />
-                                        <FormHelperText id="nombre-text">Ingrese su nombre</FormHelperText>
-                                    </FormControl>
-                                </Item>
-                                <Item>
-                                    <FormControl>
-                                        <TextField onChange={(event)=> {handleChange(event)}} value={form.apellido}
-                                                   type="text" variant="outlined" id="apellido"
-                                                   required label="Apellido"
-                                        />
-                                        <FormHelperText id="apellido-text">Ingrese su apellido</FormHelperText>
-                                    </FormControl>
-                                </Item>
-                                <Item>
-                                    <FormControl>
-                                        <TextField onChange={(event)=> {handleChange(event)}} value={form.dni}
-                                                   type="number" variant="outlined" id="dni"
-                                                   required label="DNI"
-                                        />
-                                        <FormHelperText id="dni-text">Ingrese su n° de documento sin puntos</FormHelperText>
-                                    </FormControl>
-                                </Item>
-                            </Box>
-                        </Item>
-                        <Item>
-                            <Box
-                                sx={{
-                                    backgroundColor: colors.background,
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    display: "flex"
-                                }}
-                            >
-                            { !cookie ?
-                                <Item>
-                                    <FormControl>
-                                        <TextField onChange={(event)=> {handleChange(event)}} value={form.fecha_nacimiento}
-                                                   type="date" variant="outlined" id="fecha_nacimiento"
-                                                   required 
-                                        />
-                                        <FormHelperText id="fecha-nacimiento-text">Ingrese su fecha de nacimiento</FormHelperText>
-                                    </FormControl>
-                                </Item>
-                                : <p></p>
-                            }
-                                <Item>
-                                    <FormControl>
-                                        <TextField onChange={(event)=> {handleChange(event)}} value={form.email}
-                                                   type="email" variant="outlined" id="email"
-                                                   required label="Email"
-                                        />
-                                        <FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
-                                    </FormControl>
-                                </Item>
-                                <Item>
-                                    <FormControl>
-                                        <TextField onChange={(event)=> {handleChange(event)}} value={form.pass}
-                                                   label="Contraseña" variant="outlined" id="pass" required
-                                                   type={showPassword ? "text" : "password"}
-                                                   InputProps={{
-                                                       endAdornment: (
-                                                           <InputAdornment position="end">
-                                                               <IconButton
-                                                                   onClick={handleShowPassword}
-                                                               >
-                                                                   {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                                               </IconButton>
-                                                           </InputAdornment>
-                                                       )
-                                                   }}
-                                                />
-                                        <FormHelperText id="pass-text">Ingrese su contraseña</FormHelperText>
-                                    </FormControl>
-                                </Item>
-                            </Box>
-                        </Item>
-                        <Item>
+            <Grid container spacing={2} className="FullWidthPage">
+                <Grid item xs={12}>
+                    <Typography variant="subtitle1">{cookie ? "¡Registra un Ayudante!" : "¡Registrate!"}</Typography>
+                </Grid>
+                <Grid item xs={1}/>
+                <Grid item container spacing={2} xs={10}>
+                    <Grid item xs={4}>
+                        <Stack spacing={2} direction="column">
+                            <FormControl>
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.nombre}
+                                           type="text" variant="outlined" id="nombre"
+                                />
+                                <FormHelperText id="nombre-text">Ingrese su nombre</FormHelperText>
+                            </FormControl>
+                            <FormControl>
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.fecha_nacimiento}
+                                           type="date" variant="outlined" id="fecha_nacimiento"
+                                />
+                                <FormHelperText id="fecha-nacimiento-text">Ingrese su fecha de nacimiento</FormHelperText>
+                            </FormControl>
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Stack spacing={2} direction="column">
+                            <FormControl>
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.apellido}
+                                           type="text" variant="outlined" id="apellido"
+                                />
+                                <FormHelperText id="apellido-text">Ingrese su apellido</FormHelperText>
+                            </FormControl>
+                            <FormControl>
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.email}
+                                           type="email" variant="outlined" id="email"
+                                />
+                                <FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
+                            </FormControl>
                             <Button variant="contained" color="secondary" startIcon={<PersonAddAltRoundedIcon color="primary"/>}
                                     onClick={register} disabled={btnDisabled}>
                                 <Typography variant="button">Registrar</Typography>
                             </Button>
-                        </Item>
-                    </Box>
-                </Item>
-                <Item sx={{ flexGrow: 1 }}/>
-            </Box>
+                        </Stack>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Stack spacing={2} direction="column">
+                            <FormControl>
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.dni}
+                                           type="number" variant="outlined" id="dni"
+                                />
+                                <FormHelperText id="dni-text">Ingrese su n° de documento sin puntos</FormHelperText>
+                            </FormControl>
+                            <FormControl>
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.pass}
+                                           variant="outlined" id="pass" type={showPassword ? "text" : "password"}
+                                           InputProps={{
+                                               endAdornment: (
+                                                   <InputAdornment position="end">
+                                                       <IconButton
+                                                           onClick={handleShowPassword}
+                                                       >
+                                                           {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                                       </IconButton>
+                                                   </InputAdornment>
+                                               )
+                                           }}
+                                />
+                                <FormHelperText id="pass-text">Ingrese su contraseña</FormHelperText>
+                            </FormControl>
+                        </Stack>
+                    </Grid>
+                </Grid>
+                <Grid item xs={1}/>
+            </Grid>
         </React.Fragment>
     )
 }

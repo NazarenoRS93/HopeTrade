@@ -18,18 +18,6 @@ export const defaultFormRegister = {
     email: '',
     pass: ''
 };
-export const defaultFormAddPost = {
-    id: null,
-    titulo: '',
-    descripcion: '',
-    userID: 0,
-    imagen: '',
-    catID: 0,
-    catName: '',
-    active: '',
-    fechaHoraCreacion: '',
-    ultimaModificacion: ''
-};
 export const defaultBaseName = "localhost:3000/app";
 
 export const defaultHeaders = {
@@ -63,4 +51,10 @@ export const defaultFormAddOferta = {
     cat: 0,
     fil: 0,
     fecha: defDateTime
+};
+export const defaultFormAddPost = {
+    image: null,
+    titulo: '',
+    desc: '',
+    cat: 0,
 };

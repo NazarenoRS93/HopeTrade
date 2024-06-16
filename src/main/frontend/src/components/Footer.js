@@ -33,11 +33,9 @@ function Footer() {
     return (
         <Grid container spacing={2} className="FullWidthFooter">
             {user.isLogged ?
-                <Typography variant="footer">Desarrollado por CODEX™</Typography>
+                <Typography variant="footer">Desarrollado por <b>CODEX™</b></Typography>
                 :
-                <div>
-                    <Typography variant="footer">Desarrollado por CODEX™ | Para uso interno, haga click <Link to="/logAdmin">aqu&iacute;</Link></Typography>
-                </div>
+                <Typography variant="footer">Desarrollado por<b> CODEX™ </b>| Para uso interno, haga click <b><Link to="/logAdmin">aqu&iacute;</Link></b></Typography>
             }
         </Grid>
 )

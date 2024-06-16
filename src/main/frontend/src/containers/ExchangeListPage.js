@@ -20,7 +20,6 @@ function ExchangeListPage() {
     const [user, setUser] = useState({});
     const [intercambios, setIntercambio] = useState([]);
     const [states, setStates] = useState([]);
-    const [form, setForm] = useState(defaultFormAddPost)
 
     const fetchIntercambios = async () => {
         try {
