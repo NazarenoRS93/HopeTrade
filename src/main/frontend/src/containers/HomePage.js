@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import '../App.css';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
@@ -8,12 +8,13 @@ import FindInPageRoundedIcon from '@mui/icons-material/FindInPageRounded';
 import HomeGrid from "../components/home/HomeGrid";
 import HomeItem from "../components/home/HomeItem";
 import {
-    addPostInfo,
-    listAdminInfo,
-    listExchangesInfo,
-    myPostsInfo,
-    profileUserInfo,
-    viewPostsInfo
+	addPostInfo,
+	listAdminInfo,
+	listExchangesInfo,
+	myPostsInfo,
+	profileUserInfo,
+	listUsersInfo,
+	viewPostsInfo
 } from "../utils/utilData";
 
 function HomePage() {
@@ -53,7 +54,11 @@ function HomePage() {
 				}
 				{user?.tipoUser === 2 ?
 					<HomeItem link="/adminusers" data={listAdminInfo} icon={<PeopleRoundedIcon color="primary" />} />
-					:null
+					: null
+				}
+				{user?.tipoUser === 2 ?
+					<HomeItem link="/usersystem" data={listUsersInfo} icon={<PeopleRoundedIcon color="primary" />} />
+					: null
 				}
 				{user?.tipoUser === 1 ?
 					<HomeItem link="/verperfiladministrativo" data={profileUserInfo} icon={<PersonRoundedIcon color="primary" />} />

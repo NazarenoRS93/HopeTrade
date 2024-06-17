@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -24,6 +24,7 @@ import ExchangeListPage from "./containers/ExchangeListPage";
 import ProfilePage from "./containers/ProfilePage";
 import AdministradorProfilePage from "./containers/AdministradorProfilePage";
 import SystemAdminsPage from "./containers/SystemAdminsPage";
+import SystemUsersListPage from "./containers/SystemUsersListPage";
 
 const router = createBrowserRouter(
 	[
@@ -110,6 +111,10 @@ const router = createBrowserRouter(
 				{
 					path: "/adminusers",
 					element: <SystemAdminsPage />
+				},
+				{
+					path: "/usersystem",
+					element: <SystemUsersListPage />
 				},
 			]
 		},

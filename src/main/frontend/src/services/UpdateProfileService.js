@@ -37,6 +37,15 @@ const UpdateProfileService = {
 		}
 	},
 
+	getAllUsers: async () => {
+		try {
+			const response = await axios.get('/user/all'); // Changed to GET request
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	},
+
 	getAllAyudantes: async () => {
 		try {
 			const response = await axios.get('/ayudante/listar-ayudantes'); // Changed to GET request
@@ -47,13 +56,13 @@ const UpdateProfileService = {
 	},
 
 	deleteAyudante: async (id) => {
-	       try {
-	           const response = await axios.post(`/ayudante/deleteayudante/${id}`);
-	           return response.data;
-	       } catch (error) {
-	           throw error;
-	       }
-	   },
+		try {
+			const response = await axios.post(`/ayudante/deleteayudante/${id}`);
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	},
 };
 
 export default UpdateProfileService;
