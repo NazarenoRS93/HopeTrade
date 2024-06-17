@@ -87,7 +87,7 @@ function Post( props ) {
                                 </Link>
                                 : null
                             }                          
-                            { (user.idUser === data.userID || user.tipoUser !== 0) ?
+                            { ((user.idUser === data.userID || user.tipoUser !== 0 ) && ( data.estado !== "Eliminado" && data.estado !== "Finalizado")) ?
                                 <Button variant="contained" color="error" onClick={deletePost}
                                         startIcon={<DeleteRounded color="background2"/>}>
                                     <Typography variant="button2">Eliminar</Typography>
