@@ -130,4 +130,17 @@ public class MailService {
 		message.setText(text);
 		mailSender.send(message);
 	}
+
+	public void sendEmailUsuarioBaja(User user,String motivo) {
+		String subject = "Cuenta suspendida";
+		String text = "Hola " + user.getNombre() + ",\n\n"
+				+ "Te informamos que tu cuenta fue suspendida" + ",\n"
+				+ "Motivo: " + motivo + ",\n\n"
+				+ "Saludos.";
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(user.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+	}
 }
