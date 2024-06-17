@@ -161,8 +161,8 @@ public class UserController {
 	}
 	
 	@PostMapping("/deleteusuario/{id}")
-	public ResponseEntity<?> deleteUsuario(@PathVariable(value = "id") Long Id, String motivo) {
-		Optional<User> userOp = userRepository.findById(Id);
+	  public ResponseEntity<?> deleteUsuario(@PathVariable(value = "id") Long id, @RequestParam(value = "motivo") String motivo) {
+		Optional<User> userOp = userRepository.findById(id);
 		if (userOp.isPresent()) {
 			User user = userOp.get();
 			user.setActivo(false);

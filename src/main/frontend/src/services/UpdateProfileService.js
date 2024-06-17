@@ -63,6 +63,20 @@ const UpdateProfileService = {
 			throw error;
 		}
 	},
+	
+	deleteUser: async (id, motivo) => {
+    try {
+        const response = await axios.post(`/user/deleteusuario/${id}`, null, {
+            params: {
+                motivo: motivo
+            }
+        });
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+},
+
 };
 
 export default UpdateProfileService;
