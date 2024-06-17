@@ -33,8 +33,8 @@ function PostListPage() {
     }, []);
 
     useEffect(() => {
-        fetchPublicaciones(user.id, selectedCategoria);
-    }, [user, selectedCategoria]);
+        fetchPublicaciones(user.idUser, selectedCategoria);
+    }, [user]);
 
     const fetchPublicaciones = async (idUser, cat) => {
         try {
