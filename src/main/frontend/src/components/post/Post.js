@@ -40,18 +40,18 @@ function Post( props ) {
         <Card className="ItemGrid">
             <CardContent>
                 <Grid container alignItems="center" spacing={1}>
-                    <Grid item xs={9}>
+                    <Grid item xs={8}>
                         <Typography variant="subtitle2">{data.titulo}</Typography>
-                        <Typography variant="h6"><strong>por: </strong>{data.userFullName}</Typography>
+                        <Typography variant="h6"><b>por: </b>{data.userFullName}</Typography>
                         <hr/>
                         <Typography variant="h2">{data.descripcion}</Typography>
                         <hr/>
-                        <Typography variant="h6"><strong>Categoria: </strong>{data.categoria_Nombre}</Typography>
-                        <Typography variant="h6"><strong>Estado: </strong>{data.estado}</Typography>
-                        <Typography variant="h6"><strong>Ofertas: </strong>{data.ofertas}</Typography>
+                        <Typography variant="h6"><b>Categoria: </b>{data.categoria_Nombre}</Typography>
+                        <Typography variant="h6"><b>Estado: </b>{data.estado}</Typography>
+                        <Typography variant="h6"><b>Ofertas: </b>{data.ofertas}</Typography>
                     </Grid>
-                    <Grid item xs={3}>
-                        <Avatar src={data.imagenUrl} variant="rounded" sx={{ width:"150px",height:"150px"}} />
+                    <Grid item xs={4}>
+                        <Avatar src={data.imagenUrl} variant="rounded" sx={{marginLeft:"15px",width:"150px",height:"150px"}} />
                     </Grid>
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">

@@ -67,14 +67,14 @@ function LoginPage() {
                 <Grid item xs={3}>
                     <Stack spacing={2} direction="column">
                         <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.dni}
-                                       placeholder="DNI" type="number" variant="outlined" id="dni"
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       value={form.dni} type="number" variant="outlined" id="dni"
                             />
                             <FormHelperText id="dni-text">Ingrese su n° de documento sin puntos</FormHelperText>
                         </FormControl>
                         <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.pass}
-                                       placeholder="Contraseña" variant="outlined" id="pass"
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       value={form.pass} variant="outlined" id="pass"
                                        type={showPassword ? "text" : "password"}
                                        InputProps={{
                                            endAdornment: (

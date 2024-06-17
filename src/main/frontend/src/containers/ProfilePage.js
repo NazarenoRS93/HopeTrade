@@ -97,7 +97,7 @@ function ProfilePage() {
                                         <TextField
                                             value={form.nombre}
                                             type="text" variant="outlined" id="nombre"
-                                            label="Nombre" InputProps={{ readOnly: true }}
+                                            InputLabelProps={{ shrink: true }} label="Nombre" InputProps={{ readOnly: true }}
                                         />
                                         <FormHelperText id="nombre-text">Nombre</FormHelperText>
                                     </FormControl>
@@ -107,7 +107,7 @@ function ProfilePage() {
                                         <TextField
                                             value={form.apellido}
                                             type="text" variant="outlined" id="apellido"
-                                            label="Apellido" InputProps={{ readOnly: true }}
+                                            InputLabelProps={{ shrink: true }} label="Apellido" InputProps={{ readOnly: true }}
                                         />
                                         <FormHelperText id="apellido-text">Apellido</FormHelperText>
                                     </FormControl>
@@ -117,7 +117,7 @@ function ProfilePage() {
                                         <TextField
                                             value={form.dni}
                                             type="number" variant="outlined" id="dni"
-                                            label="DNI" InputProps={{ readOnly: true }}
+                                            InputLabelProps={{ shrink: true }} label="DNI" InputProps={{ readOnly: true }}
                                         />
                                         <FormHelperText id="dni-text">DNI</FormHelperText>
                                     </FormControl>
@@ -138,7 +138,7 @@ function ProfilePage() {
                                         <TextField
                                             value={form.fecha_nacimiento}
                                             type="date" variant="outlined" id="fecha_nacimiento"
-                                            label="Fecha de Nacimiento" InputProps={{ readOnly: true }}
+                                            InputLabelProps={{ shrink: true }} label="Fecha de Nacimiento" InputProps={{ readOnly: true }}
                                         />
                                         <FormHelperText id="fecha-nacimiento-text">Fecha de Nacimiento</FormHelperText>
                                     </FormControl>
@@ -148,9 +148,9 @@ function ProfilePage() {
                                         <TextField
                                             value={form.email}
                                             type="email" variant="outlined" id="email"
-                                            label="Email" InputProps={{ readOnly: true }}
+                                            InputLabelProps={{ shrink: true }} label="E-mail" InputProps={{ readOnly: true }}
                                         />
-                                        <FormHelperText id="email-text">Email</FormHelperText>
+                                        <FormHelperText id="email-text">E-mail</FormHelperText>
                                     </FormControl>
                                 </Item>
                             </Box>

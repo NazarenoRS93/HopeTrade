@@ -122,7 +122,7 @@ function ChangePasswordPage() {
 							<TextField
 								onChange={handleChange}
 								value={form.antiguaContrasenia}
-								placeholder="Antigua Contraseña"
+								InputLabelProps={{ shrink: true }} label="Antigua Contraseña"
 								type="password"
 								variant="outlined"
 								id="antiguaContrasenia"
@@ -134,7 +134,7 @@ function ChangePasswordPage() {
 							<TextField
 								onChange={handleChange}
 								value={form.nuevaContrasenia}
-								placeholder="Nueva Contraseña"
+								InputLabelProps={{ shrink: true }} label="Nueva Contraseña"
 								type="password"
 								variant="outlined"
 								id="nuevaContrasenia"

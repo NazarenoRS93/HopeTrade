@@ -8,7 +8,8 @@ import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
 import Button from "@mui/material/Button"; // Import Button component
 import {colors} from "../utils/colors";
-import UpdateProfileService from "../services/UpdateProfileService"; // Ensure you have this service
+import UpdateProfileService from "../services/UpdateProfileService";
+import {FormLabel} from "@mui/material"; // Ensure you have this service
 
 function AdministradorProfilePage() {
 	const initialFormState = {
@@ -92,42 +93,38 @@ function AdministradorProfilePage() {
 							>
 								<Item>
 									<FormControl>
-										<TextField
-											value={form.nombre}
-											type="text" variant="outlined" id="nombre"
-											label="Nombre" InputProps={{ readOnly: true }}
+										<FormLabel>Nombre</FormLabel>
+										<TextField value={form.nombre} type="text" variant="outlined"
+												   id="nombre" InputProps={{ readOnly: true }}
 										/>
 										<FormHelperText id="nombre-text">Nombre</FormHelperText>
 									</FormControl>
 								</Item>
 								<Item>
 									<FormControl>
-										<TextField
-											value={form.apellido}
-											type="text" variant="outlined" id="apellido"
-											label="Apellido" InputProps={{ readOnly: true }}
+										<FormLabel>Apellido</FormLabel>
+										<TextField value={form.apellido} type="text" variant="outlined"
+												   id="apellido" InputProps={{ readOnly: true }}
 										/>
 										<FormHelperText id="apellido-text">Apellido</FormHelperText>
 									</FormControl>
 								</Item>
 								<Item>
 									<FormControl>
-										<TextField
-											value={form.dni}
-											type="number" variant="outlined" id="dni"
-											label="DNI" InputProps={{ readOnly: true }}
+										<FormLabel>DNI</FormLabel>
+										<TextField value={form.dni} type="number" variant="outlined"
+												   id="dni" InputProps={{ readOnly: true }}
 										/>
 										<FormHelperText id="dni-text">DNI</FormHelperText>
 									</FormControl>
 								</Item>
 								<Item>
 									<FormControl>
-										<TextField
-											value={form.email}
-											type="email" variant="outlined" id="email"
-											label="Email" InputProps={{ readOnly: true }}
+										<FormLabel>E-mail</FormLabel>
+										<TextField value={form.email} type="email" variant="outlined"
+												   id="email" InputProps={{ readOnly: true }}
 										/>
-										<FormHelperText id="email-text">Email</FormHelperText>
+										<FormHelperText id="email-text">E-mail</FormHelperText>
 									</FormControl>
 								</Item>
 							</Box>

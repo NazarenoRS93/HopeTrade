@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Typography from '@mui/material/Typography';
-import {colors} from "../utils/colors";
 import FilialService from "../services/FilialService";
-import Item from '../utils/Item';
-import { defaultGateway } from '../utils/utilConstants';
+import {defaultGateway} from '../utils/utilConstants';
+import Grid from "@mui/material/Grid";
+import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
 
 function SelectFilialPage() {
 	const [filiales, setFiliales] = useState([]);
-	const [selectedFilial, setSelectedFilial] = useState('');
+	const [selectedFilial, setSelectedFilial] = useState(0);
 	const [userId, setUserId] = useState(null);
 	const [btnDisabled, setBtnDisabled] = useState(true);
 
@@ -34,7 +34,7 @@ function SelectFilialPage() {
 
 	const handleChange = (event) => {
 		setSelectedFilial(event.target.value);
-		setBtnDisabled(event.target.value.toString() === "")
+		setBtnDisabled(event.target.value === 0)
 	};
 
 	const handleSelect = async () => {
@@ -46,12 +46,12 @@ function SelectFilialPage() {
 					let user = JSON.parse(cookie);
 					//Se obtiene el objeto de la filial seleccionada
 					let laFilial = filiales.find((element) => element.id === selectedFilial);
-					user = {...user, filial: selectedFilial, desc_filial: laFilial.direccion + " (" + laFilial.nombre + ")"};
+					user = {...user, filial: selectedFilial, desc_filial: laFilial.nombre + " (" + laFilial.direccion + ")"};
 					window.localStorage.setItem("user",JSON.stringify(user));
 				};
 				let href = window.location.href;
-	            href = href.substring(0, href.lastIndexOf('/'));
-	            window.location.replace(href+"/home");
+				href = href.substring(0, href.lastIndexOf('/'));
+				window.location.replace(href+"/home");
 			} catch (error) {
 				alert("Error al seleccionar filial: " + error.response.data);
 			}
@@ -59,40 +59,34 @@ function SelectFilialPage() {
 			alert("Seleccione una filial.");
 		}
 	};
-	
+
 	return (
-		<Box
-			sx={{
-				backgroundColor: colors.background,
-				flexDirection: "row",
-				alignItems: "center",
-				display: "flex",
-				width: "100%"
-			}}
-		>
-			<Item>
-				<Select
-					value={selectedFilial}
-					onChange={handleChange}
-					displayEmpty
-					sx={{ minWidth: 200, marginBottom: 2 }}
-				>
-					<MenuItem value="" disabled>
-						Seleccione una filial
-					</MenuItem>
-					{filiales.map((filial) => (
-						<MenuItem key={filial.id} value={filial.id}>
-							{filial.direccion + " (" + filial.nombre + ")"}
+		<Grid container spacing={2} className="FullWidthPage">
+			<Grid item xs={12}>
+				<Typography variant="subtitle1">Seleccionar Filial</Typography>
+			</Grid>
+			<Grid item xs={3}>
+				<Stack spacing={2} direction="column">
+					<Select
+						value={selectedFilial}
+						onChange={handleChange}
+					>
+						<MenuItem value={0} disabled>
+							Seleccione una filial
 						</MenuItem>
-					))}
-				</Select>
-			</Item>
-			<Item>
-				<Button sx={{flexDirection: "column"}} variant="contained" color="success" onClick={handleSelect} disabled={btnDisabled}>
-					<Typography variant="button">Seleccionar</Typography>
-				</Button>
-			</Item>
-		</Box>
+						{filiales.map((filial) => (
+							<MenuItem key={filial.id} value={filial.id}>
+								{filial.nombre} ({filial.direccion})
+							</MenuItem>
+						))}
+					</Select>
+					<Button variant="contained" color="success" onClick={handleSelect}
+							disabled={btnDisabled} startIcon={<TaskAltRoundedIcon color="primary"/>}>
+						<Typography variant="button">Seleccionar</Typography>
+					</Button>
+				</Stack>
+			</Grid>
+		</Grid>
 	);
 }
 

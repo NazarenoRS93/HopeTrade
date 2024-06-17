@@ -8,6 +8,8 @@ import FormControl from "@mui/material/FormControl";
 import {colors} from "../utils/colors";
 import PersonAddAltRoundedIcon from "@mui/icons-material/PersonAddAltRounded";
 import UpdateProfileService from "../services/UpdateProfileService";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 
 function EditProfilePage() {
 	const initialFormState = {
@@ -133,63 +135,44 @@ function EditProfilePage() {
 
 	return (
 		<React.Fragment>
-			<Box
-				sx={{
-					backgroundColor: colors.background,
-					flexDirection: "row",
-					alignItems: "center",
-					display: "flex",
-					width: "100%"
-				}}
-			>
-				<Box sx={{ flexGrow: 1 }} />
-				<Box>
-					<Box
-						sx={{
-							backgroundColor: colors.background,
-							flexDirection: "column",
-							alignItems: "center",
-							display: "flex"
-						}}
-					>
-						<Typography variant="subtitle1">Editar Perfil</Typography>
+			<Grid container spacing={2} className="FullWidthPage">
+				<Grid item xs={12}>
+					<Typography variant="subtitle1">Editar Perfil</Typography>
+				</Grid>
+				<Grid item xs={3}>
+					<Stack spacing={2} direction="column">
 						<FormControl>
-							<TextField onChange={(event) => { handleChange(event) }} value={form.nombre}
-								placeholder="Nombre" type="text" variant="outlined" id="nombre"
+							<TextField onChange={(event)=> {handleChange(event)}}
+									   value={form.nombre} type="text" variant="outlined" id="nombre"
 							/>
 							<FormHelperText id="nombre-text">Ingrese su nombre</FormHelperText>
 						</FormControl>
 						<FormControl>
-							<TextField onChange={(event) => { handleChange(event) }} value={form.apellido}
-								placeholder="Apellido" type="text" variant="outlined" id="apellido"
+							<TextField onChange={(event)=> {handleChange(event)}}
+									   value={form.apellido} type="text" variant="outlined" id="apellido"
 							/>
 							<FormHelperText id="apellido-text">Ingrese su apellido</FormHelperText>
 						</FormControl>
 						<FormControl>
-							<TextField onChange={(event) => { handleChange(event) }} value={form.email}
-								placeholder="Email" type="email" variant="outlined" id="email"
+							<TextField onChange={(event) => { handleChange(event) }}
+									   value={form.email} type="email" variant="outlined" id="email"
 							/>
 							<FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
 						</FormControl>
-						<Button
-							variant="contained"
-							color="secondary"
-							startIcon={<PersonAddAltRoundedIcon color="primary" />}
-							onClick={updateProfile}
-							disabled={!hasChanges()}
+						<Button variant="contained" color="success" onClick={updateProfile} disabled={!hasChanges()} // Deshabilita el botón si no hay cambios
+								startIcon={<PersonAddAltRoundedIcon color="primary" />}
 						>
 							<Typography variant="button">Guardar cambios</Typography>
 						</Button>
-						<Button variant="contained" color="primary" onClick={handleCancel}>
-							Cancelar
+						<Button variant="contained" color="error" onClick={handleCancel}>
+							<Typography variant="button2">Cancelar</Typography>
 						</Button>
 						<Button variant="contained" color="primary" onClick={handleChangePassword}>
-							Cambiar Contraseña
+							<Typography variant="button">Cambiar Contraseña</Typography>
 						</Button>
-					</Box>
-				</Box>
-				<Box sx={{ flexGrow: 1 }} />
-			</Box>
+					</Stack>
+				</Grid>
+			</Grid>
 		</React.Fragment>
 	);
 }

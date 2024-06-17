@@ -17,7 +17,7 @@ function App() {
         <React.Fragment className="App">
             <ThemeProvider theme={theme}>
                 <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="es">
-                    <Stack spacing={2} alignItems="center" justifyContent="center" direction="column" sx={{width:"99%"}}>
+                    <Stack spacing={2} alignItems="center" justifyContent="center" direction="column" sx={{width:"99.3%"}}>
                         <Header/>
                         <Outlet/>
                         <Footer/>

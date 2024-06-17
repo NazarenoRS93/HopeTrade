@@ -50,15 +50,15 @@ function Header() {
         let sEtiqueta = '';
         if (userInfo.isLogged) {
             // si el usuario está logueado se toma su nombre
-            sEtiqueta = '¡Hola, <strong>' + userInfo.nombre + '</strong>! | ';
+            sEtiqueta = '¡Hola, <b>' + userInfo.nombre + '</b>! | ';
             // solo si el rol es ayudante y hay una filial seleccionada se toma su descripción
             if (userInfo.tipoUser === 1 && userInfo.desc_filial !== "") {
-                sEtiqueta += 'Filial: <strong>' + userInfo.desc_filial + '</strong> | ';
+                sEtiqueta += 'Filial: <b>' + userInfo.desc_filial + '</b> | ';
             }
         };
-        sEtiqueta += 'App Versión <strong>' + userInfo.appVersion + '<strong>';
+        sEtiqueta += 'App Versión <b>' + userInfo.appVersion + '<b>';
         return (
-            <Typography variant="h5" dangerouslySetInnerHTML={{ __html: sEtiqueta }}></Typography>
+            <Typography variant="h6" dangerouslySetInnerHTML={{ __html: sEtiqueta }}></Typography>
         );
     }
 

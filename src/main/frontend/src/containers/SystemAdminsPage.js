@@ -89,7 +89,7 @@ function SystemAdminsPage() {
                         type="text"
                         variant="outlined"
                         id="search"
-                        label="Buscar por Nombre"
+                        placeholder="Buscar por Nombre"
                         fullWidth
                     />
                 </Item>
@@ -100,7 +100,7 @@ function SystemAdminsPage() {
                             labelId="filter-status-label"
                             id="filter-status"
                             value={filterStatus}
-                            label="Estado"
+                            InputLabelProps={{ shrink: true }} label="Estado"
                             onChange={handleFilterChange}
                         >
                             <MenuItem value="Activos">Activos</MenuItem>
@@ -119,13 +119,13 @@ function SystemAdminsPage() {
                                     </Typography>
                                     <Divider sx={{ marginBottom: 2 }} />
                                     <Typography variant="body2" color="text.secondary">
-                                        <strong>DNI:</strong> {user.dni || "N/A"}
+                                        <b>DNI:</b> {user.dni || "N/A"}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        <strong>Email:</strong> {user.email || "N/A"}
+                                        <b>E-mail:</b> {user.email || "N/A"}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        <strong>Estado:</strong> {user.activo ? "Activo" : "Inactivo"}
+                                        <b>Estado:</b> {user.activo ? "Activo" : "Inactivo"}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
