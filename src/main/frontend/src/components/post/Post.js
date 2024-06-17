@@ -71,7 +71,7 @@ function Post( props ) {
                             }
                             { user.idUser === data.userID && data.estado === "Disponible" && !window.location.href.includes("/inspect-post") && data.ofertas > 0 ?
                                 <Link to={"/inspect-post/"+id}> 
-                                <Button variant="contained" color="secondary" onClick={editPost}
+                                <Button variant="contained" color="secondary"
                                         startIcon={<Visibility color="primary"/>}>
                                     <Typography variant="button">Ver Ofertas</Typography>
                                 </Button> 
@@ -80,7 +80,7 @@ function Post( props ) {
                             }
                               { user.idUser === data.userID && data.estado === "Reservado" && !window.location.href.includes("/exchange") ?
                                 <Link to={"/exchange/"+id}> 
-                                <Button variant="contained" color="secondary" onClick={editPost}
+                                <Button variant="contained" color="secondary"
                                         startIcon={<Visibility color="primary"/>}>
                                     <Typography variant="button">Ver Intercambio</Typography>
                                 </Button> 
