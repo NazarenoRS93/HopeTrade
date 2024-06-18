@@ -21,6 +21,7 @@ function PostListPage() {
     const [hayPublis, setHayPublis] = useState(true);
     const [categorias, setCategorias] = useState([]);
     const [selectedCategoria, setSelectedCategoria] = useState(0);
+    const [selectedState, setSelectedState] = useState("Disponible");
 
     // Render on start
     useEffect(() => {
@@ -33,14 +34,17 @@ function PostListPage() {
     }, []);
 
     useEffect(() => {
-        fetchPublicaciones(user.idUser, selectedCategoria);
-    }, [user]);
+        fetchPublicaciones(user.idUser);
+    }, [user, selectedState, selectedCategoria]);
 
-    const fetchPublicaciones = async (idUser, cat) => {
+    const fetchPublicaciones = async (idUser) => {
         try {
             let path = "/all/activas";
             if(window.location.href.includes("my-posts")) {
-                path = "/user/" + idUser + "/activas";
+                path = "/user/" + idUser;
+            }
+            if (user.tipoUser === 1 || user.tipoUser === 2) {
+                path = "/all";
             }
             let url = "http://localhost:8080/publicacion"+path;
             const response = await axios.get(url);
@@ -51,15 +55,24 @@ function PostListPage() {
                 };
 
             });
-            if(cat != 0) {
-                console.log("CATEGORIA:"+ cat);
-                data = data.filter(function (publicacion) {
-                    return publicacion.categoria_ID == cat;
-                });
-            }
             if (!window.location.href.includes("my-posts") && user.tipoUser === 0) {
                 data = data.filter(function (publicacion) {
                     return publicacion.estado == "Disponible";
+                });
+            }
+            else if (window.location.href.includes("my-posts") && user.tipoUser === 0) {
+                data = data.filter(function (publicacion) {
+                    return publicacion.estado == "Disponible" || publicacion.estado == "Reservado" || publicacion.estado == "Finalizado";
+                });
+            }
+            if (selectedState != 0 && selectedState != null) {
+                data = data.filter(function (publicacion) {
+                    return publicacion.estado == selectedState;
+                });
+            }
+            if(selectedCategoria != 0 && selectedCategoria != null) {
+                data = data.filter(function (publicacion) {
+                    return publicacion.categoria_ID == selectedCategoria;
                 });
             }
             if (data.length > 0) setHayPublis(true);
@@ -80,13 +93,19 @@ function PostListPage() {
         }
     }
     const onUpdate = () => {
-        fetchPublicaciones(user.idUser, selectedCategoria);
+        fetchPublicaciones(user.idUser);
     }
 
-    const handleChange = (event) => {
+    const handleCatChange = (event) => {
         setSelectedCategoria(event.target.value);
-        fetchPublicaciones(user.idUser, event.target.value);
+        fetchPublicaciones(user.idUser);
     }
+
+    const handleStateChange = (event) => {
+        setSelectedState(event.target.value);
+        fetchPublicaciones(user.idUser);
+    }
+
 
     return (
 
@@ -97,7 +116,7 @@ function PostListPage() {
                         <FormControl>
                             <Select
                                 value={selectedCategoria}
-                                onChange={handleChange}
+                                onChange={handleCatChange}
                                 defaultValue="0"
                                 sx={{ minWidth: 250 }}
                             >
@@ -112,7 +131,37 @@ function PostListPage() {
                             </Select>
                             <FormHelperText id="categoria-text">Filtre por categoría</FormHelperText>
                         </FormControl>
-                    </Stack>
+                        { (window.location.href.includes("my-posts") || user.tipoUser !== 0)?
+                            <FormControl>
+                                <Select
+                                    value={selectedState}
+                                    onChange={handleStateChange}
+                                    sx={{ minWidth: 250 }}
+                                >
+                                    <MenuItem value="0">
+                                        Todos
+                                    </MenuItem>
+                                    <MenuItem value="Disponible">
+                                        Disponible
+                                    </MenuItem>
+                                    <MenuItem value="Reservado">
+                                        Reservado
+                                    </MenuItem>
+                                    <MenuItem value="Finalizado">
+                                        Finalizado
+                                    </MenuItem>
+                                    { (user.tipoUser !== 0) ?
+                                        <MenuItem value="Eliminado">
+                                            Eliminado
+                                        </MenuItem>
+                                        : null
+                                    }
+                                </Select>
+                                <FormHelperText id="categoria-text">Filtre por estado</FormHelperText>
+                            </FormControl>    
+                            : null
+                        }
+                    </Stack>           
                 </Grid>
                 <Grid item xs={12}>
                     <PostGrid>
