@@ -209,9 +209,6 @@ public class AyudanteController {
 		Optional<Ayudante> ayudanteOp = ayudanteRepository.findAyudanteById(Id);
 		if (ayudanteOp.isPresent()) {
 			Ayudante ayudante = ayudanteOp.get();
-			if (ayudante.isActivo() == false) {
-				return new ResponseEntity<>("Error, el ayudante ya se encuentra dado de baja", HttpStatus.BAD_REQUEST);
-			}
 			ayudante.setActivo(false);
 			ayudante.setFilial(null);
 			ayudanteRepository.save(ayudante);
