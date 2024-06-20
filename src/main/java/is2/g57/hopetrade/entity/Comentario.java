@@ -99,4 +99,15 @@ public class Comentario {
     public void setPublicacion(Publicacion publicacion) {
         this.publicacion = publicacion;
     }
+
+	public RespuestaComentario getRespuestaComentario() {
+		return respuestaComentario;
+	}
+
+	public void setRespuestaComentario(RespuestaComentario respuestaComentario) {
+		this.respuestaComentario = respuestaComentario;
+	}
+    
+    
+    
 }
