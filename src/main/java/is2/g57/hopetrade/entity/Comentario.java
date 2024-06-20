@@ -21,6 +21,9 @@ public class Comentario {
 
     @Column(name = "fechaCreacion", nullable = false)
     private LocalDateTime fechaComentario;
+    
+    @Column(name = "activo", nullable = false)
+    private Boolean activo;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -45,6 +48,7 @@ public class Comentario {
         this.user = user;
         this.publicacion = publicacion;
         this.fechaComentario = LocalDateTime.now();
+        this.activo = true;
     }
 
     @Override
@@ -100,6 +104,16 @@ public class Comentario {
         this.publicacion = publicacion;
     }
 
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
+	}
+
+
 	public RespuestaComentario getRespuestaComentario() {
 		return respuestaComentario;
 	}
@@ -107,7 +121,5 @@ public class Comentario {
 	public void setRespuestaComentario(RespuestaComentario respuestaComentario) {
 		this.respuestaComentario = respuestaComentario;
 	}
-    
-    
-    
+
 }

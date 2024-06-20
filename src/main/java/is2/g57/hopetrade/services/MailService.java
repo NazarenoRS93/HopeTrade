@@ -2,7 +2,11 @@ package is2.g57.hopetrade.services;
 
 import is2.g57.hopetrade.entity.Ayudante;
 import is2.g57.hopetrade.entity.Oferta;
+
 import is2.g57.hopetrade.entity.RespuestaComentario;
+
+import is2.g57.hopetrade.entity.Publicacion;
+
 import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.repository.UserRepository;
 
@@ -145,7 +149,11 @@ public class MailService {
 		mailSender.send(message);
 	}
 
-	public void SentEmailRespuestaRecibida(RespuestaComentario nuevaRespuesta) {
+
+	public void SentEmailRespuestaRecibida(RespuestaComentario nuevaRespuesta) {}
+
+	public void sendEmailComentarioRecibido(User user, Publicacion publicacion) {
+
 		// TODO Auto-generated method stub
 		
 	}
