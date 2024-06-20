@@ -58,6 +58,14 @@ public class Publicacion implements Serializable{
   	 @JsonManagedReference
   	   private List<Oferta> ofertas;
     
+    @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+  	 @JsonManagedReference
+  	   private List<Comentario> comentario;
+    
+    @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+ 	 @JsonManagedReference
+ 	   private List<RespuestaComentario> respuestaComentario;
+    
     
     // Constructores
     public Publicacion() {
