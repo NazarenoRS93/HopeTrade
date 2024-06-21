@@ -35,7 +35,13 @@ function ExchangeListPage() {
         try {
             let url = "http://localhost:8080/intercambio/all";
             const response = await axios.get(url);
-            let data = response.data;
+            let data = response.data.map(intercambio => {
+                return {
+                    ...intercambio,
+                    imagenUrl: `data:image/jpeg;base64,${intercambio.publicacion.imagen}`
+                };
+
+            });
             // Filtrar intercambios por estado de publicacion
             data = data.filter(function (intercambio) {
                 return intercambio.publicacion.estado == "Reservado";
@@ -50,6 +56,7 @@ function ExchangeListPage() {
                 return new Date(b.oferta.fechaIntercambio) - new Date(a.oferta.fechaIntercambio);
             });
             setHayIntercambios(data.length > 0);
+            console.log(data);
             setIntercambio(data);
         } catch (error) {
             alert("Error obteniendo intercambios: "+error);

@@ -35,13 +35,13 @@ function Intercambio( props ) {
                         <Typography variant="h6"><b>Categoria: </b>{publicacion.categoria_Nombre}</Typography>
                     </Grid>
                     <Grid item xs={3}>
-                        <Avatar src={publicacion.imagenUrl} variant="rounded" sx={{ width:"150px",height:"150px"}} />
+                        <Avatar src={data.imagenUrl} variant="rounded" sx={{ width:"150px",height:"150px"}} />
                     </Grid>
                     <Grid item xs={9}>
                         <Typography variant="subtitle2">Oferta: {oferta.titulo}</Typography>
                         <Typography variant="h6"><b>por: </b>{oferta.userFullName}</Typography>
                         <hr/>
-                        <Typography variant="h2">{oferta.descripcion} asdasdaddas</Typography>
+                        <Typography variant="h2">{oferta.descripcion}</Typography>
                         <hr/>
                         <Typography variant="h6">en <b>{oferta.filialNombre}</b> </Typography> 
                         <Typography variant="h6"> Fecha propuesta: {oferta.fechaIntercambio} </Typography>
