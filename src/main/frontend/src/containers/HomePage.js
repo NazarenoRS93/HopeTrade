@@ -47,7 +47,7 @@ function HomePage() {
 					: null
 
 				}
-				{user?.tipoUser === 1 ?
+				{user?.tipoUser === 1 || user?.tipoUser === 2 ?
 					<HomeItem link="/exchanges" data={listExchangesInfo} icon={<PersonRoundedIcon color="primary" />} />
 					:
 					null
