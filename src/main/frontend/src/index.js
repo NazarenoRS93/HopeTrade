@@ -25,6 +25,7 @@ import ProfilePage from "./containers/ProfilePage";
 import AdministradorProfilePage from "./containers/AdministradorProfilePage";
 import SystemAdminsPage from "./containers/SystemAdminsPage";
 import SystemUsersListPage from "./containers/SystemUsersListPage";
+import CardPaymentPage from './containers/CardPaymentPage';
 
 const router = createBrowserRouter(
 	[
@@ -115,6 +116,10 @@ const router = createBrowserRouter(
 				{
 					path: "/usersystem",
 					element: <SystemUsersListPage />
+				},
+				{
+					path: "/pago-tarjeta",
+					element: <CardPaymentPage />
 				},
 			]
 		},
