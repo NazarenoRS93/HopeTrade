@@ -67,6 +67,7 @@ function Exchange() {
             let url = "http://localhost:8080/intercambio/publicacion/"+id;
             const response = await axios.get(url);
             let data = response.data;
+            data.imagenUrl = `data:image/jpeg;base64,${data.publicacion.imagen}`
             setIntercambio(response.data);
             setOferta(response.data.oferta);
         } catch (error) {

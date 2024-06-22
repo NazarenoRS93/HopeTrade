@@ -69,6 +69,15 @@ function SystemAdminsPage() {
             console.error("Error deleting user", error);
         }
     };
+	
+	let noUsersMessage = "";
+	  if (filteredUsers.length === 0) {
+	    if (filterStatus === "Todos") {
+	      noUsersMessage = "No se encuentran ayudantes registrados en el sistema";
+	    } else {
+	      noUsersMessage = `No se encuentran ayudantes ${filterStatus.toLowerCase()} en el sistema`;
+	    }
+	  }
 
     return (
         <React.Fragment>
@@ -109,6 +118,20 @@ function SystemAdminsPage() {
                         </Select>
                     </FormControl>
                 </Item>
+				{noUsersMessage && (
+				         <Typography
+				           variant="h6"
+				           color="text.secondary"
+				           sx={{
+				             marginTop: 2,
+				             fontSize: "1.2rem", // Increase font size
+				             fontWeight: "bold", // Make font bold
+				             color: "black" // Change color to red
+				           }}
+				         >
+				           {noUsersMessage}
+				         </Typography>
+				       )}
                 <Grid container spacing={3}>
                     {filteredUsers.map((user, index) => (
                         <Grid item xs={12} sm={6} md={6} key={user.id}>
