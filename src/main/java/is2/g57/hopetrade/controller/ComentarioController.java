@@ -75,6 +75,7 @@ public class ComentarioController {
 			Comentario comentario = comentarioOp.get();
 			comentario.setActivo(false);
 			comentario.setRespuestaComentario(null);
+			comentario.setPublicacion(null);
 			this.comentarioRepository.save(comentario);
 			return new ResponseEntity<> ("Comentario dado de baja exitosamente", HttpStatus.OK);
 		} else return new ResponseEntity<> ("Error eliminando comentario", HttpStatus.BAD_REQUEST);

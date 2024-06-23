@@ -11,6 +11,8 @@ import axios from "axios";
 function Post(props) {
     const { id, data, user, update } = props;
     const location = useLocation(); // Usa useLocation para obtener la ubicación actual
+    
+      console.log("Publicacion data:", data);
 
     const editPost = () => {
         window.localStorage.setItem("pubId", id);
@@ -35,7 +37,7 @@ function Post(props) {
         window.localStorage.setItem("pubId", id);
         let href = window.location.href;
         href = href.substring(0, href.lastIndexOf('/'));
-        window.location.replace(href + "/add-oferta");
+        window.location.replace("/app/add-oferta");
     }
 
     // Verifica si estamos en la página CommentsPage
@@ -82,7 +84,7 @@ function Post(props) {
                                     <Typography variant="button">Editar</Typography>
                                 </Button>
                             }
-                            {user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage && data.comentario > 0 &&
+                            {user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage && data.comentarios > 0 &&
                                 <Link to={`/comentarios/${id}`}>
                                     <Button variant="contained" color="secondary"
                                         startIcon={<CommentRounded color="primary" />}>

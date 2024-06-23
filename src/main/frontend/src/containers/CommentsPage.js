@@ -82,6 +82,7 @@ function CommentsPage() {
             alert(response.data); // Mensaje de éxito
             setComentarioText(""); // Limpiar el campo de texto después de enviar el comentario
             fetchComentarios(); // Actualizar la lista de comentarios
+            fetchPost();
         } catch (error) {
             alert("Error al guardar comentario: " + error);
         }
@@ -92,6 +93,7 @@ function CommentsPage() {
             const response = await axios.delete("http://localhost:8080/comentario/eliminar/" + comentarioId);
             alert(response.data); // Mensaje de éxito
             fetchComentarios(); // Actualizar la lista de comentarios
+            fetchPost();
         } catch (error) {
             alert("Error al eliminar comentario: " + error);
         }

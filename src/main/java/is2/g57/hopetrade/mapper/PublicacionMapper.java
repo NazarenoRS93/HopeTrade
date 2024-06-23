@@ -24,6 +24,8 @@ public class PublicacionMapper {
     private OfertaRepository ofertaRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ComentarioRepository comentarioRepository;
 
     public PublicacionDTO map(Publicacion publicacion) {
         PublicacionDTO dto = new PublicacionDTO();
@@ -42,6 +44,7 @@ public class PublicacionMapper {
         dto.setEstado(publicacion.getState().getNombre());
         dto.setEstadoID(publicacion.getState().getId());
         dto.setOfertas(ofertaRepository.countByPublicacionId(publicacion.getId()));
+        dto.setComentarios(comentarioRepository.countByPublicacionId(publicacion.getId()));
         return dto;
     }
 
