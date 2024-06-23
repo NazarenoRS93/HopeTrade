@@ -148,7 +148,7 @@ function CommentsPage() {
                                  <Typography variant="body2">
                                 {comentario.nombre} {comentario.apellido}  - {new Date(comentario.fechaComentario).toLocaleString()}
                                 {/* Verificar que comentario.user esté definido */}
-                               {comentario.userId === user.idUser && (
+                               {(comentario.userId === user.idUser || user.tipoUser === 2) && (
                                     <Button
                                          variant="contained"
                                             color="error"

@@ -78,13 +78,13 @@ function Post(props) {
                                     </Button>
                                 </Link>
                             }
-                            {user.idUser === data.userID && data.estado === "Disponible" &&
+                            {user.idUser === data.userID && data.estado === "Disponible" && user.tipoUser === 0 &&
                                 <Button variant="contained" color="secondary" onClick={editPost}
                                     startIcon={<EditNoteRounded color="primary" />}>
                                     <Typography variant="button">Editar</Typography>
                                 </Button>
                             }
-                            {user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage && data.comentarios > 0 &&
+                            {(user.tipoUser === 2 || user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage && data.comentarios > 0) &&
                                 <Link to={`/comentarios/${id}`}>
                                     <Button variant="contained" color="secondary"
                                         startIcon={<CommentRounded color="primary" />}>
