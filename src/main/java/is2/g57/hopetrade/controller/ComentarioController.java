@@ -31,7 +31,7 @@ public class ComentarioController {
 	private MailService mailService;
 
 	@GetMapping("/{id_comentario}")
-	public ResponseEntity<?> obtenerComentarioPorId(@PathVariable(value = "id_ayudante") Long id) {
+	public ResponseEntity<?> obtenerComentarioPorId(@PathVariable(value = "id_comentario") Long id) {
 		Optional<Comentario> comentarioOp = this.comentarioRepository.findById(id);
 		if (comentarioOp.isPresent()) {
 			return new ResponseEntity<>(comentarioOp.get(), HttpStatus.OK);
