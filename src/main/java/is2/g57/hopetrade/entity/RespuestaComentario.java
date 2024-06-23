@@ -31,11 +31,7 @@ public class RespuestaComentario {
     @JsonBackReference
     private Comentario comentario;
     
-    @ManyToOne
-    @JoinColumn(name = "publicacion_id")
-    @JsonBackReference
-    private Publicacion publicacion;
-
+   
     public RespuestaComentario() {
         // Constructor sin argumentos requerido por JPA
     }

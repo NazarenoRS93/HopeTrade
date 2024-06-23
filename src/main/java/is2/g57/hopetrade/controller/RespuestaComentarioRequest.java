@@ -12,7 +12,6 @@ public class RespuestaComentarioRequest {
 	private LocalDateTime fechaRespuesta;
 	private User user;
 	private Comentario comentario;
-	private Publicacion publicacion;
 	public Long getId() {
 		return id;
 	}
@@ -42,12 +41,6 @@ public class RespuestaComentarioRequest {
 	}
 	public void setComentario(Comentario comentario) {
 		this.comentario = comentario;
-	}
-	public Publicacion getPublicacion() {
-		return publicacion;
-	}
-	public void setPublicacion(Publicacion publicacion) {
-		this.publicacion = publicacion;
 	}
 
 	

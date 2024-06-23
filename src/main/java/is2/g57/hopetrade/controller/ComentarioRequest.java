@@ -7,9 +7,9 @@ import is2.g57.hopetrade.entity.User;
 public class ComentarioRequest {
 	private Long idComentario;
 	private String text;
-	private User user;
-	private Publicacion publicacion;
-	private RespuestaComentario respuesta;
+	private Long userId;
+	private Long publicacionId;
+
 	
 	
 	
@@ -25,25 +25,19 @@ public class ComentarioRequest {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public User getUser() {
-		return user;
+	public Long getUserId() {
+		return userId;
 	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(Long user) {
+		this.userId = user;
 	}
-	public Publicacion getPublicacion() {
-		return publicacion;
+	public Long getPublicacionId() {
+		return publicacionId;
 	}
-	public void setPublicacion(Publicacion publicacion) {
-		this.publicacion = publicacion;
+	public void setPublicacion(Long publicacion) {
+		this.publicacionId = publicacion;
 	}
-	public RespuestaComentario getRespuesta() {
-		return respuesta;
-	}
-	public void setRespuesta(RespuestaComentario respuesta) {
-		this.respuesta = respuesta;
-	}
-	
+
 	
 	
 	

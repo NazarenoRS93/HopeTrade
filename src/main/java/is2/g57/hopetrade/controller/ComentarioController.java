@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import is2.g57.hopetrade.entity.Comentario;
+import is2.g57.hopetrade.entity.Publicacion;
+import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.repository.ComentarioRepository;
+import is2.g57.hopetrade.repository.PublicacionRepository;
+import is2.g57.hopetrade.repository.UserRepository;
 import is2.g57.hopetrade.services.MailService;
 
 @CrossOrigin(origins = "*")
@@ -26,6 +31,12 @@ public class ComentarioController {
 
 	@Autowired
 	private ComentarioRepository comentarioRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private PublicacionRepository publicacionRepository;
 
 	@Autowired
 	private MailService mailService;
@@ -42,21 +53,22 @@ public class ComentarioController {
 
 	@PostMapping("/guardar")
 	public ResponseEntity<?> guardarComentario(@RequestBody ComentarioRequest request){
-		if (request.getText().length() > 100) {
-			return new ResponseEntity<> ("Debes ingresar menos de 100 caracteres",HttpStatus.BAD_REQUEST);
-		}
 		try {
-		Comentario comentario = new Comentario(request.getText(),request.getUser(),request.getPublicacion());
-		mailService.sendEmailComentarioRecibido(request.getUser(),request.getPublicacion());
+			Optional<User> userOp = this.userRepository.findById(request.getUserId());
+			Optional<Publicacion> publicacionOp = this.publicacionRepository.findById(request.getPublicacionId());
+			if (userOp.isPresent() && publicacionOp.isPresent()) {
+		Comentario comentario = new Comentario(request.getText(),userOp.get(),publicacionOp.get());
+		mailService.sendEmailComentarioRecibido(userOp.get(),publicacionOp.get());
 		this.comentarioRepository.save(comentario);
-		return new ResponseEntity<> ("¡Comentario creado exitosamente!",HttpStatus.CREATED);
+		return new ResponseEntity<> ("¡Comentario creado exitosamente!",HttpStatus.CREATED);}
+			else { throw new RuntimeException("Error"); }
 	} catch (Exception e) {
 		return new ResponseEntity<> ("Error al crear comentario",HttpStatus.BAD_REQUEST);
 	
 	}
 	}
 	
-	@PostMapping("/eliminar/{id}")
+	@DeleteMapping("/eliminar/{id}")
 	public ResponseEntity<?> deleteComentario (@PathVariable(value = "id") Long id) {
 		Optional<Comentario> comentarioOp = this.comentarioRepository.findById(id);
 		if (comentarioOp.isPresent()) {

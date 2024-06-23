@@ -16,7 +16,7 @@ public class Comentario {
     @Column(name = "id_comentario")
     private Long idComentario;
 
-    @Column(name = "text", nullable = false, length = 100)
+    @Column(name = "text", nullable = false, length = 250)
     private String text;
 
     @Column(name = "fechaCreacion", nullable = false)
@@ -24,6 +24,15 @@ public class Comentario {
     
     @Column(name = "activo", nullable = false)
     private Boolean activo;
+    
+    @Column(name = "nombre",nullable = false)
+    private String nombre;
+    
+    @Column(name = "apellido",nullable = false)
+    private String apellido;
+    
+    @Column(name="user",nullable = false)
+    private Long userId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -49,6 +58,9 @@ public class Comentario {
         this.publicacion = publicacion;
         this.fechaComentario = LocalDateTime.now();
         this.activo = true;
+        this.apellido = user.getApellido();
+        this.nombre = user.getNombre();
+        this.userId = user.getId();
     }
 
     @Override
@@ -122,4 +134,30 @@ public class Comentario {
 		this.respuestaComentario = respuestaComentario;
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+
+	
 }

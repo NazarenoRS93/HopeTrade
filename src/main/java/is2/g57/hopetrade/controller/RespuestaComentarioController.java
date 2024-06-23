@@ -61,10 +61,5 @@ public class RespuestaComentarioController {
 		return respuestaComentarioRepository.findByUserId(id);
 	}
 
-	@GetMapping("/publicacion/{id}")
-	public Iterable<RespuestaComentario> obtenerRespuestaComentariosPorPublicacion(
-			@PathVariable(value = "id") Long id) {
-		return respuestaComentarioRepository.findByPublicacionId(id);
-	}
 
 }
