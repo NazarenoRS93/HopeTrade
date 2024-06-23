@@ -3,15 +3,14 @@ package is2.g57.hopetrade.controller;
 import java.time.LocalDateTime;
 
 import is2.g57.hopetrade.entity.Comentario;
-import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 
 public class RespuestaComentarioRequest {
 	private Long id;
 	private String text;
-	private LocalDateTime fechaRespuesta;
-	private User user;
-	private Comentario comentario;
+
+	private Long idUser;
+	private Long idComentario;
 	public Long getId() {
 		return id;
 	}
@@ -24,23 +23,18 @@ public class RespuestaComentarioRequest {
 	public void setText(String text) {
 		this.text = text;
 	}
-	public LocalDateTime getFechaRespuesta() {
-		return fechaRespuesta;
+
+	public Long getUserId() {
+		return idUser;
 	}
-	public void setFechaRespuesta(LocalDateTime fechaRespuesta) {
-		this.fechaRespuesta = fechaRespuesta;
+	public void setUser(Long user) {
+		this.idUser = user;
 	}
-	public User getUser() {
-		return user;
+	public Long getComentarioId() {
+		return idComentario;
 	}
-	public void setUser(User user) {
-		this.user = user;
-	}
-	public Comentario getComentario() {
-		return comentario;
-	}
-	public void setComentario(Comentario comentario) {
-		this.comentario = comentario;
+	public void setComentario(Long comentario) {
+		this.idComentario = comentario;
 	}
 
 	

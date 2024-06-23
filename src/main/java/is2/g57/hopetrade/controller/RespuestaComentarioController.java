@@ -2,7 +2,10 @@ package is2.g57.hopetrade.controller;
 
 import is2.g57.hopetrade.entity.Comentario;
 import is2.g57.hopetrade.entity.RespuestaComentario;
+import is2.g57.hopetrade.entity.User;
+import is2.g57.hopetrade.repository.ComentarioRepository;
 import is2.g57.hopetrade.repository.RespuestaComentarioRepository;
+import is2.g57.hopetrade.repository.UserRepository;
 import is2.g57.hopetrade.services.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +22,12 @@ public class RespuestaComentarioController {
 
 	@Autowired
 	private RespuestaComentarioRepository respuestaComentarioRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private ComentarioRepository comentarioRepository;
 
 	@Autowired
 	private MailService mailService; // Asumiendo que tienes un servicio de correo electrónico
@@ -38,20 +47,22 @@ public class RespuestaComentarioController {
 	@PostMapping("/guardar")
 	public ResponseEntity<?> guardarRespuestaDeComentario(
 			@RequestBody RespuestaComentarioRequest respComentarioRequest) {
-		if (respComentarioRequest.getText().length() > 100) {
-			return new ResponseEntity<>("Debes ingresar menos de 100 caracteres", HttpStatus.BAD_REQUEST);
-		}
 		try {
+			Optional<User> oPuser = this.userRepository.findById(respComentarioRequest.getUserId());
+			Optional<Comentario> oPComent = this.comentarioRepository.findById(respComentarioRequest.getComentarioId());
 			// Crear una nueva respuesta de comentario
-			RespuestaComentario nuevaRespuesta = new RespuestaComentario(respComentarioRequest.getText(),
-					respComentarioRequest.getUser(), respComentarioRequest.getComentario());
-			// Guardar la nueva respuesta en la base de datos
-			respuestaComentarioRepository.save(nuevaRespuesta);
-			// Puedes enviar un correo electrónico aquí usando el servicio de correo
-			mailService.SentEmailRespuestaRecibida(nuevaRespuesta);
-			return new ResponseEntity<>("Respuesta enviada con exito", HttpStatus.CREATED);
+			if (oPuser.isPresent() && oPComent.isPresent()) {
+				RespuestaComentario nuevaRespuesta = new RespuestaComentario(respComentarioRequest.getText(),
+						oPuser.get(), oPComent.get());
+				respuestaComentarioRepository.save(nuevaRespuesta);
+				mailService.SentEmailRespuestaRecibida(nuevaRespuesta);
+				return new ResponseEntity<>("Respuesta enviada con exito", HttpStatus.CREATED);
+			}else {
+				throw new RuntimeException("Ves aca esta el error: Mati");
+			}
+
 		} catch (Exception e) {
-			return new ResponseEntity<>("Error al crear una res", HttpStatus.CREATED);
+			return new ResponseEntity<>("Error al crear una res" + e, HttpStatus.CREATED);
 		}
 
 	}
@@ -60,6 +71,5 @@ public class RespuestaComentarioController {
 	public Iterable<RespuestaComentario> obtenerRespuestaComentariosPorUserId(@PathVariable(value = "id") Long id) {
 		return respuestaComentarioRepository.findByUserId(id);
 	}
-
 
 }
