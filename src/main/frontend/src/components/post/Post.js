@@ -55,6 +55,7 @@ function Post(props) {
                         <Typography variant="h6"><b>Categoria: </b>{data.categoria_Nombre}</Typography>
                         <Typography variant="h6"><b>Estado: </b>{data.estado}</Typography>
                         <Typography variant="h6"><b>Ofertas: </b>{data.ofertas}</Typography>
+                        <Typography variant="h6"><b>Comentarios: </b>{data.comentarios}</Typography>
                     </Grid>
                     <Grid item xs={4}>
                         <Avatar src={data.imagenUrl} variant="rounded" sx={{ marginLeft: "15px", width: "150px", height: "150px" }} />
@@ -81,7 +82,7 @@ function Post(props) {
                                     <Typography variant="button">Editar</Typography>
                                 </Button>
                             }
-                            {user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage &&
+                            {user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage && data.comentario > 0 &&
                                 <Link to={`/comentarios/${id}`}>
                                     <Button variant="contained" color="secondary"
                                         startIcon={<CommentRounded color="primary" />}>
