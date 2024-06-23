@@ -3,7 +3,7 @@ import axios from "axios";
 import PostItem from "../components/post/PostItem";
 import Typography from "@mui/material/Typography";
 import { useParams } from "react-router-dom";
-import { Button, Grid, TextField, IconButton } from "@mui/material";
+import { Button, Grid, TextField, IconButton, Box } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { format } from "date-fns";
 
@@ -136,20 +136,37 @@ function CommentsPage() {
                 <Grid container spacing={2} style={{ marginTop: "20px" }}>
                     {comentarios.map((comentario) => (
                         <Grid item xs={12} key={comentario.idComentario}>
-                            <Typography variant="body2">
-                                {comentario.nombre} {comentario.apellido} - {format(new Date(comentario.fechaComentario), "dd/MM/yyyy HH:mm:ss")}
+                         <Box
+                                sx={{
+                                    border: '1px solid',
+                                    borderColor: 'grey.400',
+                                    borderRadius: '4px',
+                                    padding: '8px',
+                                    marginBottom: '8px'
+                                }}
+                            >                          
+                                 <Typography variant="body2">
+                                {comentario.nombre} {comentario.apellido}  - {new Date(comentario.fechaComentario).toLocaleString()}
                                 {/* Verificar que comentario.user esté definido */}
-                                {comentario.userId === user.idUser && (
-                                    <IconButton
-                                        color="error"
-                                        aria-label="Eliminar comentario"
-                                        onClick={() => eliminarComentario(comentario.idComentario)}
+                               {comentario.userId === user.idUser && (
+                                    <Button
+                                         variant="contained"
+                                            color="error"
+                                            size="small" // Cambia el tamaño del botón a "small"
+                                            sx={{
+                                                marginLeft: 1,
+                                                padding: '2px 5px', // Ajusta el padding para hacerlo más pequeño
+                                                fontSize: '0.70rem' // Ajusta el tamaño de la fuente
+                                            }}
+                                            onClick={() => eliminarComentario(comentario.idComentario)}
                                     >
-                                        <DeleteIcon />
-                                    </IconButton>
+                                        Eliminar
+                                    </Button>
+                               
                                 )}
                             </Typography>
                             <Typography variant="subtitle2">{comentario.text}</Typography>
+                            </Box>
                         </Grid>
                     ))}
                 </Grid>
