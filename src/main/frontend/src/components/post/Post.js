@@ -84,7 +84,7 @@ function Post(props) {
                                     <Typography variant="button">Editar</Typography>
                                 </Button>
                             }
-                            {(user.tipoUser === 2 || user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage && data.comentarios > 0) &&
+                           {((user.tipoUser === 2 && data.comentarios > 0) || (user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage && data.comentarios > 0)) && 
                                 <Link to={`/comentarios/${id}`}>
                                     <Button variant="contained" color="secondary"
                                         startIcon={<CommentRounded color="primary" />}>
