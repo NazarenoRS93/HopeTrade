@@ -18,7 +18,7 @@ function Post(props) {
         window.localStorage.setItem("pubId", id);
         let href = window.location.href;
         href = href.substring(0, href.lastIndexOf('/'));
-        window.location.replace(href + "/edit-post");
+        window.location.replace("/app/edit-post");
     }
 
     const deletePost = async () => {
