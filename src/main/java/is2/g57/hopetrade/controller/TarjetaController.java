@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -19,52 +20,66 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.jpa.repository.JpaRepository;
 import is2.g57.hopetrade.entity.Tarjeta;
+import is2.g57.hopetrade.entity.DonacionTarjeta;
 import is2.g57.hopetrade.repository.TarjetaRepository;
+import is2.g57.hopetrade.repository.DonacionTarjetaRepository;
+
 
 @RestController
 @RequestMapping(path = "/donacion")
 public class TarjetaController {
 	@Autowired
 	private TarjetaRepository tarjetaRepository;
+	@Autowired
+	private DonacionTarjetaRepository donacionRepository;
+
 	public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 	@PostMapping("/pago-tarjeta")
 	public ResponseEntity<?> RegistrarPagoTarjeta(@RequestBody TarjetaRequest paramTarjetaRequest) {
-		//String numeroTarjeta = tarjetaRequest.getNumero();
+		//String numeroTarjeta = tarjetaRequest.ge<tNumero();
 		Optional<Tarjeta> tarjetaOpt = this.tarjetaRepository.findTarjetaByNumero(paramTarjetaRequest.getNumero());
 
 		if (tarjetaOpt.isPresent()) {
 			Tarjeta unaTarjeta = tarjetaOpt.get();
 			//return new ResponseEntity<>(userOp.get(), HttpStatus.OK);
 			if (unaTarjeta.getActiva() == true) {
-				// Se toma la fecha actual y se la convierte a 1° de mes ()
-				LocalDate fecha = LocalDate.now();
-				fecha = LocalDate.of(fecha.getYear(), fecha.getMonthValue(), 1);
-				// Se valida si la fecha de vencimiento de la tarjeta es igual a la fecha ingresada y, además, si no está vencida (debe superar a la fecha actual)
-				if (unaTarjeta.getFecha_vencimiento().compareTo(paramTarjetaRequest.getFecha_vencimiento()) == 0 && unaTarjeta.getFecha_vencimiento().compareTo(Date.valueOf(fecha)) >= 0) {
-					if (unaTarjeta.getNombre_titular().equals(paramTarjetaRequest.getNombre_titular()) && unaTarjeta.getDni_titular().equals(paramTarjetaRequest.getDni_titular())) {
-						if (unaTarjeta.getCodigo().equals(paramTarjetaRequest.getCodigo())) {
-							if (unaTarjeta.getSaldo_disponible() >= paramTarjetaRequest.getMonto()) {
-								// Se le resta saldo a la tarjeta ()
-								unaTarjeta.setSaldo_disponible(unaTarjeta.getSaldo_disponible() - paramTarjetaRequest.getMonto());
-								this.tarjetaRepository.save(unaTarjeta);
-								// Se registra la operación
-
-								// Se devuelve mensaje de éxito
-								return new ResponseEntity<>("¡Todo OK! ¡Muchas gracias!", HttpStatus.OK);
-								// ¿¿enviar un emilio??
+				try {
+					// Se toma la fecha actual y se la convierte a 1° de mes
+					LocalDate fecha = LocalDate.now();
+					fecha = LocalDate.of(fecha.getYear(), fecha.getMonthValue(), 1);
+					// Se valida si la fecha de vencimiento de la tarjeta es igual a la fecha ingresada y, además, si no está vencida (debe superar a la fecha actual)
+					if (unaTarjeta.getFecha_vencimiento().compareTo(paramTarjetaRequest.getFecha_vencimiento()) == 0 && unaTarjeta.getFecha_vencimiento().compareTo(Date.valueOf(fecha)) >= 0) {
+						if (unaTarjeta.getNombre_titular().equals(paramTarjetaRequest.getNombre_titular()) && unaTarjeta.getDni_titular().equals(paramTarjetaRequest.getDni_titular())) {
+							if (unaTarjeta.getCodigo().equals(paramTarjetaRequest.getCodigo())) {
+								if (unaTarjeta.getSaldo_disponible() >= paramTarjetaRequest.getMonto()) {
+									// Se le resta saldo a la tarjeta (esto es parte de la simulación, ya que esto debería resolverlo la API de la entidad de pago)
+									unaTarjeta.setSaldo_disponible(unaTarjeta.getSaldo_disponible() - paramTarjetaRequest.getMonto());
+									this.tarjetaRepository.save(unaTarjeta);
+									// Se registra la operación
+									DonacionTarjeta unaDonacion = new DonacionTarjeta(LocalDateTime.now(), paramTarjetaRequest.getId_usuario()
+											, unaTarjeta.getNumero(), paramTarjetaRequest.getMonto());
+									this.donacionRepository.save(unaDonacion);
+									// Se devuelve mensaje de éxito
+									return new ResponseEntity<>("¡¡Muchas gracias!! ¡Recibimos tu pago correctamente! Tu donación quedó registrada bajo el número: #" 
+											+ unaDonacion.getId().toString() + " en nuestro sistema.", HttpStatus.OK);
+									// ¿¿enviar un emilio??
+								} else {
+									return new ResponseEntity<>("La tarjeta ingresada no dispone de saldo suficiente para completar la operación.", HttpStatus.BAD_REQUEST);
+								}
 							} else {
-								return new ResponseEntity<>("La tarjeta ingresada no dispone de saldo suficiente para completar la operación.", HttpStatus.BAD_REQUEST);
+								return new ResponseEntity<>("El código de seguridad ingresado no es válido.", HttpStatus.BAD_REQUEST);
 							}
 						} else {
-							return new ResponseEntity<>("El código de seguridad ingresado no es válido.", HttpStatus.BAD_REQUEST);
+							return new ResponseEntity<>("Los datos del titular ingresados no se corresponden con los de la tarjeta.", HttpStatus.BAD_REQUEST);
 						}
 					} else {
-						return new ResponseEntity<>("Los datos del titular ingresados no se corresponden con los de la tarjeta.", HttpStatus.BAD_REQUEST);
+						return new ResponseEntity<>("La tarjeta ingresada se encuentra vencida o la fecha de vencimiento ingresada no es correcta.", HttpStatus.BAD_REQUEST);
 					}
-				} else {
-					return new ResponseEntity<>("La tarjeta ingresada se encuentra vencida o la fecha de vencimiento ingresada no es correcta.", HttpStatus.BAD_REQUEST);
+				} catch (Exception e) {
+					return new ResponseEntity<>("¡Lo sentimos! El pago no pudo ser procesado dado que ocurrió el siguiente error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 			} else {
 				return new ResponseEntity<>("La tarjeta ingresada no se encuentra habilitada. Por favor, comuníquese con la entidad emisora de la misma.", HttpStatus.BAD_REQUEST);

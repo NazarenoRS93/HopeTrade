@@ -5,7 +5,8 @@ const REGISTRAR_DONACION_REST_API_URL = defaultGateway + '/donacion';
 
 class CardPaymentService {
     registrarPagoTarjeta(form) {
-        // const cookie = window.localStorage.getItem("user");
+        const sCookie = window.localStorage.getItem("user");
+        let nIdUsuario = (sCookie) ? JSON.parse(sCookie).idUser : null;
         let formdata = new FormData();
         formdata.append("numero", form.numero);
         formdata.append("nombre_titular", form.nombre_titular);
@@ -16,6 +17,7 @@ class CardPaymentService {
         formdata.append("dni_titular", form.dni_titular);
         formdata.append("codigo", form.codigo);
         formdata.append("monto", form.monto);
+        formdata.append("id_usuario", nIdUsuario);
         let url = REGISTRAR_DONACION_REST_API_URL + "/pago-tarjeta";
         return axios.post(url, formdata, { headers : {'Content-Type': 'application/json'}})
     }

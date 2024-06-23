@@ -74,21 +74,10 @@ function CardPaymentPage() {
     const registrarPago = async () => {
         CardPaymentService.registrarPagoTarjeta(form)
             .then((response) => {
-/*                 if(cookie) {
-                    // si existe la cookie es porque está logueado el admin e ingresó por "registrar ayudante"
-                    ret = "/home";
-                    alert("¡Ayudante registrado exitosamente!");
-                } else {
-                    // en este caso se ingresó a "registrarse" (usuario general)
-                    ret = "/login";
-                    alert("¡Usuario creado con éxito!");
-                };
- */             
                 alert(response.data);
                 let ret = "/home";
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
-                alert(href+ret);
                 window.location.replace(href+ret);
             })
             .catch((err) => {

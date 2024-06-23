@@ -9,6 +9,8 @@ public class TarjetaRequest {
 	private String dni_titular;
 	private String codigo;
 	private Double monto;
+	private Long id_usuario;
+
 
 	public String getNumero() {
 		return numero;
@@ -50,6 +52,13 @@ public class TarjetaRequest {
 	}
 	public void setMonto(Double monto) {
 		this.monto = monto;
+	}
+
+	public Long getId_usuario() {
+		return id_usuario;
+	}
+	public void setId_usuario(Long id_usuario) {
+		this.id_usuario = id_usuario;
 	}
 
 }
