@@ -8,6 +8,7 @@ import is2.g57.hopetrade.entity.RespuestaComentario;
 import is2.g57.hopetrade.entity.Publicacion;
 
 import is2.g57.hopetrade.entity.User;
+import is2.g57.hopetrade.repository.PublicacionRepository;
 import is2.g57.hopetrade.repository.UserRepository;
 
 import java.util.List;
@@ -28,6 +29,9 @@ public class MailService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private PublicacionRepository publicacionRepository;
 
 	public void sendEmail(Ayudante ayudante) {
 		String subject = "Registro Exitoso";
@@ -150,11 +154,41 @@ public class MailService {
 	}
 
 
-	public void SentEmailRespuestaRecibida(RespuestaComentario nuevaRespuesta) {}
+	public void SentEmailRespuestaRecibida(RespuestaComentario nuevaRespuesta) {
+		String subject = "Respuesta recibida";
+		Optional<User> userOp = this.userRepository.findById(nuevaRespuesta.getComentario().getUserId());
+		Optional<Publicacion> publicacionOp = this.publicacionRepository.findById(nuevaRespuesta.getComentario().getPublicacion().getId());
+		if (userOp.isPresent() && publicacionOp.isPresent()) {
+			Publicacion publicacion = publicacionOp.get();
+			User comentarioOriginalUser = userOp.get();
+			String text = "Hola " + comentarioOriginalUser.getNombre() + ",\n\n"
+					+ "Te informamos que tu comentario en la publicacion " + publicacion.getTitulo() + ",\n\n"
+					+ "Recibio una respuesta del propietario";
+			SimpleMailMessage message = new SimpleMailMessage();
+			message.setTo(comentarioOriginalUser.getEmail());
+			message.setSubject(subject);
+			message.setText(text);
+			mailSender.send(message);
+		}
+	}
+		
+		
+	
 
 	public void sendEmailComentarioRecibido(User user, Publicacion publicacion) {
-
+		String subject = "Comentario recibido";
+		Optional<User> userOp = this.userRepository.findById(publicacion.getUserID());
+		if (userOp.isPresent()) {
+			User publicacionUser = userOp.get();
+		String text = "Hola " + publicacionUser.getNombre()  + ",\n\n"
+				+ "Te informamos que recibiste un comentario de " + user.getFullName()  + ",\n"
+				+ "Para tu publicacion " + publicacion.getTitulo();
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(publicacionUser.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
 		// TODO Auto-generated method stub
-		
+		}
 	}
 }

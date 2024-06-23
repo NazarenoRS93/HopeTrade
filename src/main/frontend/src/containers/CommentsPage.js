@@ -62,7 +62,7 @@ function CommentsPage() {
         const texto = event.target.value;
         setComentarioText(texto);
         // Verificar la longitud del comentario y actualizar disableComentar
-        setDisableComentar(texto.trim() === "" || texto.length > 250);
+        setDisableComentar(texto.trim() === "" || texto.length > 240);
     };
 
     const guardarComentario = async () => {
