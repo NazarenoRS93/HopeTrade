@@ -21,7 +21,7 @@ function Header() {
         setUser(baseUser);
         let href = window.location.href;
         href = href.substring(0, href.lastIndexOf('/'));
-        window.location.replace(href+"/login");
+        window.location.replace("/app/login");
     }
 
     useEffect(() => {
