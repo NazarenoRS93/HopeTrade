@@ -108,7 +108,7 @@ function Post(props) {
                                     </Button>
                                 </Link>
                             }
-                            {(user.idUser === data.userID || user.tipoUser !== 0) && (data.estado !== "Eliminado" && data.estado !== "Finalizado") &&
+                            {(user.idUser === data.userID || user.tipoUser !== 0) && (data.estado === "Disponible") &&
                                 <Button variant="contained" color="error" onClick={deletePost}
                                     startIcon={<DeleteRounded color="background2" />}>
                                     <Typography variant="button2">Eliminar</Typography>

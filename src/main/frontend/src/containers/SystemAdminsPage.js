@@ -48,7 +48,7 @@ function SystemAdminsPage() {
     };
 
     const filteredUsers = users.filter(user => {
-        const matchesSearch = user.nombre.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = user.nombre.toLowerCase().startsWith(searchTerm.toLowerCase()) || user.apellido.toLowerCase().startsWith(searchTerm.toLowerCase());
         const isNotAdmin = user.email !== "admin@caritas.com";
 
         if (filterStatus === "Activos") {
