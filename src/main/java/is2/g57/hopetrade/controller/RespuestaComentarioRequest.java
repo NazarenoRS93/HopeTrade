@@ -8,9 +8,10 @@ import is2.g57.hopetrade.entity.User;
 public class RespuestaComentarioRequest {
 	private Long id;
 	private String text;
-
 	private Long idUser;
 	private Long idComentario;
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -23,19 +24,20 @@ public class RespuestaComentarioRequest {
 	public void setText(String text) {
 		this.text = text;
 	}
-
-	public Long getUserId() {
+	public Long getIdUser() {
 		return idUser;
 	}
-	public void setUser(Long user) {
-		this.idUser = user;
+	public void setIdUser(Long idUser) {
+		this.idUser = idUser;
 	}
-	public Long getComentarioId() {
+	public Long getIdComentario() {
 		return idComentario;
 	}
-	public void setComentario(Long comentario) {
-		this.idComentario = comentario;
+	public void setIdComentario(Long idComentario) {
+		this.idComentario = idComentario;
 	}
+	
+	
 
 	
 	

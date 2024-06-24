@@ -48,8 +48,9 @@ public class RespuestaComentarioController {
 	public ResponseEntity<?> guardarRespuestaDeComentario(
 			@RequestBody RespuestaComentarioRequest respComentarioRequest) {
 		try {
-			Optional<User> oPuser = this.userRepository.findById(respComentarioRequest.getUserId());
-			Optional<Comentario> oPComent = this.comentarioRepository.findById(respComentarioRequest.getComentarioId());
+			System.out.println("user " + respComentarioRequest.getIdUser() + " coment " + respComentarioRequest.getIdComentario() + " text: " + respComentarioRequest.getText());
+			Optional<User> oPuser = this.userRepository.findById(respComentarioRequest.getIdUser());
+			Optional<Comentario> oPComent = this.comentarioRepository.findById(respComentarioRequest.getIdComentario());
 			// Crear una nueva respuesta de comentario
 			if (oPuser.isPresent() && oPComent.isPresent()) {
 				RespuestaComentario nuevaRespuesta = new RespuestaComentario(respComentarioRequest.getText(),
@@ -58,7 +59,7 @@ public class RespuestaComentarioController {
 				mailService.SentEmailRespuestaRecibida(nuevaRespuesta);
 				return new ResponseEntity<>("Respuesta enviada con exito", HttpStatus.CREATED);
 			}else {
-				throw new RuntimeException("Ves aca esta el error: Mati");
+				throw new RuntimeException("Error");
 			}
 
 		} catch (Exception e) {
