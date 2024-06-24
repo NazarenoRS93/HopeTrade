@@ -58,3 +58,11 @@ export const defaultFormAddPost = {
     desc: '',
     cat: 0,
 };
+export const defaultFormPayment = {
+    numero: '',
+    nombre_titular: '',
+    fecha_vencimiento: '',
+    dni_titular: '',
+    codigo: '',
+    monto: ''
+};

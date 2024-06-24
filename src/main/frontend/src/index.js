@@ -26,6 +26,7 @@ import AdministradorProfilePage from "./containers/AdministradorProfilePage";
 import SystemAdminsPage from "./containers/SystemAdminsPage";
 import SystemUsersListPage from "./containers/SystemUsersListPage";
 import CommentsPage from './containers/CommentsPage';
+import CardPaymentPage from './containers/CardPaymentPage';
 
 const router = createBrowserRouter(
 	[
@@ -120,6 +121,10 @@ const router = createBrowserRouter(
 				{
 					path: "/comentarios/:id",
 					element: <CommentsPage />
+        },
+        {
+					path: "/pago-tarjeta",
+					element: <CardPaymentPage />
 				},
 			]
 		},
