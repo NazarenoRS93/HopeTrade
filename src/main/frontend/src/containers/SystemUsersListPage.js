@@ -62,7 +62,8 @@ function SystemUsersListPage() {
    }
  };
  const filteredUsers = users.filter(user => {
-   const matchesSearch = user.nombre.toLowerCase().startsWith(searchTerm.toLowerCase()) || user.apellido.toLowerCase().startsWith(searchTerm.toLowerCase());
+  const fullName = user.nombre + " " + user.apellido;
+  const matchesSearch = user.nombre.toLowerCase().startsWith(searchTerm.toLowerCase()) || user.apellido.toLowerCase().startsWith(searchTerm.toLowerCase()) || fullName.toLowerCase().startsWith(searchTerm.toLowerCase()); 
    if (filterStatus === "Activos") {
      return matchesSearch && user.activo;
    } else if (filterStatus === "Inactivos") {
