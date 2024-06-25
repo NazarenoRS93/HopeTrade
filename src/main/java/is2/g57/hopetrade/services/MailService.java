@@ -188,7 +188,20 @@ public class MailService {
 		message.setSubject(subject);
 		message.setText(text);
 		mailSender.send(message);
-		// TODO Auto-generated method stub
 		}
+	}
+
+	public void sendEmailAlta(Ayudante ayudante) {
+		String subject = "Cuenta dada de alta";
+		String text = "Hola " + ayudante.getNombre() + ",\n\n"
+				+ "Te informamos que tu cuenta de ayudante fue dada de alta" + ",\n"
+				+ "Bienvenido nuevamente al equipo de hopetrade" + ",\n\n"
+				+ "Saludos.";
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(ayudante.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+		
 	}
 }

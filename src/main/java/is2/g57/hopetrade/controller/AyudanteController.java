@@ -219,5 +219,19 @@ public class AyudanteController {
 		}
 
 	}
+	
+	@PostMapping("/dar-de-alta-suspendido/{id}")
+	public ResponseEntity<?> daraltaSuspendido(@PathVariable(value = "id") Long id){
+		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteById(id);
+		if (ayudanteOp.isPresent()) {
+			Ayudante ayudante = ayudanteOp.get();
+			ayudante.setActivo(true);
+			this.ayudanteRepository.save(ayudante);
+			emailService.sendEmailAlta(ayudante);
+			return new ResponseEntity<>("Ayudante dado de alta satisfactoriamente",HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Ocurrio un error",HttpStatus.BAD_GATEWAY);
+		}
+	}
 
 }
