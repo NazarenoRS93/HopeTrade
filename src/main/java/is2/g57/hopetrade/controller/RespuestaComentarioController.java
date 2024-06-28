@@ -33,14 +33,12 @@ public class RespuestaComentarioController {
 	private MailService mailService; // Asumiendo que tienes un servicio de correo electrónico
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> ObtenerRespuestaAComentario(
-			@RequestBody RespuestaComentarioRequest respComentarioRequest) {
-		Optional<RespuestaComentario> respComentarioOp = this.respuestaComentarioRepository
-				.findById(respComentarioRequest.getId());
-		if (respComentarioOp.isPresent()) {
-			return new ResponseEntity<>(respComentarioOp.get(), HttpStatus.OK);
+	public ResponseEntity<?> ObtenerRespuestaAComentario(@PathVariable(value = "id") Long id) {
+		Optional<RespuestaComentario> respuestaComentarioOp = this.respuestaComentarioRepository.findById(id);
+		if (respuestaComentarioOp.isPresent()) {
+			return new ResponseEntity<>(respuestaComentarioOp.get(), HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("No se encontro Ayudante", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 

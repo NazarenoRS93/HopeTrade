@@ -20,6 +20,12 @@ public class RespuestaComentario {
 
     @Column(name = "fechaCreacion", nullable = false)
     private LocalDateTime fechaRespuesta;
+    
+    @Column(name = "nombre",nullable = false)
+    private String nombre;
+    
+    @Column(name = "apellido",nullable = false)
+    private String apellido;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -41,6 +47,8 @@ public class RespuestaComentario {
         this.user = user;
         this.comentario = comentario;
         this.fechaRespuesta = LocalDateTime.now();
+        this.apellido = user.getApellido();
+        this.nombre = user.getNombre();
     }
 
     @Override
