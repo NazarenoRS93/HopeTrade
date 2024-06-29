@@ -14,7 +14,8 @@ import {
 	myPostsInfo,
 	profileUserInfo,
 	listUsersInfo,
-	viewPostsInfo
+	viewPostsInfo,
+	listExchangesUserInfo
 } from "../utils/utilData";
 
 function HomePage() {
@@ -26,6 +27,7 @@ function HomePage() {
 			let user = JSON.parse(cookie);
 			console.log("Tipo User:", user.tipoUser);
 			setUser(user);
+			console.log(user);
 		};
 	}, [])
 
@@ -39,6 +41,10 @@ function HomePage() {
 
 				}
 				{user?.tipoUser === 0 ?
+					<HomeItem link={`/exchanges/${user.idUser}`} data={listExchangesUserInfo} icon={<NoteAddRoundedIcon color="primary" />} />
+					: null
+				}
+				{user?.tipoUser === 0 ?
 					<HomeItem link="/add-post" data={addPostInfo} icon={<NoteAddRoundedIcon color="primary" />} />
 					: null
 				}
@@ -47,7 +53,7 @@ function HomePage() {
 					: null
 
 				}
-				{user?.tipoUser === 1 || user?.tipoUser === 2 ?
+				{user?.tipoUser === 1 || user?.tipoUser === 2 ? 
 					<HomeItem link="/exchanges" data={listExchangesInfo} icon={<PersonRoundedIcon color="primary" />} />
 					:
 					null

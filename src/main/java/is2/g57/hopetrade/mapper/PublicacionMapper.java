@@ -35,8 +35,8 @@ public class PublicacionMapper {
         dto.setFechaHoraCreacion(publicacion.getFechaHoraCreacion());
         dto.setUltimaModificacion(publicacion.getUltimaModificacion());
         dto.setActive(publicacion.isActivo());
-        dto.setUserID(publicacion.getUserID());
-        dto.setUserFullName(userRepository.findUserById(publicacion.getUserID()).get().getFullName());
+        dto.setUserID(publicacion.getUser().getId());
+        dto.setUserFullName(publicacion.getUser().getFullName());
         // Convert URL to Base 64 image
         dto.setImagen(imageService.loadBase64(publicacion.getImagenUrl()));
         dto.setCategoria_Nombre(publicacion.getCategoria().getNombre());
@@ -50,6 +50,7 @@ public class PublicacionMapper {
 
     public Publicacion toNewPublicacion(PublicacionDTO publicacionDTO) {
         Publicacion p = new Publicacion(publicacionDTO);
+        p.setUser(userRepository.findById(publicacionDTO.getUserID()).get());
 
         // Convert Base 64 image to URL
         p.setImagenUrl(imageService.saveUnique(publicacionDTO.getImagen()));
