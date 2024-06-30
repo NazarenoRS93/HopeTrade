@@ -5,6 +5,7 @@ import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import FindInPageRoundedIcon from '@mui/icons-material/FindInPageRounded';
+import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import HomeGrid from "../components/home/HomeGrid";
 import HomeItem from "../components/home/HomeItem";
 import {
@@ -14,7 +15,8 @@ import {
 	myPostsInfo,
 	profileUserInfo,
 	listUsersInfo,
-	viewPostsInfo
+	viewPostsInfo,
+	donarConTarjetaInfo
 } from "../utils/utilData";
 
 function HomePage() {
@@ -36,7 +38,6 @@ function HomePage() {
 				{user?.tipoUser === 0 ?
 					<HomeItem link="/my-posts" data={myPostsInfo} icon={<DescriptionRoundedIcon color="primary" />} />
 					: null
-
 				}
 				{user?.tipoUser === 0 ?
 					<HomeItem link="/add-post" data={addPostInfo} icon={<NoteAddRoundedIcon color="primary" />} />
@@ -45,7 +46,10 @@ function HomePage() {
 				{user?.tipoUser === 0 ?
 					<HomeItem link="/verperfil" data={profileUserInfo} icon={<PersonRoundedIcon color="primary" />} />
 					: null
-
+				}
+				{user?.tipoUser === 0 ?
+					<HomeItem link="/pago-tarjeta" data={donarConTarjetaInfo} icon={<VolunteerActivismIcon color="primary" />} />
+					: null
 				}
 				{user?.tipoUser === 1 || user?.tipoUser === 2 ?
 					<HomeItem link="/exchanges" data={listExchangesInfo} icon={<PersonRoundedIcon color="primary" />} />

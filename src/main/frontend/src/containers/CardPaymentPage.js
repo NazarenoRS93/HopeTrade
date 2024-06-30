@@ -108,13 +108,6 @@ function CardPaymentPage() {
                             <FormHelperText id="numero-text">Número de tarjeta</FormHelperText>
                         </FormControl>
                         <FormControl>
-                            {/* <TextField onChange={(event)=> {handleChange(event)}} value={form.fecha_vencimiento}
-                                        type="text" variant="outlined" id="fecha_vencimiento"
-                                        inputProps={{
-                                            maxlength: "5",
-                                            pattern: "[0-1]{1}[0-9]{1}/2[4-9]{1}",
-                                        }}
-                            /> */}
                             <DatePicker onChange={(value, context)=> {handleChangeDP(value, context)}} views={['month', 'year']}
                                         variant="outlined" id="fecha_vencimiento" minDate={dayjs('2024-01-01')} 
                                         maxDate={dayjs('2029-12-31')} format="MMM YYYY"
@@ -161,7 +154,7 @@ function CardPaymentPage() {
                             <TextField onChange={(event)=> {handleChange(event)}} value={form.monto}
                                         type="text" variant="outlined" id="monto" 
                                         inputProps={{
-                                            maxlength: "8",
+                                            maxlength: "6",
                                         }}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">$</InputAdornment>,
