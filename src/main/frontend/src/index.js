@@ -21,6 +21,7 @@ import ChangePasswordPage from "./containers/ChangePasswordPage";
 import InspectPostPage from "./containers/InspectPostPage";
 import Exchange from "./containers/ExchangePage";
 import ExchangeListPage from "./containers/ExchangeListPage";
+import ExchangeListPageByUser from "./containers/ExchangeListPageByUser";
 import ProfilePage from "./containers/ProfilePage";
 import AdministradorProfilePage from "./containers/AdministradorProfilePage";
 import SystemAdminsPage from "./containers/SystemAdminsPage";
@@ -81,6 +82,10 @@ const router = createBrowserRouter(
 				{
 					path: "/exchanges",
 					element: <ExchangeListPage />
+				},
+				{
+					path: "/exchanges/:id",
+					element: <ExchangeListPageByUser />
 				},
 				{
 					path: "/test",

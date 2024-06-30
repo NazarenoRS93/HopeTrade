@@ -16,6 +16,7 @@ import Grid from '@mui/material/Grid';
 import Divider from '@mui/material/Divider';
 import Modal from '@mui/material/Modal';
 import { format } from 'date-fns';
+import { Link, useLocation } from "react-router-dom";
 function SystemUsersListPage() {
  const [users, setUsers] = useState([]);
  const [searchTerm, setSearchTerm] = useState("");
@@ -156,6 +157,20 @@ function SystemUsersListPage() {
                  </Typography>
                </CardContent>
                <CardActions>
+                 <Link to={`/exchanges/${user.id}`}>
+                   <Button
+                     variant="contained"
+                     color="secondary"
+                     sx={{
+                       backgroundColor: 'lightblue',
+                       marginLeft: 'auto',
+                       ...(user.activo ? {} : { backgroundColor: 'grey', pointerEvents: 'none' })
+                     }}
+                     disabled={!user.activo}
+                   >
+                     Ver Intercambios
+                   </Button>
+                 </Link>
                  <Button
                    variant="contained"
                    color="secondary"

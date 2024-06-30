@@ -12,12 +12,14 @@ import is2.g57.hopetrade.entity.Filial;
 import is2.g57.hopetrade.entity.Intercambio;
 import is2.g57.hopetrade.entity.Oferta;
 import is2.g57.hopetrade.entity.Publicacion;
+import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.dto.IntercambioDTO;
 import is2.g57.hopetrade.mapper.IntercambioMapper;
 import is2.g57.hopetrade.repository.FilialRepository;
 import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.OfertaRepository;
 import is2.g57.hopetrade.repository.PublicacionRepository;
+import is2.g57.hopetrade.repository.UserRepository;
 import is2.g57.hopetrade.services.MailService;
 
 import org.springframework.core.io.Resource;
@@ -45,10 +47,19 @@ public class IntercambioController {
     private MailService emailService;
     @Autowired
     private PublicacionRepository publicacionRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping(path="/all")
     public List<IntercambioDTO> getAll() {
         List<Intercambio> intercambios = intercambioRepository.findAll();
+        return intercambios.stream().map(intercambioMapper::map).collect(Collectors.toList());
+    }
+
+    @GetMapping(path="/user/{userId}")
+    public List<IntercambioDTO> getByUser(@PathVariable Long userId) {
+        User user = userRepository.findById(userId).get();
+        List<Intercambio> intercambios = intercambioRepository.findAllByUser(user);
         return intercambios.stream().map(intercambioMapper::map).collect(Collectors.toList());
     }
 

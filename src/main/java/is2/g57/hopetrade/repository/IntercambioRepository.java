@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import is2.g57.hopetrade.entity.Filial;
 import is2.g57.hopetrade.entity.Intercambio;
+import is2.g57.hopetrade.entity.User;
 
 public interface IntercambioRepository extends JpaRepository<Intercambio, Integer>{
 
@@ -18,4 +19,7 @@ public interface IntercambioRepository extends JpaRepository<Intercambio, Intege
     // JOIN with oferta.filial
     @Query ("SELECT i FROM Intercambio i WHERE i.oferta.filial = :filial")
     List<Intercambio> findAllByFilial(Filial filial);
+
+    @Query ("SELECT i FROM Intercambio i WHERE i.oferta.user = :user OR i.publicacion.user = :user")
+    List<Intercambio> findAllByUser(User user);
 }

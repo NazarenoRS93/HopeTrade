@@ -48,7 +48,7 @@ public class MailService {
 	}
 
 	public void sendEmailOfertaRecibida(Oferta oferta) {
-		Optional<User> userOp = this.userRepository.findById(oferta.getPublicacion().getUserID());
+		Optional<User> userOp = this.userRepository.findById(oferta.getPublicacion().getUser().getId());
 		if (userOp.isPresent()) {
 			User user = userOp.get();
 			String subject = "Oferta recibida";
@@ -93,7 +93,7 @@ public class MailService {
 	}
 
 	private void sendEmailOfertaAceptada2(Oferta oferta) {
-		Optional<User> userOp = userRepository.findById(oferta.getPublicacion().getUserID());
+		Optional<User> userOp = userRepository.findById(oferta.getPublicacion().getUser().getId());
 		if (userOp.isPresent()) {
 			User user = userOp.get();
 			String subject = "Intercambio programado";
@@ -177,7 +177,7 @@ public class MailService {
 
 	public void sendEmailComentarioRecibido(User user, Publicacion publicacion) {
 		String subject = "Comentario recibido";
-		Optional<User> userOp = this.userRepository.findById(publicacion.getUserID());
+		Optional<User> userOp = this.userRepository.findById(publicacion.getUser().getId());
 		if (userOp.isPresent()) {
 			User publicacionUser = userOp.get();
 		String text = "Hola " + publicacionUser.getNombre()  + ",\n\n"

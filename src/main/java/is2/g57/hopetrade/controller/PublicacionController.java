@@ -216,7 +216,7 @@ public class PublicacionController {
 
     // Check que no exista pub activa con el mismo titulo
     try {
-      Iterable<Publicacion> publicaciones = publicacionRepository.findAllByUserID(publicacion.getUserID());
+      Iterable<Publicacion> publicaciones = publicacionRepository.findAllByUserID(publicacion.getUser().getId());
       for (Publicacion p : publicaciones) {
         if (p.getTitulo().equals(publicacion.getTitulo()) && p.isActivo() && p.getId() != publicacion.getId()) {
           return new ResponseEntity<>("Ya hay una publicacion activa con ese titulo", HttpStatus.BAD_REQUEST);

@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { Avatar, CardContent, Grid, Stack } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import { Link, useLocation } from "react-router-dom"; // Importa useLocation desde react-router-dom
+import { Link, useLocation } from "react-router-dom";
 import { CommentRounded, DeleteRounded, EditNoteRounded, RepeatRounded, Visibility } from "@mui/icons-material";
 import axios from "axios";
 

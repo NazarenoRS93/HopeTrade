@@ -131,7 +131,7 @@ function PostListPage() {
                             </Select>
                             <FormHelperText id="categoria-text">Filtre por categoría</FormHelperText>
                         </FormControl>
-                        { (window.location.href.includes("my-posts") || user.tipoUser !== 0)?
+                        { (user.tipoUser !== 0)?
                             <FormControl>
                                 <Select
                                     value={selectedState}
