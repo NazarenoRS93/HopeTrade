@@ -101,35 +101,37 @@ function CommentsPage() {
     
     console.log("Datos de usuario:", user);
     console.log("Lista de comentarios:", comentarios);
+    console.log("Datos de la publicacion:",publicacion);
 
     return (
         <React.Fragment>
             <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPost} />
-
-            {/* Sección para comentarios */}
-            <Grid container spacing={2} style={{ marginTop: "20px" }}>
-                <Grid item xs={12}>
-                    <TextField
-                        fullWidth
-                        multiline
-                        rows={4}
-                        variant="outlined"
-                        label="Escribe tu comentario"
-                        value={comentarioText}
-                        onChange={handleComentarioChange}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={guardarComentario}
-                        disabled={disableComentar} // Deshabilitar el botón si el comentario está vacío o supera los 250 caracteres
-                    >
-                        Comentar
-                    </Button>
-                </Grid>
+	    {((user.tipoUser === 0) && (publicacion.userId !== user.idUser)) && (
+        <Grid container spacing={2} style={{ marginTop: "20px" }}>
+            <Grid item xs={12}>
+                <TextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    label="Escribe tu comentario"
+                    value={comentarioText}
+                    onChange={handleComentarioChange}
+                />
             </Grid>
+            <Grid item xs={12}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={guardarComentario}
+                    disabled={disableComentar}
+                >
+                    Comentar
+                </Button>
+            </Grid>
+        </Grid>
+    )}
+        
 
             {/* Mostrar comentarios existentes */}
             {comentarios.length > 0 ? (
