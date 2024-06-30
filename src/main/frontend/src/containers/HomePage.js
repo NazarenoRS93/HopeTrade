@@ -16,6 +16,7 @@ import {
 	profileUserInfo,
 	listUsersInfo,
 	viewPostsInfo,
+	listExchangesUserInfo,
 	donarConTarjetaInfo
 } from "../utils/utilData";
 
@@ -28,6 +29,7 @@ function HomePage() {
 			let user = JSON.parse(cookie);
 			console.log("Tipo User:", user.tipoUser);
 			setUser(user);
+			console.log(user);
 		};
 	}, [])
 
@@ -40,6 +42,10 @@ function HomePage() {
 					: null
 				}
 				{user?.tipoUser === 0 ?
+                    <HomeItem link={`/exchanges/${user.idUser}`} data={listExchangesUserInfo} icon={<NoteAddRoundedIcon color="primary" />} />
+                    : null
+                }
+                {user?.tipoUser === 0 ?
 					<HomeItem link="/add-post" data={addPostInfo} icon={<NoteAddRoundedIcon color="primary" />} />
 					: null
 				}
@@ -51,7 +57,7 @@ function HomePage() {
 					<HomeItem link="/pago-tarjeta" data={donarConTarjetaInfo} icon={<VolunteerActivismIcon color="primary" />} />
 					: null
 				}
-				{user?.tipoUser === 1 || user?.tipoUser === 2 ?
+				{user?.tipoUser === 1 || user?.tipoUser === 2 ? 
 					<HomeItem link="/exchanges" data={listExchangesInfo} icon={<PersonRoundedIcon color="primary" />} />
 					:
 					null
