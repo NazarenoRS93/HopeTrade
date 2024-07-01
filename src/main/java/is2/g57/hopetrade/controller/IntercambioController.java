@@ -104,7 +104,7 @@ public class IntercambioController {
         }
         
         intercambioRepository.save(intercambio);
-        return new ResponseEntity<>("Intercambio confirmado.", HttpStatus.CREATED);
+        return new ResponseEntity<>("Intercambio confirmado.", HttpStatus.OK);
 
     }
 
@@ -123,7 +123,7 @@ public class IntercambioController {
         intercambio.cancelar();
         intercambioRepository.save(intercambio);
 
-        return new ResponseEntity<>("Intercambio cancelado.", HttpStatus.CREATED);
+        return new ResponseEntity<>("Intercambio cancelado.", HttpStatus.OK);
     }
 
 
