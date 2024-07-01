@@ -27,7 +27,7 @@ function Oferta( props ) {
             <CardContent>
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={9}>
-                        <Typography variant="subtitle2">Oferta {data.id}: {data.titulo}</Typography>
+                        <Typography variant="subtitle2">Oferta: {data.titulo}</Typography>
                         <Typography variant="h6"><b>por: </b>{data.userFullName}</Typography>
                         <hr/>
                         <Typography variant="h2">{data.descripcion}</Typography>

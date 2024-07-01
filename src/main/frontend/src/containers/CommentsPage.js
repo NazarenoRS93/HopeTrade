@@ -105,8 +105,8 @@ function CommentsPage() {
 
     return (
         <React.Fragment>
-            <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPost} />
-	    {((user.tipoUser === 0) && (publicacion.userId !== user.idUser)) && (
+            <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPost}/>
+	    {((user.tipoUser === 0) && (publicacion.userID !== user.idUser)) && (
         <Grid container spacing={2} style={{ marginTop: "20px" }}>
             <Grid item xs={12}>
                 <TextField
