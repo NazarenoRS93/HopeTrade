@@ -64,7 +64,7 @@ function Post(props) {
                     </Grid>
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
-                            {(user.tipoUser === 0 && user.idUser !== data.userID && data.estado === "Disponible") &&
+                            {(user.tipoUser === 0 && user.idUser !== data.userID && data.estado === "Disponible" && isCommentsPage ) &&
                                 <Button variant="contained" color="success" onClick={addOferta}
                                     startIcon={<RepeatRounded color="primary" />}>
                                     <Typography variant="button">Ofertar</Typography>
@@ -74,25 +74,25 @@ function Post(props) {
                                 <Link to={`/comentarios/${id}`}>
                                     <Button variant="contained" color="success"
                                         startIcon={<CommentRounded color="primary" />}>
-                                        <Typography variant="button">Comentar</Typography>
+                                        <Typography variant="button">Ver detalle</Typography>
                                     </Button>
                                 </Link>
                             }
-                            {user.idUser === data.userID && data.estado === "Disponible" && user.tipoUser === 0 &&
+                            {user.idUser === data.userID && data.estado === "Disponible" && user.tipoUser === 0 && isCommentsPage &&
                                 <Button variant="contained" color="secondary" onClick={editPost}
                                     startIcon={<EditNoteRounded color="primary" />}>
                                     <Typography variant="button">Editar</Typography>
                                 </Button>
                             }
-                           {((user.tipoUser === 2 && data.comentarios > 0) || (user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage && data.comentarios > 0)) && 
+                           {((user.tipoUser === 2 && !isCommentsPage )|| (user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage )) && 
                                 <Link to={`/comentarios/${id}`}>
                                     <Button variant="contained" color="secondary"
                                         startIcon={<CommentRounded color="primary" />}>
-                                        <Typography variant="button">Ver comentarios</Typography>
+                                        <Typography variant="button">Ver detalle</Typography>
                                     </Button>
                                 </Link>
                             }
-                            {user.idUser === data.userID && data.estado === "Disponible" && !window.location.href.includes("/inspect-post") && data.ofertas > 0 &&
+                            {user.idUser === data.userID && data.estado === "Disponible" && isCommentsPage  && !window.location.href.includes("/inspect-post") && data.ofertas > 0 &&
                                 <Link to={`/inspect-post/${id}`}>
                                     <Button variant="contained" color="secondary"
                                         startIcon={<Visibility color="primary" />}>
@@ -108,7 +108,7 @@ function Post(props) {
                                     </Button>
                                 </Link>
                             }
-                            {(user.idUser === data.userID || user.tipoUser !== 0) && (data.estado === "Disponible") &&
+                            {(user.idUser === data.userID || user.tipoUser !== 0) && (data.estado === "Disponible") && (isCommentsPage ) &&
                                 <Button variant="contained" color="error" onClick={deletePost}
                                     startIcon={<DeleteRounded color="background2" />}>
                                     <Typography variant="button2">Eliminar</Typography>

@@ -39,3 +39,8 @@ export const listAdminInfo = {
 	title: "Listar Ayudantes",
 	description: "Vea y administre los ayudantes del sistema."
 }
+
+export const donarConTarjetaInfo = {
+	title: "¡Donar ahora!",
+	description: "Con tarjeta de crédito de cualquier banco."
+}
