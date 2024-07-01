@@ -30,6 +30,12 @@ function CommentsPage() {
         setDisableComentar(comentarioText.trim() === "" || comentarioText.length > 250);
     }, [comentarioText]);
 
+    useEffect(() => {
+            console.log("Datos de usuario:", user);
+            console.log("Lista de comentarios:", comentarios);
+            console.log("Datos de la publicacion:",publicacion);
+    }, [user,comentarios,publicacion]);
+
     const fetchPost = async () => {
         try {
             let id = params.id;
@@ -98,10 +104,6 @@ function CommentsPage() {
             alert("Error al eliminar comentario: " + error);
         }
     };
-    
-    console.log("Datos de usuario:", user);
-    console.log("Lista de comentarios:", comentarios);
-    console.log("Datos de la publicacion:",publicacion);
 
     return (
         <React.Fragment>

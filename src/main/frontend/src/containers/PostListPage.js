@@ -41,7 +41,11 @@ function PostListPage() {
         try {
             let path = "/all/activas";
             if(window.location.href.includes("my-posts")) {
-                path = "/user/" + idUser;
+                // wait for idUser to resolve
+                while(idUser === undefined) {
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+                path = "/user/" + user.idUser;
             }
             if (user.tipoUser === 1 || user.tipoUser === 2) {
                 path = "/all";

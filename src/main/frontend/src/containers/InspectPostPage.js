@@ -21,6 +21,8 @@ function InspectPostPage() {
             let usuario = JSON.parse(cookie);
             setUser(usuario);
             fetchPost();
+
+            console.log(user);
         }
     }, []);
 

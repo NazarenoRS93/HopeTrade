@@ -11,8 +11,6 @@ import axios from "axios";
 function Post(props) {
     const { id, data, user, update } = props;
     const location = useLocation(); // Usa useLocation para obtener la ubicación actual
-    
-      console.log("Publicacion data:", data);
 
     const editPost = () => {
         window.localStorage.setItem("pubId", id);

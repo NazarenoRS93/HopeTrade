@@ -40,17 +40,20 @@ function Oferta( props ) {
                     </Grid> */}
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
-                            { (publicacion.estado === "Disponible") ?
+                            { (publicacion.estado === "Disponible" && user.idUser === publicacion.userID) ?
                                     <Button variant="contained" color="success" onClick={onAccept}
                                         startIcon={<RepeatRounded color="primary"/>}>
                                     <Typography variant="button">Aceptar</Typography>
                                     </Button>
                                     : null
                             }
+                            { (publicacion.estado === "Disponible") ?
                             <Button variant="contained" color="error" onClick={onRechazar}
                                     startIcon={<DeleteRounded color="background2"/>}>
                                 <Typography variant="button2">Rechazar</Typography>
                             </Button>
+                            : null
+                            }
                         </Stack>
                     </Grid>
                 </Grid>

@@ -31,6 +31,8 @@ public class IntercambioMapper {
         dto.setObservacion(intercambio.getObservacion());
         dto.setEstado(intercambio.getEstado());
         dto.setEstadoID(1L);
+        dto.setPuntajeOfertante(intercambio.getPuntajeOfertante());
+        dto.setPuntajePublicante(intercambio.getPuntajePublicante());
         return dto;
     }
     

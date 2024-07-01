@@ -5,6 +5,7 @@ import {Avatar, CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import {DeleteRounded, RepeatRounded} from "@mui/icons-material";
+import StarIcon from '@mui/icons-material/Star';
 
 function Intercambio( props ) {
     const {id, publicacion, oferta, user, data, confirmar, cancelar} = props;
@@ -61,11 +62,33 @@ function Intercambio( props ) {
                                     : null
                             }
                             { (data.estado == "PROGRAMADO")? 
-                            <Button variant="contained" color="error" onClick={onCancel}
-                                    startIcon={<DeleteRounded color="background2"/>}>
-                                <Typography variant="button2"> Cancelar Intercambio </Typography>
-                            </Button>
-                            : null
+                                    <Button variant="contained" color="error" onClick={onCancel}
+                                        startIcon={<DeleteRounded color="background2"/>}>
+                                    <Typography variant="button2"> Cancelar Intercambio </Typography>
+                                    </Button>
+                                    : null
+                            }
+                            { (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.idUser == publicacion.userID) && (data.puntajeOfertante == -1)?
+                                    <Button variant="contained" color="success" onClick={nada}
+                                        startIcon={<StarIcon color="background"/>}>
+                                    <Typography variant="button2"> Puntuar (O) </Typography>
+                                    </Button>
+                                    : null
+                            }
+                            { (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.idUser == publicacion.userID) && (data.puntajeOfertante != -1)? 
+                                    <Typography variant="h6">Puntaje: <b>{data.puntajeOfertante}</b> </Typography>
+                                    : null
+                            }
+                            { (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.idUser == oferta.userId) && (data.puntajePublicante == -1)?
+                                    <Button variant="contained" color="success" onClick={nada}
+                                        startIcon={<StarIcon color="background"/>}>
+                                    <Typography variant="button2"> Puntuar (P) </Typography>
+                                    </Button>
+                                    : null
+                            }
+                            { (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.idUser == oferta.userID) && (data.puntajePublicante != -1) ? 
+                                    <Typography variant="h6">Puntaje: <b>{data.puntajePublicante}</b> </Typography>
+                                    : null
                             }
                         </Stack>
                     </Grid>

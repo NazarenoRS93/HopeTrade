@@ -24,6 +24,12 @@ public class Intercambio implements Serializable {
 
     @Column(name="estado")
     private String estado;
+    
+    @Column(name="puntaje_ofertante")
+    private Integer puntajeOfertante = -1;
+
+    @Column(name="puntaje_publicante")
+    private Integer puntajePublicante = -1;
 
 //     @ManyToOne (cascade = CascadeType.DETACH)
 //     @JoinColumn(name = "ID_ESTADO")
@@ -85,5 +91,21 @@ public class Intercambio implements Serializable {
 
     public void cancelar() {
         this.estado = "CANCELADO";
+    }
+
+    public void setPuntajeOfertante(Integer puntajeOfertante) {
+        this.puntajeOfertante = puntajeOfertante;
+    }
+
+    public void setPuntajePublicante(Integer puntajePublicante) {
+        this.puntajePublicante = puntajePublicante;
+    }
+
+    public Integer getPuntajeOfertante() {
+        return puntajeOfertante;
+    }
+
+    public Integer getPuntajePublicante() {
+        return puntajePublicante;
     }
 }
