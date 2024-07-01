@@ -147,7 +147,7 @@ function EditPostPage() {
                         </FormControl>
                         <Button startIcon={<PostAddRoundedIcon color="primary"/>} disabled={btnDisabled}
                                 variant="contained" color="success" onClick={editPost}>
-                            <Typography variant="button">Realizar oferta</Typography>
+                            <Typography variant="button">Editar</Typography>
                         </Button>
                     </Stack>
                 </Grid>

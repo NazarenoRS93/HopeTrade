@@ -53,8 +53,13 @@ function InspectPostPage() {
             let id = params.id;
             let url = "http://localhost:8080/publicacion/"+id+"/ofertas";
             const response = await axios.get(url);
-            setOfertas(response.data);
-            if (response.data.length > 0) setHayOfertas(true);
+            let data = response.data;
+            console.log(data);
+            data.filter(function (oferta) {
+                return oferta.estado == "ACTIVA";
+            });
+            setOfertas(data);
+            if (data.length > 0) setHayOfertas(true);
             else setHayOfertas(false);
         } catch (error) {
             alert("Error obteniendo ofertas: "+error);
@@ -62,24 +67,36 @@ function InspectPostPage() {
     }
 
     const rechazarOferta = async (id) => {
-        console.log("Eliminando oferta con ID:", id);
-        try {
-            await axios.delete("http://localhost:8080/oferta/eliminar/"+id);
-            fetchOfertas();
-        } catch (error) {
-            console.log("Error eliminando oferta: "+error);
-        }
+        console.log("Rechazando oferta con ID:", id);
+        const url = `http://localhost:8080/oferta/rechazar/${id}`;
+        let respuesta = "Rechazada porque pasaron cosas";
+        const params = { respuesta: respuesta };
+
+        console.log("Request URL:", url);
+        console.log("Params:", params);
+
+        await axios.put(url, null, { params: params })
+        .then(function (response) {
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log("Error rechazando oferta: " + (error.response ? error.response.data : error.message));
+        });
+        fetchPost();
         fetchOfertas();
     }
 
     const aceptarOferta = async (id) => {
         console.log("Aceptando oferta con ID:", id);
-        try {
-            await axios.put("http://localhost:8080/oferta/aceptar/"+id);
-        } catch (error) {
-            console.log("Error aceptando oferta: "+error);
-        }
+        await axios.put("http://localhost:8080/oferta/aceptar/"+id)
+        .then(function (response) {
+            console.log(response.data);
+        })
+        .catch(function (error) {
+            console.log("Error aceptando oferta: "+error.response.data);
+        });
         fetchPost();
+        fetchOfertas();
     }
     
     return (

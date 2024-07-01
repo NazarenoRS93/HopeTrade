@@ -279,9 +279,7 @@ public class PublicacionController {
 
   @GetMapping("/{id}/ofertas")
   public @ResponseBody Iterable<OfertaDTO> buscarOfertasPorPublicacionId(@PathVariable Long id) {
-    List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(id);
-    // ignorar ofertas con state != ACTIVA
-    ofertas.stream().filter(oferta -> oferta.getEstado() == "ACTIVA").collect(Collectors.toList());
+    List<Oferta> ofertas = ofertaRepository.findAllByPublicacionIdAndEstado(id, "ACTIVA");
     return ofertas.stream().map(ofertaMapper::map).collect(Collectors.toList());
   }
 

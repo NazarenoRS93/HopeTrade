@@ -40,7 +40,7 @@ function Oferta( props ) {
                     </Grid> */}
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
-                            { (publicacion.estado === "Disponible" && user.idUser === publicacion.userID) ?
+                            { (publicacion.estado === "Disponible" && user.idUser === publicacion.userID && user.tipoUser === 0) ?
                                     <Button variant="contained" color="success" onClick={onAccept}
                                         startIcon={<RepeatRounded color="primary"/>}>
                                     <Typography variant="button">Aceptar</Typography>

@@ -3,6 +3,7 @@ package is2.g57.hopetrade.controller;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -134,15 +136,19 @@ public class OfertaController {
 
 			System.out.println("ENVIANDO CORREO");
 		    emailService.sendEmailOfertaAceptada(oferta);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>("Oferta aceptada.", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@PostMapping("/rechazar/{id}")
-	public ResponseEntity<?> rechazarOferta(@PathVariable("id") Long ofertaId, @RequestBody String respuesta) {
-		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
+	@PutMapping("/rechazar/{id}")
+	public ResponseEntity<?> rechazarOferta(@PathVariable Long id, @RequestParam String respuesta) {
+
+		System.out.println("RECHAZANDO");
+		System.out.println("RESPUESTA: " + respuesta);
+
+		Optional<Oferta> ofertaOp = ofertaRepository.findById(id);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
 			oferta.rechazar();
@@ -155,7 +161,7 @@ public class OfertaController {
 
 			this.ofertaRepository.save(oferta);
 			emailService.sendEmailOfertaRechazada(oferta);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>("Oferta rechazada.", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
 		}
