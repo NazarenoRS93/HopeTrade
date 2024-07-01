@@ -68,26 +68,28 @@ function ExchangeListPage() {
     const handleChange = (event) => {
     }
 
-    const cancelar = (id) => {
-        try {
+    const cancelar = async (id) => {
             let url = "http://localhost:8080/intercambio/cancelar/"+id;
-            axios.put(url);
+            await axios.put(url).then (function (response) {
+                alert(response.data);
+                console.log(response);
+            })
+            .catch (function (error) {
+                console.log("Error cancelando intercambio: "+error.response.data);
+            });
             fetchIntercambios();
-        } catch (error) {
-            alert("Error cancelando intercambio: "+error);
-            fetchIntercambios();
-        }
     }
 
-    const confirmar = (id) => {
-        try {
-            let url = "http://localhost:8080/intercambio/confirmar/"+id;
-            axios.put(url);
-            fetchIntercambios();
-        } catch (error) {
-            console.log("Error cancelando intercambio: "+error);
-            fetchIntercambios();
-        }
+    const confirmar = async (id) => {
+        let url = "http://localhost:8080/intercambio/confirmar/"+id;
+        await axios.put(url).then (function (response) {
+            alert(response.data);
+            console.log(response);
+        })
+        .catch (function (error) {
+            console.log("Error confirmando intercambio: "+error.response.data);
+        });
+        fetchIntercambios();
     }
 
     return (
