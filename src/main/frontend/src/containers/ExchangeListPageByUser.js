@@ -28,7 +28,7 @@ function ExchangeListPageByUser() {
     const [user, setUser] = useState({});
     const [intercambios, setIntercambio] = useState([]);
     const [states, setStates] = useState([]);
-    const [selectedState, setSelectedState] = useState("Reservado");
+    const [selectedState, setSelectedState] = useState("PROGRAMADO");
     const [hayIntercambios, setHayIntercambios] = useState(false);
 
     useEffect(() => {
@@ -50,7 +50,7 @@ function ExchangeListPageByUser() {
             // Filtrar intercambios por estado de publicacion
             if (selectedState !== "Todos") {
                 data = data.filter(function (intercambio) {
-                    return intercambio.publicacion.estado == selectedState;
+                    return intercambio.estado == selectedState;
                 });
             }
             if (user.tipoUser === 1) {
@@ -91,7 +91,7 @@ function ExchangeListPageByUser() {
 
     const confirmar = (id) => {
         try {
-            let url = "http://localhost:8080/intercambio/cancelar/"+id;
+            let url = "http://localhost:8080/intercambio/confirmar/"+id;
             axios.put(url);
             fetchIntercambios();
         } catch (error) {
@@ -102,13 +102,13 @@ function ExchangeListPageByUser() {
 
     return (
         <React.Fragment>
-            { (user.tipoUser === 0)?
+            { (true)?
                 <FormControl>
                     <Select value={selectedState} onChange={handleStateChange} sx={{ minWidth: 250 }} >
                         <MenuItem value="Todos"> Todos </MenuItem>
-                        <MenuItem value="Reservado"> Programado </MenuItem>
-                        <MenuItem value="Finalizado"> Finalizado </MenuItem>
-                        <MenuItem value="Eliminado"> Cancelado </MenuItem>
+                        <MenuItem value="PROGRAMADO"> Programado </MenuItem>
+                        <MenuItem value="FINALIZADO"> Finalizado </MenuItem>
+                        <MenuItem value="CANCELADO"> Cancelado </MenuItem>
                     </Select>
                     <FormHelperText id="categoria-text">Filtre por estado</FormHelperText>
                 </FormControl>    

@@ -44,7 +44,7 @@ function ExchangeListPage() {
             });
             // Filtrar intercambios por estado de publicacion
             data = data.filter(function (intercambio) {
-                return intercambio.publicacion.estado == "Reservado";
+                return intercambio.estado == "PROGRAMADO";
             });
             if (user.tipoUser === 1) {
                 data = data.filter(function (intercambio) {
@@ -56,7 +56,6 @@ function ExchangeListPage() {
                 return new Date(b.oferta.fechaIntercambio) - new Date(a.oferta.fechaIntercambio);
             });
             setHayIntercambios(data.length > 0);
-            console.log(data);
             setIntercambio(data);
         } catch (error) {
             alert("Error obteniendo intercambios: "+error);

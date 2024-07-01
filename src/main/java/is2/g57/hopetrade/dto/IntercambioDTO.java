@@ -6,6 +6,7 @@ public class IntercambioDTO {
     private OfertaDTO oferta;
     private String observacion;
     private Long estadoID;
+    private String estado;
     
     public Long getId() {
         return id;
@@ -36,6 +37,14 @@ public class IntercambioDTO {
     }
     public void setEstadoID(Long estadoID) {
         this.estadoID = estadoID;
+    }
+
+    public void setEstado(String estado){
+        this.estado = estado;
+    }
+
+    public String getEstado() {
+        return estado;
     }
 
     

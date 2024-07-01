@@ -86,14 +86,20 @@ public class IntercambioController {
     public ResponseEntity<?> confirmarIntercambio(@PathVariable String id) {
         Intercambio intercambio = intercambioRepository.findById(Long.parseLong(id)).get();
         intercambio.confirmar();
-        intercambio.getOferta().setEstado(false);
+        intercambio.getOferta().setEstado(true);
         intercambio.getPublicacion().finalizar();
 
         // Eliminar ofertas de publicacion excepto la oferta del intercambio
         List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(intercambio.getPublicacion().getId());
+
+        // Eliminar ofertas no protegidas (las canceladas y la asociada al intercambio confirmado; se necesitan para el puntaje)
+        for (Oferta oferta : ofertas) {
+            if (oferta.isEstado()) {
+                ofertas.remove(oferta);
+            }
+        }
         emailService.sendEmailIntercambioRealizado(ofertas);
-        ofertas.remove(intercambio.getOferta());
-      
+        // Eliminar ofertas irrelevantes
         ofertaRepository.deleteAll(ofertas);
         
         intercambioRepository.save(intercambio);
@@ -104,22 +110,16 @@ public class IntercambioController {
     public ResponseEntity<?> cancelarIntercambio(@PathVariable String id) {
         Intercambio intercambio = intercambioRepository.findById(Long.parseLong(id)).get();
         Publicacion publicacion = intercambio.getPublicacion();
+        Oferta oferta = intercambio.getOferta();
+
+        oferta.setEstado(true);
+        ofertaRepository.save(oferta);
+
         publicacion.publicar();
         publicacionRepository.save(publicacion);
 
-        intercambioRepository.delete(intercambio);
-        // intercambio.cancelar();
-        // intercambioRepository.save(intercambio);
-        
-        
-        // Nota, esta el caso borde de que pase esto
-        // 1 - Se programa un intercambio
-        // 2 - Se cancela el intercambio
-        // 3 - Se programa un intercambio desde la misma publicacion
-        // 4 - Se confirma el intercambio
-        // El resultado es que la oferta correspondiente al primer intercambio ( el cancelado ) se elimina, dejandolo sin referencia
-        // La solución sería marcar la oferta como protegida de alguna manera, para que no se elimine en procesos como este. O dejar de eliminarlas porque no importa dado el volumen de datos que manejamos.
-
+        intercambio.cancelar();
+        intercambioRepository.save(intercambio);
         return ResponseEntity.ok().build();
     }
 

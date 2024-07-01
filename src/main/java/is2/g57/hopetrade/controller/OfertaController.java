@@ -118,7 +118,7 @@ public class OfertaController {
 			Oferta oferta = ofertaOp.get();
 			oferta.setEstado(true);
 		    this.ofertaRepository.save(oferta);
-		    Intercambio intercambio = new Intercambio(oferta.getPublicacion(), oferta, "Pendiente");
+		    Intercambio intercambio = new Intercambio(oferta.getPublicacion(), oferta);
 		    this.intercambioRepository.save(intercambio);
 		    emailService.sendEmailOfertaAceptada(oferta);
 			Publicacion publicacion = publicacionRepository.findById(oferta.getPublicacion().getId()).get();

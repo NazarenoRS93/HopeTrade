@@ -42,7 +42,7 @@ function HomePage() {
 					: null
 				}
 				{user?.tipoUser === 0 ?
-                    <HomeItem link={`/exchanges/${user.idUser}`} data={listExchangesUserInfo} icon={<NoteAddRoundedIcon color="primary" />} />
+                    <HomeItem link={`/exchanges/${user.idUser}`} data={listExchangesUserInfo} icon={<DescriptionRoundedIcon color="primary" />} />
                     : null
                 }
                 {user?.tipoUser === 0 ?

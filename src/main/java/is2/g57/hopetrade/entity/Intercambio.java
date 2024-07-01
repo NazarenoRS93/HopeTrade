@@ -22,6 +22,9 @@ public class Intercambio implements Serializable {
     @Column(name="observacion")
     private String observacion;
 
+    @Column(name="estado")
+    private String estado;
+
 //     @ManyToOne (cascade = CascadeType.DETACH)
 //     @JoinColumn(name = "ID_ESTADO")
 //    IntercambioState estado;
@@ -32,10 +35,10 @@ public class Intercambio implements Serializable {
     
     
 
-    public Intercambio(Publicacion publicacion, Oferta oferta, String observacion) {
+    public Intercambio(Publicacion publicacion, Oferta oferta) {
 		this.publicacion = publicacion;
 		this.oferta = oferta;
-		this.observacion = observacion;
+		this.estado = "PROGRAMADO";
 	}
 
 
@@ -68,11 +71,19 @@ public class Intercambio implements Serializable {
         return id;
     }
 
+    public void setEstado(String estado) {
+        this.estado = estado;  
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
     public void confirmar() {
-        // Estado interno
+        this.estado = "FINALIZADO";
     }
 
     public void cancelar() {
-        // Estado interno
+        this.estado = "CANCELADO";
     }
 }
