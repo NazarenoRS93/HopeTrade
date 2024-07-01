@@ -30,7 +30,7 @@ function Oferta( props ) {
                         <Typography variant="subtitle2">Oferta {data.id}: {data.titulo}</Typography>
                         <Typography variant="h6"><b>por: </b>{data.userFullName}</Typography>
                         <hr/>
-                        <Typography variant="h2">{data.descripcion} asdasdaddas</Typography>
+                        <Typography variant="h2">{data.descripcion}</Typography>
                         <hr/>
                         <Typography variant="h6">en <b>{data.filialNombre}</b> </Typography> 
                         <Typography variant="h6"> Fecha propuesta: {data.fechaIntercambio} </Typography>

@@ -28,11 +28,12 @@ function ExchangeListPageByUser() {
     const [user, setUser] = useState({});
     const [intercambios, setIntercambio] = useState([]);
     const [states, setStates] = useState([]);
+    const [selectedState, setSelectedState] = useState("Reservado");
     const [hayIntercambios, setHayIntercambios] = useState(false);
 
     useEffect(() => {
         fetchIntercambios();
-    }, [user]);
+    }, [user, selectedState]);
 
     const fetchIntercambios = async () => {
         try {
@@ -47,9 +48,11 @@ function ExchangeListPageByUser() {
 
             });
             // Filtrar intercambios por estado de publicacion
-            data = data.filter(function (intercambio) {
-                return intercambio.publicacion.estado == "Reservado";
-            });
+            if (selectedState !== "Todos") {
+                data = data.filter(function (intercambio) {
+                    return intercambio.publicacion.estado == selectedState;
+                });
+            }
             if (user.tipoUser === 1) {
                 data = data.filter(function (intercambio) {
                     return intercambio.oferta.filialId == user.filial;
@@ -70,7 +73,9 @@ function ExchangeListPageByUser() {
     const onUpdate = () => {
     }
 
-    const handleChange = (event) => {
+    const handleStateChange = (event) => {
+        setSelectedState(event.target.value);
+        fetchIntercambios();
     }
 
     const cancelar = (id) => {
@@ -96,8 +101,18 @@ function ExchangeListPageByUser() {
     }
 
     return (
-        
         <React.Fragment>
+            { (user.tipoUser === 0)?
+                <FormControl>
+                    <Select value={selectedState} onChange={handleStateChange} sx={{ minWidth: 250 }} >
+                        <MenuItem value="Todos"> Todos </MenuItem>
+                        <MenuItem value="Reservado"> Programado </MenuItem>
+                        <MenuItem value="Finalizado"> Finalizado </MenuItem>
+                        <MenuItem value="Eliminado"> Cancelado </MenuItem>
+                    </Select>
+                    <FormHelperText id="categoria-text">Filtre por estado</FormHelperText>
+                </FormControl>    
+                : null}
             <PostGrid>
             {  intercambios?.map((intercambio) => (
                 <IntercambioItem id={intercambio.id} data={intercambio} publicacion={intercambio.publicacion} oferta={intercambio.oferta} user={user} cancelar={cancelar} confirmar={confirmar}/>

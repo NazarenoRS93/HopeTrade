@@ -26,7 +26,7 @@ export const listExchangesInfo = {
 }
 
 export const listExchangesUserInfo = {
-	title: "Listar intercambios ",
+	title: "Ver intercambios ",
 	description: "Vea sus intercambios."
 }
 
