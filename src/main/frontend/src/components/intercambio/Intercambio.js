@@ -61,7 +61,7 @@ function Intercambio( props ) {
                                     </Button>
                                     : null
                             }
-                            { (data.estado == "PROGRAMADO")? 
+                            { (data.estado == "PROGRAMADO" && user.tipoUser !== 0)? 
                                     <Button variant="contained" color="error" onClick={onCancel}
                                         startIcon={<DeleteRounded color="background2"/>}>
                                     <Typography variant="button2"> Cancelar Intercambio </Typography>
@@ -94,7 +94,7 @@ function Intercambio( props ) {
                             {
                                 (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.tipoUser == 1 || user.tipoUser == 2) ?
                                     <Typography variant="h6">Puntajes: <b> {publicacion.userFullName}: 
-                                        (data.puntajePublicante != -1) ? {data.puntajePublicante} / {oferta.userFullName}: {data.puntajeOfertante} </b> </Typography>
+                                        {data.puntajePublicante} / {oferta.userFullName}: {data.puntajeOfertante} </b> </Typography>
                                     : null
                             }
                         </Stack>
