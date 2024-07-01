@@ -84,23 +84,28 @@ public class IntercambioController {
 
     @PutMapping("confirmar/{id}")
     public ResponseEntity<?> confirmarIntercambio(@PathVariable String id) {
+        System.out.println("CONFIRMANDO INTERCAMBIO " + id);
+
         Intercambio intercambio = intercambioRepository.findById(Long.parseLong(id)).get();
         intercambio.confirmar();
-        intercambio.getOferta().setEstado(true);
+
+        System.out.println("ARCHIVANDO OFERTA");
+        intercambio.getOferta().archivar();
+
+        System.out.println("FINALIZANDO PUBLICACION");
         intercambio.getPublicacion().finalizar();
 
         // Eliminar ofertas de publicacion excepto la oferta del intercambio
-        List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(intercambio.getPublicacion().getId());
+        System.out.println("LIMPIANDO OFERTAS RESTANTES");
 
-        // Eliminar ofertas no protegidas (las canceladas y la asociada al intercambio confirmado; se necesitan para el puntaje)
-        for (Oferta oferta : ofertas) {
-            if (oferta.isEstado()) {
-                ofertas.remove(oferta);
-            }
+        if (ofertaRepository.countByPublicacionIdAndEstado(intercambio.getPublicacion().getId(), "ACTIVA") > 0) {
+            List<Oferta> ofertas = ofertaRepository.findAllByPublicacionIdAndEstado(intercambio.getPublicacion().getId(), "ACTIVA");
+            // Eliminar ofertas no protegidas (las canceladas y la asociada al intercambio confirmado; se necesitan para el puntaje y el historial)
+            System.out.println("NOTIFICANDO OFERTANTES RESTANTES");
+            emailService.sendEmailIntercambioRealizado(ofertas);
+            // Eliminar ofertas irrelevantes
+            ofertaRepository.deleteAll(ofertas);
         }
-        emailService.sendEmailIntercambioRealizado(ofertas);
-        // Eliminar ofertas irrelevantes
-        ofertaRepository.deleteAll(ofertas);
         
         intercambioRepository.save(intercambio);
         return ResponseEntity.ok().build();
@@ -112,7 +117,7 @@ public class IntercambioController {
         Publicacion publicacion = intercambio.getPublicacion();
         Oferta oferta = intercambio.getOferta();
 
-        oferta.setEstado(true);
+        oferta.archivar();
         ofertaRepository.save(oferta);
 
         publicacion.publicar();

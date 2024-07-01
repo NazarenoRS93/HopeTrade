@@ -37,7 +37,9 @@ public class Intercambio implements Serializable {
 //     ESTADOS POSIBLES: PROGRAMADO, FINALIZADO, CANCELADO
 //     Hay que pensar si hace falta implementar state para esto o con un String alcanza
 
-    public Intercambio() {}
+    public Intercambio() {
+        this.estado = "PROGRAMADO";
+    }
     
     
 

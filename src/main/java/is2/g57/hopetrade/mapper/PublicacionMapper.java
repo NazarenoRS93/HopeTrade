@@ -43,7 +43,7 @@ public class PublicacionMapper {
         dto.setCategoria_ID(publicacion.getCategoria().getId());
         dto.setEstado(publicacion.getState().getNombre());
         dto.setEstadoID(publicacion.getState().getId());
-        dto.setOfertas(ofertaRepository.countByPublicacionId(publicacion.getId()));
+        dto.setOfertas(ofertaRepository.countByPublicacionIdAndEstado(publicacion.getId(), "ACTIVA"));
         dto.setComentarios(comentarioRepository.countByPublicacionId(publicacion.getId()));
         return dto;
     }

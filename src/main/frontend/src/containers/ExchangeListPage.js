@@ -81,7 +81,7 @@ function ExchangeListPage() {
 
     const confirmar = (id) => {
         try {
-            let url = "http://localhost:8080/intercambio/cancelar/"+id;
+            let url = "http://localhost:8080/intercambio/confirmar/"+id;
             axios.put(url);
             fetchIntercambios();
         } catch (error) {

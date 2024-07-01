@@ -116,14 +116,24 @@ public class OfertaController {
 		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
-			oferta.setEstado(true);
+			oferta.aceptar();
+
+			System.out.println("UPDATING OFERTA");
 		    this.ofertaRepository.save(oferta);
-		    Intercambio intercambio = new Intercambio(oferta.getPublicacion(), oferta);
-		    this.intercambioRepository.save(intercambio);
-		    emailService.sendEmailOfertaAceptada(oferta);
-			Publicacion publicacion = publicacionRepository.findById(oferta.getPublicacion().getId()).get();
+
+			System.out.println("RESERVANDO PUBLICACION");
+			Publicacion publicacion = oferta.getPublicacion();
 			publicacion.reservar();
-			publicacionRepository.save(publicacion);
+			this.publicacionRepository.save(publicacion);
+
+			System.out.println("CREANDO INTERCAMBIO");
+			Intercambio intercambio = new Intercambio();
+			intercambio.setPublicacion(publicacion);
+			intercambio.setOferta(oferta);
+		    this.intercambioRepository.save(intercambio);
+
+			System.out.println("ENVIANDO CORREO");
+		    emailService.sendEmailOfertaAceptada(oferta);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
@@ -135,13 +145,14 @@ public class OfertaController {
 		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
-			oferta.setEstado(false);
+			oferta.rechazar();
 			if (respuesta != null) {
 				oferta.setRespuesta(respuesta);
 			}
 			else {
 				oferta.setRespuesta("[PLACEHOLDER]");
 			}
+
 			this.ofertaRepository.save(oferta);
 			emailService.sendEmailOfertaRechazada(oferta);
 			return new ResponseEntity<>(HttpStatus.OK);

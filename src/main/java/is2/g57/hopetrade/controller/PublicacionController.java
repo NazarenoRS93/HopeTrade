@@ -22,6 +22,7 @@ import is2.g57.hopetrade.repository.PublicacionStateRepository;
 import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.dto.OfertaDTO;
 import is2.g57.hopetrade.dto.PublicacionDTO;
+import is2.g57.hopetrade.entity.Oferta;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.mapper.OfertaMapper;
@@ -278,7 +279,10 @@ public class PublicacionController {
 
   @GetMapping("/{id}/ofertas")
   public @ResponseBody Iterable<OfertaDTO> buscarOfertasPorPublicacionId(@PathVariable Long id) {
-    return ofertaRepository.findAllByPublicacionId(id).stream().map(ofertaMapper::map).collect(Collectors.toList());
+    List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(id);
+    // ignorar ofertas con state != ACTIVA
+    ofertas.stream().filter(oferta -> oferta.getEstado() == "ACTIVA").collect(Collectors.toList());
+    return ofertas.stream().map(ofertaMapper::map).collect(Collectors.toList());
   }
 
   @GetMapping("/user/{userID}")

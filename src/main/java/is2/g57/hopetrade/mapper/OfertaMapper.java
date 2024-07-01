@@ -39,7 +39,7 @@ public class OfertaMapper {
         dto.setFechaIntercambio(oferta.getFechaIntercambio());
         dto.setFechaCreacion(oferta.getFechaCreacion());
         dto.setRespuesta(oferta.getRespuesta());
-        dto.setEstado(oferta.isEstado());
+        dto.setEstado(oferta.getEstado());
 
         // Convert URL to Base 64 image
         // Si existe la imagen, cargarla
