@@ -43,9 +43,9 @@ public class DonacionEnFilial {
     public DonacionEnFilial() {
     }
 
-    public DonacionEnFilial(LocalDateTime fecha_hora, String dni, String nombre_apellido, Long id_filial,
+    public DonacionEnFilial( String dni, String nombre_apellido, Long id_filial,
             Long id_ayudante, Long id_categoria, String descripcion, Integer cantidad, boolean es_dinero) {
-        this.fecha_hora = fecha_hora;
+        this.fecha_hora = LocalDateTime.now();
         this.dni = dni;
         this.nombre_apellido = nombre_apellido;
         this.id_filial = id_filial;
