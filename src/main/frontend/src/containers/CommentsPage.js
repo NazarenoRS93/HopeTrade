@@ -245,7 +245,7 @@ function CommentsPage() {
 										}}
 									>
 										<Typography variant="body2">
-											{respuestas[comentario.idComentario].nombre} {respuestas[comentario.idComentario].apellido} - {respuestas[comentario.idComentario].fechaRespuesta && new Date(respuestas[comentario.idComentario].fechaRespuesta).toLocaleString()}
+											 {publicacion.userFullName} - {respuestas[comentario.idComentario].fechaRespuesta && new Date(respuestas[comentario.idComentario].fechaRespuesta).toLocaleString()}
 										</Typography>
 										<Typography variant="subtitle2">{respuestas[comentario.idComentario].text}</Typography>
 									</Box>

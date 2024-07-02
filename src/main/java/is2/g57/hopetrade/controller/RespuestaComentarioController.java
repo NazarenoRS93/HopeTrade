@@ -34,11 +34,16 @@ public class RespuestaComentarioController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> ObtenerRespuestaAComentario(@PathVariable(value = "id") Long id) {
-		Optional<RespuestaComentario> respuestaComentarioOp = this.respuestaComentarioRepository.findById(id);
-		if (respuestaComentarioOp.isPresent()) {
-			return new ResponseEntity<>(respuestaComentarioOp.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		try {
+			Optional<RespuestaComentario> respuestaComentarioOp = this.respuestaComentarioRepository
+					.findByComentarioIdComentario(id); // Utilizando el nuevo método
+			if (respuestaComentarioOp.isPresent()) {
+				return new ResponseEntity<>(respuestaComentarioOp.get(), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("No existe una respuesta para este comentario.", HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al obtener la respuesta: " + e, HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -46,7 +51,8 @@ public class RespuestaComentarioController {
 	public ResponseEntity<?> guardarRespuestaDeComentario(
 			@RequestBody RespuestaComentarioRequest respComentarioRequest) {
 		try {
-			System.out.println("user " + respComentarioRequest.getIdUser() + " coment " + respComentarioRequest.getIdComentario() + " text: " + respComentarioRequest.getText());
+			System.out.println("user " + respComentarioRequest.getIdUser() + " coment "
+					+ respComentarioRequest.getIdComentario() + " text: " + respComentarioRequest.getText());
 			Optional<User> oPuser = this.userRepository.findById(respComentarioRequest.getIdUser());
 			Optional<Comentario> oPComent = this.comentarioRepository.findById(respComentarioRequest.getIdComentario());
 			// Crear una nueva respuesta de comentario
@@ -56,7 +62,7 @@ public class RespuestaComentarioController {
 				respuestaComentarioRepository.save(nuevaRespuesta);
 				mailService.SentEmailRespuestaRecibida(nuevaRespuesta);
 				return new ResponseEntity<>("Respuesta enviada con exito", HttpStatus.CREATED);
-			}else {
+			} else {
 				throw new RuntimeException("Error");
 			}
 

@@ -8,5 +8,5 @@ import is2.g57.hopetrade.entity.RespuestaComentario;
 public interface RespuestaComentarioRepository extends JpaRepository<RespuestaComentario, Long> {
     Optional<RespuestaComentario> findById(Long id);
     Iterable<RespuestaComentario> findByUserId(Long id);
-
+    Optional<RespuestaComentario> findByComentarioIdComentario(Long idComentario);
 }
