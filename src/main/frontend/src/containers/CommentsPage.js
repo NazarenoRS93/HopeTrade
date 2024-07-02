@@ -17,14 +17,14 @@ function CommentsPage() {
 	const [respuestaText, setRespuestaText] = useState("");
 	const [comentarioSeleccionado, setComentarioSeleccionado] = useState(null);
 	const [respuestas, setRespuestas] = useState({});
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const cookie = window.localStorage.getItem("user");
 		if (cookie) {
 			let usuario = JSON.parse(cookie);
 			setUser(usuario);
-			fetchPost();
-			fetchComentarios();
+			fetchData();
 		}
 	}, []);
 
@@ -33,8 +33,19 @@ function CommentsPage() {
 	}, [comentarioText]);
 
 	useEffect(() => {
-		setDisableEnviarRespuesta(comentarioText.trim() === "" || comentarioText.length > 250);
-	}, [comentarioText]);
+		setDisableEnviarRespuesta(respuestaText.trim() === "" || respuestaText.length > 250);
+	}, [respuestaText]);
+
+	const fetchData = async () => {
+		try {
+			await fetchPost();
+			await fetchComentarios();
+		} catch (error) {
+			alert("Error cargando datos: " + error.message);
+		} finally {
+			setLoading(false);
+		}
+	};
 
 	const fetchPost = async () => {
 		try {
@@ -57,8 +68,7 @@ function CommentsPage() {
 			setComentarios(comentariosActivos);
 			// Fetch respuestas for each comentario
 			for (let comentario of comentariosActivos) {
-				console.log("Comentario: ", comentario);
-				fetchRespuestas(comentario.idComentario);
+				await fetchRespuestas(comentario.idComentario);
 			}
 		} catch (error) {
 			alert(error.message);
@@ -66,26 +76,25 @@ function CommentsPage() {
 	};
 
 	const fetchRespuestas = async (comentarioId) => {
-	    try {
-	        const respuesta = await ComentariosYRespuestasService.fetchRespuestas(comentarioId);
-	        console.log("Respuesta", respuesta);
-	        setRespuestas(prevRespuestas => ({
-	            ...prevRespuestas,
-	            [comentarioId]: respuesta || null
-	        }));
-	    } catch (error) {
-	        if (error.message.includes('404')) {
-	            // No se encontraron respuestas para este comentario
-	            setRespuestas(prevRespuestas => ({
-	                ...prevRespuestas,
-	                [comentarioId]: null
-	            }));
-	        } else {
-	            alert("Error obteniendo respuestas: " + error.message);
-	        }
-	    }
+		try {
+			const respuesta = await ComentariosYRespuestasService.fetchRespuestas(comentarioId);
+			setRespuestas((prevRespuestas) => ({
+				...prevRespuestas,
+				[comentarioId]: respuesta || null,
+			}));
+		} catch (error) {
+			if (error.message.includes("404")) {
+				// No se encontraron respuestas para este comentario
+				setRespuestas((prevRespuestas) => ({
+					...prevRespuestas,
+					[comentarioId]: null,
+				}));
+			} else {
+				alert("Error obteniendo respuestas: " + error.message);
+			}
+		}
 	};
-	
+
 	const handleComentarioChange = (event) => {
 		const texto = event.target.value;
 		setComentarioText(texto);
@@ -108,7 +117,7 @@ function CommentsPage() {
 			const comentarioData = {
 				text: comentarioText,
 				user: user.idUser,
-				publicacion: publicacion.id
+				publicacion: publicacion.id,
 			};
 			const response = await ComentariosYRespuestasService.guardarComentario(comentarioData);
 			alert(response);
@@ -130,7 +139,7 @@ function CommentsPage() {
 			const respuestaData = {
 				text: respuestaText,
 				idUser: user.idUser,
-				idComentario: comentarioId
+				idComentario: comentarioId,
 			};
 			const response = await ComentariosYRespuestasService.guardarRespuesta(respuestaData);
 			alert(response);
@@ -155,6 +164,10 @@ function CommentsPage() {
 	const handleResponderClick = (comentario) => {
 		setComentarioSeleccionado(comentario);
 	};
+
+	if (loading) {
+		return <Typography variant="body1">Cargando...</Typography>;
+	}
 
 	return (
 		<React.Fragment>
@@ -192,39 +205,39 @@ function CommentsPage() {
 						<Grid item xs={12} key={comentario.idComentario}>
 							<Box
 								sx={{
-									border: '1px solid',
-									borderColor: 'grey.400',
-									borderRadius: '4px',
-									padding: '8px',
-									marginBottom: '8px'
+									border: "1px solid",
+									borderColor: "grey.400",
+									borderRadius: "4px",
+									padding: "8px",
+									marginBottom: "8px",
 								}}
 							>
 								<Typography variant="body2">
 									{comentario.nombre} {comentario.apellido} - {new Date(comentario.fechaComentario).toLocaleString()}
-									{(comentario.userId === user.idUser || user.tipoUser === 2) && !respuestas[comentario.idComentario] &&(
+									{(comentario.userId === user.idUser || user.tipoUser === 2) && !respuestas[comentario.idComentario] && (
 										<Button
 											variant="contained"
 											color="error"
 											size="small"
 											sx={{
 												marginLeft: 1,
-												padding: '2px 5px',
-												fontSize: '0.70rem'
+												padding: "2px 5px",
+												fontSize: "0.70rem",
 											}}
 											onClick={() => eliminarComentario(comentario.idComentario)}
 										>
 											Eliminar
 										</Button>
 									)}
-									{publicacion.userID === user.idUser  && !respuestas[comentario.idComentario] &&(
+									{publicacion.userID === user.idUser && !respuestas[comentario.idComentario] && (
 										<Button
 											variant="contained"
 											color="primary"
 											size="small"
 											sx={{
 												marginLeft: 1,
-												padding: '2px 5px',
-												fontSize: '0.70rem'
+												padding: "2px 5px",
+												fontSize: "0.70rem",
 											}}
 											onClick={() => handleResponderClick(comentario)}
 										>
@@ -238,14 +251,14 @@ function CommentsPage() {
 								{respuestas[comentario.idComentario] && (
 									<Box
 										sx={{
-											borderLeft: '2px solid grey',
-											marginLeft: '16px',
-											paddingLeft: '8px',
-											marginTop: '8px'
+											borderLeft: "2px solid grey",
+											marginLeft: "16px",
+											paddingLeft: "8px",
+											marginTop: "8px",
 										}}
 									>
 										<Typography variant="body2">
-											 {publicacion.userFullName} - {respuestas[comentario.idComentario].fechaRespuesta && new Date(respuestas[comentario.idComentario].fechaRespuesta).toLocaleString()}
+											{publicacion.userFullName} - {respuestas[comentario.idComentario].fechaRespuesta && new Date(respuestas[comentario.idComentario].fechaRespuesta).toLocaleString()}
 										</Typography>
 										<Typography variant="subtitle2">{respuestas[comentario.idComentario].text}</Typography>
 									</Box>
