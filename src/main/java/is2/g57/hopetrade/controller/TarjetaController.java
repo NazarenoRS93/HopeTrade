@@ -28,10 +28,10 @@ public class TarjetaController {
 
 	@PostMapping("/pago-tarjeta")
 	public ResponseEntity<?> RegistrarPagoTarjeta(@RequestBody TarjetaRequest paramTarjetaRequest) {
-		Double nMinMonto = 850.0;
-		Double nMaxMonto = 100000.0;
+		Double nMinMonto = 10.0;	// esto lo saqué de la página: caritaslaplata.org
+		//Double nMaxMonto = 100000.0;
 		// Se valida que el monto a donar esté dentro del rango establecido
-		if (nMinMonto <= paramTarjetaRequest.getMonto() && paramTarjetaRequest.getMonto() <= nMaxMonto) {
+		if (nMinMonto <= paramTarjetaRequest.getMonto()) {
 			Optional<Tarjeta> tarjetaOpt = this.tarjetaRepository.findTarjetaByNumero(paramTarjetaRequest.getNumero());
 			// Se valida si el número de tarjeta es válido
 			if (tarjetaOpt.isPresent()) {
@@ -83,8 +83,7 @@ public class TarjetaController {
 				return new ResponseEntity<>("El número ingresado no corresponde a una tarjeta de crédito válida.", HttpStatus.NOT_FOUND);
 			}
 		} else {
-			return new ResponseEntity<>("Por favor, revise el monto ingresado. El mismo no debe ser inferior a $" + Double.toString(nMinMonto).replace(".0", "") 
-						+ " ni superior a $" + Double.toString(nMaxMonto).replace(".0", "") + ".", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Por favor, revise el monto ingresado. El mismo no debe ser inferior a $" + Double.toString(nMinMonto).replace(".0", "") + ".", HttpStatus.BAD_REQUEST);
 		}
 	}
 

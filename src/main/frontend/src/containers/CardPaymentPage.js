@@ -96,9 +96,9 @@ function CardPaymentPage() {
                     <Stack spacing={2} direction="row">
                         <FormControl>
                             <TextField onChange={(event)=> {handleChange(event)}} value={form.numero}
-                                        type="text" variant="outlined" id="numero" placeholder="1234567890"
+                                        type="text" variant="outlined" id="numero" placeholder="1234567890123456"
                                         inputProps={{
-                                            maxlength: "10",
+                                            maxlength: "16",
                                         }}
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end"><CreditCardIcon /></InputAdornment>,
@@ -154,7 +154,7 @@ function CardPaymentPage() {
                             <TextField onChange={(event)=> {handleChange(event)}} value={form.monto}
                                         type="text" variant="outlined" id="monto" 
                                         inputProps={{
-                                            maxlength: "6",
+                                            maxlength: "9",
                                         }}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">$</InputAdornment>,
