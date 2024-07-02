@@ -33,14 +33,17 @@ public class RespuestaComentarioController {
 	private MailService mailService; // Asumiendo que tienes un servicio de correo electrónico
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> ObtenerRespuestaAComentario(
-			@RequestBody RespuestaComentarioRequest respComentarioRequest) {
-		Optional<RespuestaComentario> respComentarioOp = this.respuestaComentarioRepository
-				.findById(respComentarioRequest.getId());
-		if (respComentarioOp.isPresent()) {
-			return new ResponseEntity<>(respComentarioOp.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>("No se encontro Ayudante", HttpStatus.NOT_FOUND);
+	public ResponseEntity<?> ObtenerRespuestaAComentario(@PathVariable(value = "id") Long id) {
+		try {
+			Optional<RespuestaComentario> respuestaComentarioOp = this.respuestaComentarioRepository
+					.findByComentarioIdComentario(id); // Utilizando el nuevo método
+			if (respuestaComentarioOp.isPresent()) {
+				return new ResponseEntity<>(respuestaComentarioOp.get(), HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>("No existe una respuesta para este comentario.", HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al obtener la respuesta: " + e, HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -48,7 +51,8 @@ public class RespuestaComentarioController {
 	public ResponseEntity<?> guardarRespuestaDeComentario(
 			@RequestBody RespuestaComentarioRequest respComentarioRequest) {
 		try {
-			System.out.println("user " + respComentarioRequest.getIdUser() + " coment " + respComentarioRequest.getIdComentario() + " text: " + respComentarioRequest.getText());
+			System.out.println("user " + respComentarioRequest.getIdUser() + " coment "
+					+ respComentarioRequest.getIdComentario() + " text: " + respComentarioRequest.getText());
 			Optional<User> oPuser = this.userRepository.findById(respComentarioRequest.getIdUser());
 			Optional<Comentario> oPComent = this.comentarioRepository.findById(respComentarioRequest.getIdComentario());
 			// Crear una nueva respuesta de comentario
@@ -58,7 +62,7 @@ public class RespuestaComentarioController {
 				respuestaComentarioRepository.save(nuevaRespuesta);
 				mailService.SentEmailRespuestaRecibida(nuevaRespuesta);
 				return new ResponseEntity<>("Respuesta enviada con exito", HttpStatus.CREATED);
-			}else {
+			} else {
 				throw new RuntimeException("Error");
 			}
 
