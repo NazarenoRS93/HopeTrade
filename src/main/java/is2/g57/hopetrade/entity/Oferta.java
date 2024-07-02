@@ -30,7 +30,7 @@ public class Oferta {
     private LocalDateTime fechaIntercambio;
 
     @Column(name = "estado")
-    private Boolean estado;
+    private String estado;
 
     @Column(name = "imagen_url")
     private String imagenUrl;
@@ -58,12 +58,12 @@ public class Oferta {
         this.publicacion = publicacion;
         this.filial = filial;
         this.user = user;
-        this.estado= true;
+        this.estado= "ACTIVA";
     }
 
     public Oferta() { 
         this.fechaCreacion = LocalDateTime.now();
-        this.estado= true;
+        this.estado= "ACTIVA";
     }
 
     public Long getId() {
@@ -114,11 +114,11 @@ public class Oferta {
         this.fechaIntercambio = fechaIntercambio;
     }
 
-    public boolean isEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
@@ -152,5 +152,21 @@ public class Oferta {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void archivar() {
+        this.estado = "ARCHIVADA";
+    }
+
+    public void rechazar() {
+        this.estado = "RECHAZADA";
+    }
+
+    public void aceptar() {
+        this.estado = "ACEPTADA";
+    }
+
+    public void eliminar() {
+        this.estado = "ELIMINADA";
     }
 }

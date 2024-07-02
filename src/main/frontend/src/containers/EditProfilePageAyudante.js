@@ -146,7 +146,7 @@ function EditProfilePageAyudante() {
                           <Typography variant="button2">Cancelar</Typography>
                       </Button>
                       <Button variant="contained" color="primary" onClick={handleChangePassword}>
-                          <Typography variant="button">Cambiar Contraseña</Typography>
+                          Cambiar Contraseña
                       </Button>
                   </Stack>
               </Grid>

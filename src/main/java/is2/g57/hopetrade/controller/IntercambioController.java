@@ -12,21 +12,19 @@ import is2.g57.hopetrade.entity.Filial;
 import is2.g57.hopetrade.entity.Intercambio;
 import is2.g57.hopetrade.entity.Oferta;
 import is2.g57.hopetrade.entity.Publicacion;
+import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.dto.IntercambioDTO;
 import is2.g57.hopetrade.mapper.IntercambioMapper;
 import is2.g57.hopetrade.repository.FilialRepository;
 import is2.g57.hopetrade.repository.IntercambioRepository;
 import is2.g57.hopetrade.repository.OfertaRepository;
 import is2.g57.hopetrade.repository.PublicacionRepository;
+import is2.g57.hopetrade.repository.UserRepository;
 import is2.g57.hopetrade.services.MailService;
 
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -45,10 +43,19 @@ public class IntercambioController {
     private MailService emailService;
     @Autowired
     private PublicacionRepository publicacionRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping(path="/all")
     public List<IntercambioDTO> getAll() {
         List<Intercambio> intercambios = intercambioRepository.findAll();
+        return intercambios.stream().map(intercambioMapper::map).collect(Collectors.toList());
+    }
+
+    @GetMapping(path="/user/{userId}")
+    public List<IntercambioDTO> getByUser(@PathVariable Long userId) {
+        User user = userRepository.findById(userId).get();
+        List<Intercambio> intercambios = intercambioRepository.findAllByUser(user);
         return intercambios.stream().map(intercambioMapper::map).collect(Collectors.toList());
     }
 
@@ -73,43 +80,50 @@ public class IntercambioController {
 
     @PutMapping("confirmar/{id}")
     public ResponseEntity<?> confirmarIntercambio(@PathVariable String id) {
+        System.out.println("CONFIRMANDO INTERCAMBIO " + id);
+
         Intercambio intercambio = intercambioRepository.findById(Long.parseLong(id)).get();
         intercambio.confirmar();
-        intercambio.getOferta().setEstado(false);
+
+        System.out.println("ARCHIVANDO OFERTA");
+        intercambio.getOferta().archivar();
+
+        System.out.println("FINALIZANDO PUBLICACION");
         intercambio.getPublicacion().finalizar();
 
         // Eliminar ofertas de publicacion excepto la oferta del intercambio
-        List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(intercambio.getPublicacion().getId());
-        emailService.sendEmailIntercambioRealizado(ofertas);
-        ofertas.remove(intercambio.getOferta());
-      
-        ofertaRepository.deleteAll(ofertas);
+        System.out.println("LIMPIANDO OFERTAS RESTANTES");
+
+        if (ofertaRepository.countByPublicacionIdAndEstado(intercambio.getPublicacion().getId(), "ACTIVA") > 0) {
+            List<Oferta> ofertas = ofertaRepository.findAllByPublicacionIdAndEstado(intercambio.getPublicacion().getId(), "ACTIVA");
+            // Eliminar ofertas no protegidas (las canceladas y la asociada al intercambio confirmado; se necesitan para el puntaje y el historial)
+            System.out.println("NOTIFICANDO OFERTANTES RESTANTES");
+            emailService.sendEmailIntercambioRealizado(ofertas);
+            // Eliminar ofertas irrelevantes
+            ofertaRepository.deleteAll(ofertas);
+        }
         
         intercambioRepository.save(intercambio);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>("Intercambio confirmado.", HttpStatus.OK);
+
     }
 
     @PutMapping("cancelar/{id}")
     public ResponseEntity<?> cancelarIntercambio(@PathVariable String id) {
         Intercambio intercambio = intercambioRepository.findById(Long.parseLong(id)).get();
         Publicacion publicacion = intercambio.getPublicacion();
+        Oferta oferta = intercambio.getOferta();
+
+        oferta.archivar();
+        ofertaRepository.save(oferta);
+
         publicacion.publicar();
         publicacionRepository.save(publicacion);
 
-        intercambioRepository.delete(intercambio);
-        // intercambio.cancelar();
-        // intercambioRepository.save(intercambio);
-        
-        
-        // Nota, esta el caso borde de que pase esto
-        // 1 - Se programa un intercambio
-        // 2 - Se cancela el intercambio
-        // 3 - Se programa un intercambio desde la misma publicacion
-        // 4 - Se confirma el intercambio
-        // El resultado es que la oferta correspondiente al primer intercambio ( el cancelado ) se elimina, dejandolo sin referencia
-        // La solución sería marcar la oferta como protegida de alguna manera, para que no se elimine en procesos como este. O dejar de eliminarlas porque no importa dado el volumen de datos que manejamos.
+        intercambio.cancelar();
+        intercambioRepository.save(intercambio);
 
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>("Intercambio cancelado.", HttpStatus.OK);
     }
 
 

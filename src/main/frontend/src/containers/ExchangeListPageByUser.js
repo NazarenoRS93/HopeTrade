@@ -10,8 +10,9 @@ import FormControl from "@mui/material/FormControl";
 import Select from '@mui/material/Select';
 import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
+import {useParams} from "react-router-dom";
 
-function ExchangeListPage() {
+function ExchangeListPageByUser() {
     // Render on start
     useEffect(() => {
         const cookie = window.localStorage.getItem("user");
@@ -20,20 +21,24 @@ function ExchangeListPage() {
             setUser(usuario);
         }
     }, []);
+    
+    const params = useParams();
 
     const reader = new FileReader();
     const [user, setUser] = useState({});
     const [intercambios, setIntercambio] = useState([]);
     const [states, setStates] = useState([]);
+    const [selectedState, setSelectedState] = useState("PROGRAMADO");
     const [hayIntercambios, setHayIntercambios] = useState(false);
 
     useEffect(() => {
         fetchIntercambios();
-    }, [user]);
+    }, [user, selectedState]);
 
     const fetchIntercambios = async () => {
         try {
-            let url = "http://localhost:8080/intercambio/all";
+            let id = params.id;
+            let url = "http://localhost:8080/intercambio/user/"+id;
             const response = await axios.get(url);
             let data = response.data.map(intercambio => {
                 return {
@@ -43,9 +48,11 @@ function ExchangeListPage() {
 
             });
             // Filtrar intercambios por estado de publicacion
-            data = data.filter(function (intercambio) {
-                return intercambio.estado == "PROGRAMADO";
-            });
+            if (selectedState !== "Todos") {
+                data = data.filter(function (intercambio) {
+                    return intercambio.estado == selectedState;
+                });
+            }
             if (user.tipoUser === 1) {
                 data = data.filter(function (intercambio) {
                     return intercambio.oferta.filialId == user.filial;
@@ -56,6 +63,7 @@ function ExchangeListPage() {
                 return new Date(b.oferta.fechaIntercambio) - new Date(a.oferta.fechaIntercambio);
             });
             setHayIntercambios(data.length > 0);
+            console.log(data);
             setIntercambio(data);
         } catch (error) {
             alert("Error obteniendo intercambios: "+error);
@@ -65,36 +73,46 @@ function ExchangeListPage() {
     const onUpdate = () => {
     }
 
-    const handleChange = (event) => {
-    }
-
-    const cancelar = async (id) => {
-            let url = "http://localhost:8080/intercambio/cancelar/"+id;
-            await axios.put(url).then (function (response) {
-                alert(response.data);
-                console.log(response);
-            })
-            .catch (function (error) {
-                console.log("Error cancelando intercambio: "+error.response.data);
-            });
-            fetchIntercambios();
-    }
-
-    const confirmar = async (id) => {
-        let url = "http://localhost:8080/intercambio/confirmar/"+id;
-        await axios.put(url).then (function (response) {
-            alert(response.data);
-            console.log(response);
-        })
-        .catch (function (error) {
-            console.log("Error confirmando intercambio: "+error.response.data);
-        });
+    const handleStateChange = (event) => {
+        setSelectedState(event.target.value);
         fetchIntercambios();
     }
 
+    const cancelar = (id) => {
+        try {
+            let url = "http://localhost:8080/intercambio/cancelar/"+id;
+            axios.put(url);
+            fetchIntercambios();
+        } catch (error) {
+            alert("Error cancelando intercambio: "+error);
+            fetchIntercambios();
+        }
+    }
+
+    const confirmar = (id) => {
+        try {
+            let url = "http://localhost:8080/intercambio/confirmar/"+id;
+            axios.put(url);
+            fetchIntercambios();
+        } catch (error) {
+            console.log("Error cancelando intercambio: "+error);
+            fetchIntercambios();
+        }
+    }
+
     return (
-        
         <React.Fragment>
+            { (true)?
+                <FormControl>
+                    <Select value={selectedState} onChange={handleStateChange} sx={{ minWidth: 250 }} >
+                        <MenuItem value="Todos"> Todos </MenuItem>
+                        <MenuItem value="PROGRAMADO"> Programado </MenuItem>
+                        <MenuItem value="FINALIZADO"> Finalizado </MenuItem>
+                        <MenuItem value="CANCELADO"> Cancelado </MenuItem>
+                    </Select>
+                    <FormHelperText id="categoria-text">Filtre por estado</FormHelperText>
+                </FormControl>    
+                : null}
             <PostGrid>
             {  intercambios?.map((intercambio) => (
                 <IntercambioItem id={intercambio.id} data={intercambio} publicacion={intercambio.publicacion} oferta={intercambio.oferta} user={user} cancelar={cancelar} confirmar={confirmar}/>
@@ -103,7 +121,7 @@ function ExchangeListPage() {
             <Grid item xs={12}>
                 { !hayIntercambios ?
                     <div style={{textAlign: "center", paddingTop: "30px", paddingBottom: "50px"}}>
-                        <Typography variant="h1">No se encontraron intercambios programados.</Typography>
+                        <Typography variant="h1">No se encontraron intercambios.</Typography>
                     </div>
                     : null
                 }
@@ -112,4 +130,4 @@ function ExchangeListPage() {
     )
 }
 
-export default ExchangeListPage;
+export default ExchangeListPageByUser;
