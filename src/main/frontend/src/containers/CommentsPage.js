@@ -291,9 +291,9 @@ function CommentsPage() {
 					))}
 				</Grid>
 			) : (
-				<Typography variant="body1" style={{ marginTop: "20px" }}>
-					No hay comentarios para mostrar.
-				</Typography>
+				  <div style={{ textAlign: "center", paddingTop: "30px", paddingBottom: "50px" }}>
+                    <Typography variant="h4">¡Nadie ha comentado nada aun!</Typography>
+                </div>
 			)}
 		</React.Fragment>
 	);
