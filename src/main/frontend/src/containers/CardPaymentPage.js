@@ -96,9 +96,9 @@ function CardPaymentPage() {
                     <Stack spacing={2} direction="row">
                         <FormControl>
                             <TextField onChange={(event)=> {handleChange(event)}} value={form.numero}
-                                        type="text" variant="outlined" id="numero" placeholder="1234567890"
+                                        type="text" variant="outlined" id="numero" placeholder="1234567890123456"
                                         inputProps={{
-                                            maxlength: "10",
+                                            maxlength: "16",
                                         }}
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end"><CreditCardIcon /></InputAdornment>,
@@ -108,13 +108,6 @@ function CardPaymentPage() {
                             <FormHelperText id="numero-text">Número de tarjeta</FormHelperText>
                         </FormControl>
                         <FormControl>
-                            {/* <TextField onChange={(event)=> {handleChange(event)}} value={form.fecha_vencimiento}
-                                        type="text" variant="outlined" id="fecha_vencimiento"
-                                        inputProps={{
-                                            maxlength: "5",
-                                            pattern: "[0-1]{1}[0-9]{1}/2[4-9]{1}",
-                                        }}
-                            /> */}
                             <DatePicker onChange={(value, context)=> {handleChangeDP(value, context)}} views={['month', 'year']}
                                         variant="outlined" id="fecha_vencimiento" minDate={dayjs('2024-01-01')} 
                                         maxDate={dayjs('2029-12-31')} format="MMM YYYY"
@@ -161,7 +154,7 @@ function CardPaymentPage() {
                             <TextField onChange={(event)=> {handleChange(event)}} value={form.monto}
                                         type="text" variant="outlined" id="monto" 
                                         inputProps={{
-                                            maxlength: "8",
+                                            maxlength: "9",
                                         }}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">$</InputAdornment>,

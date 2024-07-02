@@ -6,6 +6,10 @@ public class IntercambioDTO {
     private OfertaDTO oferta;
     private String observacion;
     private Long estadoID;
+    private String estado;
+
+    private Integer puntajeOfertante;
+    private Integer puntajePublicante;
     
     public Long getId() {
         return id;
@@ -36,6 +40,30 @@ public class IntercambioDTO {
     }
     public void setEstadoID(Long estadoID) {
         this.estadoID = estadoID;
+    }
+
+    public void setEstado(String estado){
+        this.estado = estado;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setPuntajeOfertante(Integer puntajeOfertante) {
+        this.puntajeOfertante = puntajeOfertante;
+    }
+
+    public void setPuntajePublicante(Integer puntajePublicante) {
+        this.puntajePublicante = puntajePublicante;
+    }
+
+    public Integer getPuntajeOfertante() {
+        return puntajeOfertante;
+    }
+
+    public Integer getPuntajePublicante() {
+        return puntajePublicante;
     }
 
     

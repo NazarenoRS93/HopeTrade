@@ -13,6 +13,10 @@ public interface OfertaRepository extends JpaRepository<Oferta, Long> {
  List<Oferta> findAllByUserId(Long userId);
  List<Oferta> findAllByPublicacionId(Long publicacionId);
  List<Oferta> findAllByFilialId(Long filialId);
+
+ List<Oferta> findAllByPublicacionIdAndEstado(Long publicacionId, String estado);
  
+ Integer countByPublicacionIdAndEstado(Long publicacionId, String estado);
+
  Integer countByPublicacionId(Long publicacionId);
 }

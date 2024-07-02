@@ -16,8 +16,8 @@ import {defaultFormAddOferta, defDateTime, endTime, nextDay, nextMonth, startTim
 function AddOfertaPage() {
     // Render on start
     useEffect(() => {
-        fetchCategorias();
         fetchFiliales();
+        fetchPost();
         const cookie = window.localStorage.getItem("user");
         if(cookie) {
             let user = JSON.parse(cookie);
@@ -25,12 +25,12 @@ function AddOfertaPage() {
         };
     }, []);
     const [form, setForm] = useState(defaultFormAddOferta);
-    const [categorias, setCategorias] = useState([])
     const [filiales, setFiliales] = useState([]);
     const [selectedFilial, setSelectedFilial] = useState('');
     const reader = new FileReader();
 
     const [user, setUser] = useState({});
+    const [post, setPost] = useState({});
     const [image, setImage] = useState(null);
     const [titulo, setTitulo] = useState("");
     const [desc, setDesc] = useState("");
@@ -39,27 +39,31 @@ function AddOfertaPage() {
     const [fecha, setFecha] = useState(defDateTime);
     const [btnDisabled, setBtnDisabled] = useState(true);
 
-    const fetchCategorias = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/categoria/all');
-            const data = response.data;
-            setCategorias(data);
-        } catch (error) {
-            alert("Error obteniendo categorías: "+error);
-        }
-    }
     const fetchFiliales = async () => {
         try {
             const response = await axios.get('http://localhost:8080/filial/all');
             setFiliales(response.data);
-            console.log(response.data);
         } catch (error) {
             alert("Error obteniendo filiales: " + error);
         }
     };
 
+    const fetchPost = async () => {
+        try {
+            let id = window.localStorage.getItem("pubId");
+            let url = "http://localhost:8080/publicacion/"+id;
+            const response = await axios.get(url);
+            const data = response.data;
+            data.imagenUrl = `data:image/jpeg;base64,${data.imagen}`
+            setPost(data);
+            console.log(data);
+        } catch (error) {
+            alert("Error obteniendo publicacion: "+error);
+        }
+    }
+
     const validar = (form) => {
-        if(form.titulo.trim()!=="" && form.desc.trim()!=="" && form.cat !== 0 && form.fil !== 0 && form.image !== null) {
+        if(form.titulo.trim()!=="" && form.desc.trim()!=="" && form.fil !== 0 && form.image !== null) {
             setBtnDisabled(false);
         } else setBtnDisabled(true);
     }
@@ -68,7 +72,6 @@ function AddOfertaPage() {
         switch (e.target.name) {
             case "titulo": tempForm = {...tempForm, titulo: e.target.value}; break;
             case "descripcion": tempForm = {...tempForm, desc: e.target.value}; break;
-            case "categoria": tempForm = {...tempForm, cat: e.target.value}; break;
             case "imagen": tempForm = {...tempForm, image: e.target.files[0]}; break;
             case "filial": tempForm = {...tempForm, fil: e.target.value}; break;
             case "fechaHora": tempForm = {...tempForm, fecha: e.$d}; break;
@@ -101,7 +104,7 @@ function AddOfertaPage() {
         formdata.append("publicacionId", pubId);
         formdata.append("userId", userId);
         formdata.append("filialId", form.fil);
-        formdata.append("categoriaId", form.cat);
+        formdata.append("categoria", post.categoria_ID);
         formdata.append("fechaIntercambio", form.fecha.toISOString());
         formdata.append("imagen", await fileToBase64(form.image));
 
@@ -143,17 +146,11 @@ function AddOfertaPage() {
                             <FormHelperText id="descripcion-text">Describa el producto ofertado</FormHelperText>
                         </FormControl>
                         <FormControl>
-                            <Select onChange={(event)=> {handleChange(event)}}
-                                    name="categoria" value={form.cat}
-                            >
-                                <MenuItem value={0} disabled>
-                                    Seleccione una categoría
-                                </MenuItem>
-                                { categorias.map((categoria) => (
-                                    <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
-                                ))}
-                            </Select>
-                            <FormHelperText id="categoria-text">Seleccione la categoría del producto ofertado</FormHelperText>
+                            <TextField value={post.categoria_Nombre}
+                                            type="text" variant="outlined" id="apellido"
+                                            InputLabelProps={{ shrink: true }} label="Categoria" InputProps={{ readOnly: true }}
+                                        />
+                                        <FormHelperText id="categoria-text"> Verifique que la oferta sea de la misma categoría que la publicacion original. </FormHelperText>
                         </FormControl>
                     </Stack>
                 </Grid>

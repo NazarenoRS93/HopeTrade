@@ -15,6 +15,7 @@ function EditPostPage() {
     // Render on start
     useEffect(() => {
         fetchCategorias();
+        fetchPost();
         const cookie = window.localStorage.getItem("user");
         if(cookie) {
             let user = JSON.parse(cookie);
@@ -23,6 +24,7 @@ function EditPostPage() {
     }, []);
     const [form, setForm] = useState(defaultFormAddPost);
     const [categorias, setCategorias] = useState([])
+    const [post, setPost] = useState({});
     const reader = new FileReader();
 
     const [user, setUser] = useState({});
@@ -39,7 +41,7 @@ function EditPostPage() {
     }
 
     const validar = (form) => {
-        if(form.titulo.trim()!=="" && form.desc.trim()!=="" && form.cat !== 0 && form.image !== null) {
+        if(form.desc.trim()!=="") {
             setBtnDisabled(false);
         } else setBtnDisabled(true);
     }
@@ -69,15 +71,29 @@ function EditPostPage() {
         });
     };
 
+    const fetchPost = async () => {
+        try {
+            let id = window.localStorage.getItem("pubId");
+            let url = "http://localhost:8080/publicacion/"+id;
+            const response = await axios.get(url);
+            const data = response.data;
+            data.imagenUrl = `data:image/jpeg;base64,${data.imagen}`
+            setPost(data);
+            console.log(data);
+        } catch (error) {
+            alert("Error obteniendo publicacion: "+error);
+        }
+    }   
+
     const editPost = async (event) => {
         event.preventDefault();
         let userID = user.idUser;
         let publicacionID = window.localStorage.getItem("pubId");
         var formdata = new FormData();
-        formdata.append("titulo", form.titulo);
+        formdata.append("titulo", post.titulo);
         formdata.append("descripcion", form.desc);
-        formdata.append("categoria_ID", form.cat);
-        formdata.append("imagen", await fileToBase64(form.image));
+        formdata.append("categoria_ID", post.categoria_ID);
+        formdata.append("imagen", post.imagen);
         formdata.append("userID", userID);
         formdata.append("id", publicacionID);
         axios.put('http://localhost:8080/publicacion/update', formdata, {
@@ -106,10 +122,11 @@ function EditPostPage() {
                 <Grid item xs={4}>
                     <Stack spacing={2} direction="column">
                         <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}}
-                                       type="text" variant="outlined" name="titulo"
-                            />
-                            <FormHelperText id="titulo-text">Ingrese el título de su publicación</FormHelperText>
+                            <TextField value={post.titulo}
+                                            type="text" variant="outlined" id="apellido"
+                                            InputLabelProps={{ shrink: true }} label="Titulo" InputProps={{ readOnly: true }}
+                                        />
+                                        <FormHelperText id="titulo-text"></FormHelperText>
                         </FormControl>
                         <FormControl>
                             <TextField onChange={(event)=> {handleChange(event)}}
@@ -121,28 +138,16 @@ function EditPostPage() {
                 </Grid>
                 <Grid item xs={4}>
                     <Stack spacing={2} direction="column">
-                        <FormControl>
-                            <Select onChange={(event)=> {handleChange(event)}}
-                                    value={form.cat} name="categoria" variant="outlined"
-                            >
-                                <MenuItem value={0} disabled>
-                                    Seleccione una categoría
-                                </MenuItem>
-                                { categorias.map((categoria) => (
-                                    <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
-                                ))}
-                            </Select>
-                            <FormHelperText id="categoria-text">Seleccione la categoría del producto publicado</FormHelperText>
+                    <FormControl>
+                            <TextField value={post.categoria_Nombre}
+                                            type="text" variant="outlined" id="apellido"
+                                            InputLabelProps={{ shrink: true }} label="Categoria" InputProps={{ readOnly: true }}
+                                        />
+                                        <FormHelperText id="categoria-text"></FormHelperText>
                         </FormControl>
-                        <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}}
-                                       type="file" variant="outlined" name="imagen" className="AddPostForm"
-                            />
-                            <FormHelperText id="descripcion-text">Agregue una foto del producto publicado</FormHelperText>
-                        </FormControl>
-                        <Button variant="contained" color="success" onClick={editPost}
-                                startIcon={<PostAddRoundedIcon color="primary"/>}>
-                            <Typography variant="button">Publicar</Typography>
+                        <Button startIcon={<PostAddRoundedIcon color="primary"/>} disabled={btnDisabled}
+                                variant="contained" color="success" onClick={editPost}>
+                            <Typography variant="button">Editar</Typography>
                         </Button>
                     </Stack>
                 </Grid>

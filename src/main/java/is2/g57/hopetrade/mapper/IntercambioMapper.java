@@ -29,7 +29,10 @@ public class IntercambioMapper {
         dto.setPublicacion(publicacionMapper.map(intercambio.getPublicacion()));
         dto.setOferta(ofertaMapper.map(intercambio.getOferta()));
         dto.setObservacion(intercambio.getObservacion());
+        dto.setEstado(intercambio.getEstado());
         dto.setEstadoID(1L);
+        dto.setPuntajeOfertante(intercambio.getPuntajeOfertante());
+        dto.setPuntajePublicante(intercambio.getPuntajePublicante());
         return dto;
     }
     

@@ -64,6 +64,15 @@ const UpdateProfileService = {
 		}
 	},
 	
+		unsuspendAyudante: async (id) => {
+		try {
+			const response = await axios.post(`/ayudante/dar-de-alta-suspendido/${id}`);
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	},
+	
 	deleteUser: async (id, motivo) => {
     try {
         const response = await axios.post(`/user/deleteusuario/${id}`, null, {

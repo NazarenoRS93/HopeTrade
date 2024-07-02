@@ -25,6 +25,11 @@ export const listExchangesInfo = {
 	description: "Vea y administre los intercambios pendientes del sistema."
 }
 
+export const listExchangesUserInfo = {
+	title: "Ver intercambios ",
+	description: "Vea sus intercambios."
+}
+
 export const profileUserInfo = {
 	title: "Ver Perfil",
 	description: "Vea los datos de su perfil."
@@ -33,4 +38,9 @@ export const profileUserInfo = {
 export const listAdminInfo = {
 	title: "Listar Ayudantes",
 	description: "Vea y administre los ayudantes del sistema."
+}
+
+export const donarConTarjetaInfo = {
+	title: "¡Donar ahora!",
+	description: "Con tarjeta de crédito de cualquier banco."
 }

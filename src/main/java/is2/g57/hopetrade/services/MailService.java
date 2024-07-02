@@ -48,7 +48,7 @@ public class MailService {
 	}
 
 	public void sendEmailOfertaRecibida(Oferta oferta) {
-		Optional<User> userOp = this.userRepository.findById(oferta.getPublicacion().getUserID());
+		Optional<User> userOp = this.userRepository.findById(oferta.getPublicacion().getUser().getId());
 		if (userOp.isPresent()) {
 			User user = userOp.get();
 			String subject = "Oferta recibida";
@@ -93,7 +93,7 @@ public class MailService {
 	}
 
 	private void sendEmailOfertaAceptada2(Oferta oferta) {
-		Optional<User> userOp = userRepository.findById(oferta.getPublicacion().getUserID());
+		Optional<User> userOp = userRepository.findById(oferta.getPublicacion().getUser().getId());
 		if (userOp.isPresent()) {
 			User user = userOp.get();
 			String subject = "Intercambio programado";
@@ -177,7 +177,7 @@ public class MailService {
 
 	public void sendEmailComentarioRecibido(User user, Publicacion publicacion) {
 		String subject = "Comentario recibido";
-		Optional<User> userOp = this.userRepository.findById(publicacion.getUserID());
+		Optional<User> userOp = this.userRepository.findById(publicacion.getUser().getId());
 		if (userOp.isPresent()) {
 			User publicacionUser = userOp.get();
 		String text = "Hola " + publicacionUser.getNombre()  + ",\n\n"
@@ -188,7 +188,20 @@ public class MailService {
 		message.setSubject(subject);
 		message.setText(text);
 		mailSender.send(message);
-		// TODO Auto-generated method stub
 		}
+	}
+
+	public void sendEmailAlta(Ayudante ayudante) {
+		String subject = "Cuenta dada de alta";
+		String text = "Hola " + ayudante.getNombre() + ",\n\n"
+				+ "Te informamos que tu cuenta de ayudante fue dada de alta" + ",\n"
+				+ "Bienvenido nuevamente al equipo de hopetrade" + ",\n\n"
+				+ "Saludos.";
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(ayudante.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+		
 	}
 }

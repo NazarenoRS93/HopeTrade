@@ -27,10 +27,10 @@ function Oferta( props ) {
             <CardContent>
                 <Grid container alignItems="center" spacing={1}>
                     <Grid item xs={9}>
-                        <Typography variant="subtitle2">Oferta {data.id}: {data.titulo}</Typography>
+                        <Typography variant="subtitle2">Oferta: {data.titulo}</Typography>
                         <Typography variant="h6"><b>por: </b>{data.userFullName}</Typography>
                         <hr/>
-                        <Typography variant="h2">{data.descripcion} asdasdaddas</Typography>
+                        <Typography variant="h2">{data.descripcion}</Typography>
                         <hr/>
                         <Typography variant="h6">en <b>{data.filialNombre}</b> </Typography> 
                         <Typography variant="h6"> Fecha propuesta: {data.fechaIntercambio} </Typography>
@@ -40,17 +40,20 @@ function Oferta( props ) {
                     </Grid> */}
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
-                            { (publicacion.estado === "Disponible") ?
+                            { (publicacion.estado === "Disponible" && user.idUser === publicacion.userID && user.tipoUser === 0) ?
                                     <Button variant="contained" color="success" onClick={onAccept}
                                         startIcon={<RepeatRounded color="primary"/>}>
                                     <Typography variant="button">Aceptar</Typography>
                                     </Button>
                                     : null
                             }
+                            { (publicacion.estado === "Disponible") ?
                             <Button variant="contained" color="error" onClick={onRechazar}
                                     startIcon={<DeleteRounded color="background2"/>}>
                                 <Typography variant="button2">Rechazar</Typography>
                             </Button>
+                            : null
+                            }
                         </Stack>
                     </Grid>
                 </Grid>
