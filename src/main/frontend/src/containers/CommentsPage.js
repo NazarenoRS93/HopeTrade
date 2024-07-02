@@ -201,7 +201,7 @@ function CommentsPage() {
 							>
 								<Typography variant="body2">
 									{comentario.nombre} {comentario.apellido} - {new Date(comentario.fechaComentario).toLocaleString()}
-									{(comentario.userId === user.idUser || user.tipoUser === 2) && (
+									{(comentario.userId === user.idUser || user.tipoUser === 2) && !respuestas[comentario.idComentario] &&(
 										<Button
 											variant="contained"
 											color="error"
@@ -216,7 +216,7 @@ function CommentsPage() {
 											Eliminar
 										</Button>
 									)}
-									{publicacion.userID === user.idUser && (
+									{publicacion.userID === user.idUser  && !respuestas[comentario.idComentario] &&(
 										<Button
 											variant="contained"
 											color="primary"
@@ -251,7 +251,7 @@ function CommentsPage() {
 									</Box>
 								)}
 								{/* Formulario para responder */}
-								{comentarioSeleccionado && comentarioSeleccionado.idComentario === comentario.idComentario && (
+								{comentarioSeleccionado && comentarioSeleccionado.idComentario === comentario.idComentario && !respuestas[comentario.idComentario] && (
 									<Box sx={{ marginLeft: 2, marginTop: 1 }}>
 										<TextField
 											fullWidth
