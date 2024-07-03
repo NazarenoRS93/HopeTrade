@@ -17,6 +17,7 @@ function MostrarDonacionesPage() {
     const [donacionesTarjeta, setDonacionesTarjeta] = useState([]);
     const [ayudantes, setAyudantes] = useState({});
     const [categorias, setCategorias] = useState({});
+    const [userNames, setUserNames] = useState({}); // Estado para almacenar nombres de usuario
 
     useEffect(() => {
         fetchDonaciones();
@@ -30,6 +31,7 @@ function MostrarDonacionesPage() {
             setDonacionesTarjeta(tarjeta);
             fetchAyudantes(enFilial);
             fetchCategorias(enFilial);
+            fetchUserNames(tarjeta); // Llamar a la función para obtener nombres de usuario
         } catch (error) {
             alert("Error fetching donations: " + error);
         }
@@ -62,6 +64,22 @@ function MostrarDonacionesPage() {
             setCategorias(categoriasMap);
         } catch (error) {
             alert("Error fetching categories: " + error);
+        }
+    };
+
+    const fetchUserNames = async (donaciones) => {
+        try {
+            const userIds = donaciones.map(donacion => donacion.id_usuario);
+            const uniqueUserIds = [...new Set(userIds)]; // Filtrar IDs únicos
+
+            const userNameMap = {};
+            for (const userId of uniqueUserIds) {
+                const user = await DonacionesService.getUserById(userId);
+                userNameMap[userId] = `${user.nombre} ${user.apellido}`;
+            }
+            setUserNames(userNameMap);
+        } catch (error) {
+            alert("Error fetching user names: " + error);
         }
     };
 
@@ -118,7 +136,7 @@ function MostrarDonacionesPage() {
                                 <TableBody>
                                     {donacionesTarjeta.map((donacion) => (
                                         <TableRow key={donacion.id}>
-                                            <TableCell>{donacion.id_usuario}</TableCell>
+                                            <TableCell>{userNames[donacion.id_usuario] || "Cargando..."}</TableCell>
                                             <TableCell>{format(new Date(donacion.fecha_hora), 'dd/MM/yyyy HH:mm:ss')}</TableCell>
                                             <TableCell>{donacion.monto}</TableCell>
                                             <TableCell>{donacion.numero_tarjeta}</TableCell>
