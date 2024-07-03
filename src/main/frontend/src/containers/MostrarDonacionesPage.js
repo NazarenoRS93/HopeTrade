@@ -83,22 +83,34 @@ function MostrarDonacionesPage() {
         }
     };
 
+    const titleCellStyle = {
+        backgroundColor: 'grey',
+        color: 'white',
+        fontWeight: 'bold',
+    };
+
+    const titleContainerStyle = {
+        marginBottom: '20px', // Espacio inferior para separar los títulos de las tablas
+    };
+
     return (
         <React.Fragment>
             <Grid container spacing={2} className="FullWidthPage">
                 <Grid item xs={12}>
-                    <Typography variant="h4">Donaciones en Filial</Typography>
+                    <div style={titleContainerStyle}>
+                        <Typography variant="h4">Donaciones en Filial</Typography>
+                    </div>
                     {donacionesEnFilial.length > 0 ? (
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Nombre del Donante</TableCell>
-                                        <TableCell>Nombre del Ayudante</TableCell>
-                                        <TableCell>Categoría</TableCell>
-                                        <TableCell>Cantidad</TableCell>
-                                        <TableCell>Fecha y Hora</TableCell>
-                                        <TableCell>DNI del Donante</TableCell>
+                                        <TableCell style={titleCellStyle}>Nombre del Donante</TableCell>
+                                        <TableCell style={titleCellStyle}>Nombre del Ayudante</TableCell>
+                                        <TableCell style={titleCellStyle}>Categoría</TableCell>
+                                        <TableCell style={titleCellStyle}>Cantidad</TableCell>
+                                        <TableCell style={titleCellStyle}>Fecha y Hora</TableCell>
+                                        <TableCell style={titleCellStyle}>DNI del Donante</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -121,16 +133,18 @@ function MostrarDonacionesPage() {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Typography variant="h4">Donaciones por Tarjeta</Typography>
+                    <div style={titleContainerStyle}>
+                        <Typography variant="h4">Donaciones por Tarjeta</Typography>
+                    </div>
                     {donacionesTarjeta.length > 0 ? (
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell>Nombre del Donante</TableCell>
-                                        <TableCell>Fecha y Hora</TableCell>
-                                        <TableCell>Monto</TableCell>
-                                        <TableCell>Número de Tarjeta</TableCell>
+                                        <TableCell style={titleCellStyle}>Nombre del Donante</TableCell>
+                                        <TableCell style={titleCellStyle}>Fecha y Hora</TableCell>
+                                        <TableCell style={titleCellStyle}>Monto</TableCell>
+                                        <TableCell style={titleCellStyle}>Número de Tarjeta</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
