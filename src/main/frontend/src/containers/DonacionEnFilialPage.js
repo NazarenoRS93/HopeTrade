@@ -61,13 +61,29 @@ function DonacionEnFilialPage() {
 
     const handleChange = (e) => {
         let tempForm = {...form};
+        let value = e.target.value;
+
         switch (e.target.id) {
-            case "dni_donante": tempForm = {...tempForm, dni_donante: e.target.value}; break;
-            case "nombre_completo_donante": tempForm = {...tempForm, nombre_completo_donante: e.target.value}; break;
-            case "descripcion_donacion": tempForm = {...tempForm, descripcion_donacion: e.target.value}; break;
-            case "cantidad": tempForm = {...tempForm, cantidad: e.target.value}; break;
-            default: break;
+            case "dni_donante":
+                tempForm = {...tempForm, dni_donante: value};
+                break;
+            case "nombre_completo_donante":
+                tempForm = {...tempForm, nombre_completo_donante: value};
+                break;
+            case "descripcion_donacion":
+                tempForm = {...tempForm, descripcion_donacion: value};
+                break;
+            case "cantidad":
+                // Eliminar ceros a la izquierda si no es el primer dígito
+                if (value.length > 1 && value[0] === '0') {
+                    value = value.slice(1);
+                }
+                tempForm = {...tempForm, cantidad: value};
+                break;
+            default:
+                break;
         }
+
         if (e.target.name === "id_categoria") {
             tempForm = {...tempForm, id_categoria: e.target.value};
         }
@@ -91,10 +107,7 @@ function DonacionEnFilialPage() {
         DonacionEnFilialService.registrarDonacionEnFilial(form)
             .then((response) => {
                 alert(response.data);
-                let ret = "/home";
-                let href = window.location.href;
-                href = href.substring(0, href.lastIndexOf('/'));
-                window.location.replace(href+ret);
+                window.location.reload();
             })
             .catch((err) => {
                 alert(err.response.data);
@@ -199,10 +212,12 @@ function DonacionEnFilialPage() {
                 <Grid item xs={1}/>
                 <Grid item container spacing={2} xs={10}>
                     <Stack spacing={2} direction="row">
-                        <Button variant="contained" color="success" startIcon={<TaskAltRoundedIcon color="primary"/>}
-                                    onClick={registrarDonacion} disabled={btnDisabled}>
-                            <Typography variant="button">Guardar</Typography>
-                        </Button>
+                        {tipoDonacion && (
+                            <Button variant="contained" color="success" startIcon={<TaskAltRoundedIcon color="primary"/>}
+                                        onClick={registrarDonacion} disabled={btnDisabled}>
+                                <Typography variant="button">Guardar</Typography>
+                            </Button>
+                        )}
                     </Stack>
                 </Grid>
             </Grid>
