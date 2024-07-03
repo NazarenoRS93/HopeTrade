@@ -29,6 +29,7 @@ import SystemUsersListPage from "./containers/SystemUsersListPage";
 import CommentsPage from './containers/CommentsPage';
 import CardPaymentPage from './containers/CardPaymentPage';
 import DonacionEnFilialPage from './containers/DonacionEnFilialPage';
+import MostrarDonacionesPage from './containers/MostrarDonacionesPage';
 
 const router = createBrowserRouter(
 	[
@@ -127,14 +128,18 @@ const router = createBrowserRouter(
 				{
 					path: "/comentarios/:id",
 					element: <CommentsPage />
-        },
-        {
+				},
+				{
 					path: "/pago-tarjeta",
 					element: <CardPaymentPage />
 				},
 				{
 					path: "/donacion-presencial",
 					element: <DonacionEnFilialPage />
+				},
+				{
+					path: "/ver-donaciones",
+					element: <MostrarDonacionesPage />
 				},
 			]
 		},
