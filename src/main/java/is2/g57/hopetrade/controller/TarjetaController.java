@@ -58,8 +58,7 @@ public class TarjetaController {
 												, unaTarjeta.getNumero(), paramTarjetaRequest.getMonto());
 										this.donacionRepository.save(unaDonacion);
 										// Se devuelve mensaje de éxito
-										return new ResponseEntity<>("¡¡Muchas gracias!! ¡Recibimos tu pago correctamente! Tu donación quedó registrada bajo el número: #" 
-												+ unaDonacion.getId().toString() + " en nuestro sistema.", HttpStatus.OK);
+										return new ResponseEntity<>("¡Muchas gracias por colaborar con Cáritas! ¡Recibimos tu pago correctamente!", HttpStatus.OK);
 										// ¿¿enviar un emilio??
 									} else {
 										return new ResponseEntity<>("La tarjeta ingresada no dispone de saldo suficiente para completar la operación.", HttpStatus.BAD_REQUEST);

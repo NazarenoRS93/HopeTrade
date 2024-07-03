@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import '../App.css';
 import { onlyNumbers } from "../utils/utilMethods";
-import { defaultFormPayment } from "../utils/utilConstants"
+import { defaultFormPayment } from "../utils/utilConstants";
 import TextField from "@mui/material/TextField";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Typography from "@mui/material/Typography";
@@ -33,7 +33,7 @@ function CardPaymentPage() {
         } else {
             setBtnDisabled(true);
         }
-    }
+    };
 
     const handleChange = (e) => {
         let tempForm = { ...form };
@@ -58,7 +58,7 @@ function CardPaymentPage() {
         }
         setForm(tempForm);
         verificaIngresoDatos(tempForm);
-    }
+    };
 
     const handleChangeDP = (val, cntxt) => {
         let sValDP = "";
@@ -74,22 +74,21 @@ function CardPaymentPage() {
             setErrorDatePicker(cntxt.validationError.length !== 0);
         }
         verificaIngresoDatos(tempForm);
-    }
+    };
 
     const handleShowPassword = () => {
         setShowPassword(!showPassword);
-    }
+    };
 
     const registrarPago = async () => {
         CardPaymentService.registrarPagoTarjeta(form)
             .then((response) => {
                 alert(response.data);
-              
             })
             .catch((err) => {
                 alert(err.response.data);
-            })
-    }
+            });
+    };
 
     return (
         <React.Fragment>
@@ -129,7 +128,7 @@ function CardPaymentPage() {
                                 <TextField onChange={(event) => { handleChange(event) }} value={form.codigo}
                                     type={showPassword ? "text" : "password"} variant="outlined" id="codigo_cvv"
                                     inputProps={{
-                                        maxLength: "4",
+                                        maxLength: "3", // Aquí cambiamos a 3 dígitos
                                     }}
                                     InputProps={{
                                         endAdornment: (
@@ -203,7 +202,7 @@ function CardPaymentPage() {
                 </Grid>
             </Grid>
         </React.Fragment>
-    )
+    );
 }
 
 export default CardPaymentPage;
