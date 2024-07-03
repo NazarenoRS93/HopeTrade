@@ -66,3 +66,11 @@ export const defaultFormPayment = {
     codigo: '',
     monto: ''
 };
+export const defaultFormDonacion = {
+    dni_donante: '',
+    nombre_completo_donante: '',
+    id_categoria: 0,
+    descripcion_donacion: '',
+    cantidad: '',
+    es_dinero: false
+};

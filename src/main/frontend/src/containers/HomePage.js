@@ -5,7 +5,8 @@ import NoteAddRoundedIcon from '@mui/icons-material/NoteAddRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import FindInPageRoundedIcon from '@mui/icons-material/FindInPageRounded';
-import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
+import VolunteerActivismRoundedIcon from '@mui/icons-material/VolunteerActivismRounded';
+import EditNoteRoundedIcon from '@mui/icons-material/EditNoteRounded';
 import HomeGrid from "../components/home/HomeGrid";
 import HomeItem from "../components/home/HomeItem";
 import {
@@ -17,7 +18,8 @@ import {
 	listUsersInfo,
 	viewPostsInfo,
 	listExchangesUserInfo,
-	donarConTarjetaInfo
+	donarConTarjetaInfo,
+	registrarDonacionEnFilialInfo
 } from "../utils/utilData";
 
 function HomePage() {
@@ -54,7 +56,7 @@ function HomePage() {
 					: null
 				}
 				{user?.tipoUser === 0 ?
-					<HomeItem link="/pago-tarjeta" data={donarConTarjetaInfo} icon={<VolunteerActivismIcon color="primary" />} />
+					<HomeItem link="/pago-tarjeta" data={donarConTarjetaInfo} icon={<VolunteerActivismRoundedIcon color="primary" />} />
 					: null
 				}
 				{user?.tipoUser === 1 || user?.tipoUser === 2 ? 
@@ -72,6 +74,10 @@ function HomePage() {
 				}
 				{user?.tipoUser === 1 ?
 					<HomeItem link="/verperfiladministrativo" data={profileUserInfo} icon={<PersonRoundedIcon color="primary" />} />
+					: null
+				}
+				{user?.tipoUser === 1 ?
+					<HomeItem link="/donacion-presencial" data={registrarDonacionEnFilialInfo} icon={<EditNoteRoundedIcon color="primary" />} />
 					: null
 				}
 			</HomeGrid>

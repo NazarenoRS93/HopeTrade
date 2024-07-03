@@ -44,3 +44,8 @@ export const donarConTarjetaInfo = {
 	title: "¡Donar ahora!",
 	description: "Con tarjeta de crédito de cualquier banco."
 }
+
+export const registrarDonacionEnFilialInfo = {
+	title: "Registrar donaciones",
+	description: "Registre las donaciones que recibe en su filial."
+}

@@ -28,6 +28,7 @@ import SystemAdminsPage from "./containers/SystemAdminsPage";
 import SystemUsersListPage from "./containers/SystemUsersListPage";
 import CommentsPage from './containers/CommentsPage';
 import CardPaymentPage from './containers/CardPaymentPage';
+import DonacionEnFilialPage from './containers/DonacionEnFilialPage';
 
 const router = createBrowserRouter(
 	[
@@ -130,6 +131,10 @@ const router = createBrowserRouter(
         {
 					path: "/pago-tarjeta",
 					element: <CardPaymentPage />
+				},
+				{
+					path: "/donacion-presencial",
+					element: <DonacionEnFilialPage />
 				},
 			]
 		},
