@@ -19,7 +19,8 @@ import {
 	viewPostsInfo,
 	listExchangesUserInfo,
 	donarConTarjetaInfo,
-	registrarDonacionEnFilialInfo
+	registrarDonacionEnFilialInfo,
+	verInventario
 } from "../utils/utilData";
 
 function HomePage() {
@@ -44,10 +45,10 @@ function HomePage() {
 					: null
 				}
 				{user?.tipoUser === 0 ?
-                    <HomeItem link={`/exchanges/${user.idUser}`} data={listExchangesUserInfo} icon={<DescriptionRoundedIcon color="primary" />} />
-                    : null
-                }
-                {user?.tipoUser === 0 ?
+					<HomeItem link={`/exchanges/${user.idUser}`} data={listExchangesUserInfo} icon={<DescriptionRoundedIcon color="primary" />} />
+					: null
+				}
+				{user?.tipoUser === 0 ?
 					<HomeItem link="/add-post" data={addPostInfo} icon={<NoteAddRoundedIcon color="primary" />} />
 					: null
 				}
@@ -59,7 +60,7 @@ function HomePage() {
 					<HomeItem link="/pago-tarjeta" data={donarConTarjetaInfo} icon={<VolunteerActivismRoundedIcon color="primary" />} />
 					: null
 				}
-				{user?.tipoUser === 1 || user?.tipoUser === 2 ? 
+				{user?.tipoUser === 1 || user?.tipoUser === 2 ?
 					<HomeItem link="/exchanges" data={listExchangesInfo} icon={<PersonRoundedIcon color="primary" />} />
 					:
 					null
@@ -78,6 +79,10 @@ function HomePage() {
 				}
 				{user?.tipoUser === 1 ?
 					<HomeItem link="/donacion-presencial" data={registrarDonacionEnFilialInfo} icon={<EditNoteRoundedIcon color="primary" />} />
+					: null
+				}
+				{user?.tipoUser === 2 ?
+					<HomeItem link="/ver-donaciones" data={verInventario} icon={<EditNoteRoundedIcon color="primary" />} />
 					: null
 				}
 			</HomeGrid>

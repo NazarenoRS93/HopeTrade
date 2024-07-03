@@ -49,3 +49,8 @@ export const registrarDonacionEnFilialInfo = {
 	title: "Registrar donaciones",
 	description: "Registre las donaciones que recibe en su filial."
 }
+
+export const verInventario = {
+	title: "Ver inventario",
+	description: "Vea las donaciones realizadas en todas las filiales."
+}

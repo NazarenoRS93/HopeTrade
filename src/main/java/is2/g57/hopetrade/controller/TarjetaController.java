@@ -3,11 +3,13 @@ package is2.g57.hopetrade.controller;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -85,5 +87,11 @@ public class TarjetaController {
 			return new ResponseEntity<>("Por favor, revise el monto ingresado. El mismo no debe ser inferior a $" + Double.toString(nMinMonto).replace(".0", "") + ".", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/tarjeta/all")
+    public ResponseEntity<?> obtenerTodasLasDonacionesTarjeta() {
+        List<DonacionTarjeta> donaciones = this.donacionRepository.findAll();
+        return new ResponseEntity<>(donaciones, HttpStatus.OK);
+    }
 
 }
