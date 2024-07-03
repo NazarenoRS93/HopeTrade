@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import '../App.css';
 import { onlyNumbers } from "../utils/utilMethods";
 import { defaultFormPayment } from "../utils/utilConstants"
@@ -27,48 +27,57 @@ function CardPaymentPage() {
 
     const verificaIngresoDatos = (tmpForm) => {
         if (tmpForm.numero.trim() !== "" && tmpForm.fecha_vencimiento.toString().trim() !== "" && tmpForm.codigo.trim() !== "" &&
-            tmpForm.dni_titular.trim() !== "" && tmpForm.monto.trim() !== "" && tmpForm.nombre_titular.trim() !== "") {
-            setBtnDisabled(false)
+            tmpForm.dni_titular.trim() !== "" && tmpForm.monto.trim() !== "" && parseFloat(tmpForm.monto) >= 10 &&
+            tmpForm.nombre_titular.trim() !== "") {
+            setBtnDisabled(false);
         } else {
-            setBtnDisabled(true)
-        };
+            setBtnDisabled(true);
+        }
     }
 
     const handleChange = (e) => {
-        let tempForm = {...form};
+        let tempForm = { ...form };
         switch (e.target.id) {
-            case "numero": tempForm = {...tempForm, numero: e.target.value}; break;
-            //case "fecha_vencimiento": tempForm = {...tempForm, fecha_vencimiento: e.target.value}; break;
-            case "codigo_cvv": tempForm = {...tempForm, codigo: e.target.value}; break;
-            case "dni_titular": tempForm = {...tempForm, dni_titular: e.target.value}; break;
-            case "monto": tempForm = {...tempForm, monto: e.target.value}; break;
-            case "nombre_titular": tempForm = {...tempForm, nombre_titular: e.target.value}; break;
-            default: break;
+            case "numero":
+                tempForm = { ...tempForm, numero: e.target.value };
+                break;
+            case "codigo_cvv":
+                tempForm = { ...tempForm, codigo: e.target.value };
+                break;
+            case "dni_titular":
+                tempForm = { ...tempForm, dni_titular: e.target.value };
+                break;
+            case "monto":
+                tempForm = { ...tempForm, monto: e.target.value };
+                break;
+            case "nombre_titular":
+                tempForm = { ...tempForm, nombre_titular: e.target.value };
+                break;
+            default:
+                break;
         }
         setForm(tempForm);
-        // alert(tempForm.fecha_vencimiento.toString());
         verificaIngresoDatos(tempForm);
     }
 
     const handleChangeDP = (val, cntxt) => {
         let sValDP = "";
         if (val !== null) {
-            sValDP = val
+            sValDP = val;
         }
-        let tempForm = {...form};
-        tempForm = {...tempForm, fecha_vencimiento: sValDP};
+        let tempForm = { ...form };
+        tempForm = { ...tempForm, fecha_vencimiento: sValDP };
         setForm(tempForm);
         if (cntxt.validationError === null) {
-            // Se toma como error si el usuario deja en blanco la fecha del DatePicker
-            setErrorDatePicker(val === null)
+            setErrorDatePicker(val === null);
         } else {
-            setErrorDatePicker(cntxt.validationError.length !== 0)
+            setErrorDatePicker(cntxt.validationError.length !== 0);
         }
         verificaIngresoDatos(tempForm);
     }
 
     const handleShowPassword = () => {
-        setShowPassword(!showPassword)
+        setShowPassword(!showPassword);
     }
 
     const registrarPago = async () => {
@@ -78,7 +87,7 @@ function CardPaymentPage() {
                 let ret = "/home";
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
-                window.location.replace(href+ret);
+                window.location.replace(href + ret);
             })
             .catch((err) => {
                 alert(err.response.data);
@@ -87,101 +96,113 @@ function CardPaymentPage() {
 
     return (
         <React.Fragment>
-            <Grid container spacing={2} className="FullWidthPage">
+            <Grid container spacing={2} className="FullWidthPage" justifyContent="center">
                 <Grid item xs={12}>
-                    <Typography variant="subtitle1">Datos de la tarjeta</Typography>
+                    <Typography variant="subtitle1" align="center">Datos de la tarjeta</Typography>
                 </Grid>
-                <Grid item xs={1}/>
-                <Grid item container spacing={2} xs={10}>
-                    <Stack spacing={2} direction="row">
-                        <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.numero}
-                                        type="text" variant="outlined" id="numero" placeholder="1234567890123456"
-                                        inputProps={{
-                                            maxlength: "16",
-                                        }}
-                                        InputProps={{
-                                            endAdornment: <InputAdornment position="end"><CreditCardIcon /></InputAdornment>,
-                                        }}
-                                        onInput={(event) => onlyNumbers(event) }
-                            />
-                            <FormHelperText id="numero-text">Número de tarjeta</FormHelperText>
-                        </FormControl>
-                        <FormControl>
-                            <DatePicker onChange={(value, context)=> {handleChangeDP(value, context)}} views={['month', 'year']}
-                                        variant="outlined" id="fecha_vencimiento" minDate={dayjs('2024-01-01')} 
-                                        maxDate={dayjs('2029-12-31')} format="MMM YYYY"
-                            />
-                            <FormHelperText id="fecha-vencimiento-text">Fecha de vencimiento</FormHelperText>
-                        </FormControl>
-                        <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.codigo} 
-                                        type={showPassword ? "text" : "password"} variant="outlined" id="codigo_cvv" 
-                                        inputProps={{
-                                            maxlength: "4",
-                                        }}
-                                        InputProps={{
-                                            endAdornment: (
-                                                <InputAdornment position="end">
-                                                    <IconButton
-                                                        onClick={handleShowPassword}
-                                                    >
-                                                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                                    </IconButton>
-                                                </InputAdornment>
-                                            )
-                                        }}
-                                        onInput={(event) => onlyNumbers(event) }
-                            />
-                            <FormHelperText id="codigo-cvv-text">Código de seguridad</FormHelperText>
-                        </FormControl>
-                    </Stack>
+                <Grid item xs={12}>
+                    <Grid container spacing={2} justifyContent="center">
+                        <Grid item>
+                            <FormControl fullWidth>
+                                <TextField onChange={(event) => { handleChange(event) }} value={form.numero}
+                                    type="text" variant="outlined" id="numero" placeholder="1234567890123456"
+                                    inputProps={{
+                                        maxLength: "16",
+                                    }}
+                                    InputProps={{
+                                        endAdornment: <InputAdornment position="end"><CreditCardIcon /></InputAdornment>,
+                                    }}
+                                    onInput={(event) => onlyNumbers(event)}
+                                />
+                                <FormHelperText id="numero-text">Número de tarjeta</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl>
+                                <DatePicker onChange={(value, context) => { handleChangeDP(value, context) }} views={['month', 'year']}
+                                    variant="outlined" id="fecha_vencimiento" minDate={dayjs('2024-01-01')}
+                                    maxDate={dayjs('2029-12-31')} format="MMM YYYY"
+                                    error={errorDatePicker}
+                                />
+                                <FormHelperText id="fecha-vencimiento-text">Fecha de vencimiento</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl>
+                                <TextField onChange={(event) => { handleChange(event) }} value={form.codigo}
+                                    type={showPassword ? "text" : "password"} variant="outlined" id="codigo_cvv"
+                                    inputProps={{
+                                        maxLength: "4",
+                                    }}
+                                    InputProps={{
+                                        endAdornment: (
+                                            <InputAdornment position="end">
+                                                <IconButton
+                                                    onClick={handleShowPassword}
+                                                >
+                                                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        )
+                                    }}
+                                    onInput={(event) => onlyNumbers(event)}
+                                />
+                                <FormHelperText id="codigo-cvv-text">Código de seguridad</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item xs={1}/>
-                <Grid item container spacing={2} xs={10}>
-                    <Stack spacing={2} direction="row">
-                        <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.dni_titular}
-                                        type="text" variant="outlined" id="dni_titular" 
-                                        inputProps={{
-                                            maxlength: "8",
-                                        }}
-                                        onInput={(event) => onlyNumbers(event) }
-                            />
-                            <FormHelperText id="dni-titular-text">Ingrese n° de documento sin puntos</FormHelperText>
-                        </FormControl>
-                        <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.monto}
-                                        type="text" variant="outlined" id="monto" 
-                                        inputProps={{
-                                            maxlength: "9",
-                                        }}
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                                        }}
-                                        onInput={(event) => onlyNumbers(event) }
-                            />
-                            <FormHelperText id="monto-text">Monto a donar</FormHelperText>
-                        </FormControl>
-                        <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}} value={form.nombre_titular}
-                                        type="text" variant="outlined" id="nombre_titular" 
-                                        inputProps={{
-                                            maxlength: "50",
-                                        }}
-                            />
-                            <FormHelperText id="nombre-titular-text">Nombre y apellido del titular</FormHelperText>
-                        </FormControl>
-                    </Stack>
+                <Grid item xs={12}>
+                    <Grid container spacing={2} justifyContent="center">
+                        <Grid item>
+                            <FormControl>
+                                <TextField onChange={(event) => { handleChange(event) }} value={form.dni_titular}
+                                    type="text" variant="outlined" id="dni_titular"
+                                    inputProps={{
+                                        maxLength: "8",
+                                    }}
+                                    onInput={(event) => onlyNumbers(event)}
+                                />
+                                <FormHelperText id="dni-titular-text">Ingrese n° de documento sin puntos</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl>
+                                <TextField onChange={(event) => { handleChange(event) }} value={form.monto}
+                                    type="text" variant="outlined" id="monto"
+                                    inputProps={{
+                                        maxLength: "9",
+                                    }}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                    }}
+                                    onInput={(event) => onlyNumbers(event)}
+                                />
+                                <FormHelperText id="monto-text">Monto a donar</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                        <Grid item>
+                            <FormControl>
+                                <TextField onChange={(event) => { handleChange(event) }} value={form.nombre_titular}
+                                    type="text" variant="outlined" id="nombre_titular"
+                                    inputProps={{
+                                        maxLength: "50",
+                                    }}
+                                />
+                                <FormHelperText id="nombre-titular-text">Nombre y apellido del titular</FormHelperText>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
                 </Grid>
-                <Grid item xs={1}/>
-                <Grid item container spacing={2} xs={10}>
-                    <Stack spacing={2} direction="row">
-                        <Button variant="contained" color="secondary" startIcon={<CreditScoreIcon color="primary"/>}
-                                    onClick={registrarPago} disabled={btnDisabled || errorDatePicker}>
-                            <Typography variant="button">Donar</Typography>
-                        </Button>
-                    </Stack>
+                <Grid item xs={12}>
+                    <Grid container spacing={2} justifyContent="center">
+                        <Grid item>
+                            <Button variant="contained" color="secondary" startIcon={<CreditScoreIcon color="primary" />}
+                                onClick={registrarPago} disabled={btnDisabled || errorDatePicker || parseFloat(form.monto) < 10}>
+                                <Typography variant="button">Donar</Typography>
+                            </Button>
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </React.Fragment>
