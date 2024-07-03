@@ -9,26 +9,23 @@ import Stack from "@mui/material/Stack";
 import FormHelperText from "@mui/material/FormHelperText";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormControl from "@mui/material/FormControl";
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
 import TaskAltRoundedIcon from '@mui/icons-material/TaskAltRounded';
 import DonacionEnFilialService from "../services/DonacionEnFilialService";
 
 function DonacionEnFilialPage() {
     const [idCategoriaOtros, setIdCategoriaOtros] = useState(-1);
     const [categorias, setCategorias] = useState([]);
+    const [tipoDonacion, setTipoDonacion] = useState(""); // Nuevo estado para el tipo de donación
+    const [form, setForm] = useState(defaultFormDonacion);
+    const [btnDisabled, setBtnDisabled] = useState(true);
 
     useEffect(() => {
         fetchCategorias();
     }, []);
-
-    const [boolCategoriaDescripcion, setBoolCategoriaDescripcion] = useState(true);
-    const [form, setForm] = useState(defaultFormDonacion);
-    const [btnDisabled, setBtnDisabled] = useState(true);
 
     const fetchCategorias = async () => {
         try {
@@ -43,12 +40,23 @@ function DonacionEnFilialPage() {
     }
 
     const verificaIngresoDatos = (tmpForm) => {
-        if (tmpForm.dni_donante.trim() !== "" && tmpForm.nombre_completo_donante.toString().trim() !== "" && tmpForm.id_categoria !== 0 &&
-            tmpForm.descripcion_donacion.trim() !== "" && tmpForm.cantidad.trim() !== "") {
-            setBtnDisabled(false)
+        if (tipoDonacion === "Efectivo") {
+            if (tmpForm.dni_donante.trim() !== "" && tmpForm.nombre_completo_donante.trim() !== "" && tmpForm.cantidad.trim() !== ""
+			&& parseFloat(tmpForm.cantidad) > 0) {
+                setBtnDisabled(false)
+            } else {
+                setBtnDisabled(true)
+            }
+        } else if (tipoDonacion === "Alimento") {
+            if (tmpForm.dni_donante.trim() !== "" && tmpForm.nombre_completo_donante.trim() !== "" && tmpForm.id_categoria !== 0 &&
+                tmpForm.descripcion_donacion.trim() !== "" && tmpForm.cantidad.trim() !== "" && parseFloat(tmpForm.cantidad) > 0) {
+                setBtnDisabled(false)
+            } else {
+                setBtnDisabled(true)
+            }
         } else {
             setBtnDisabled(true)
-        };
+        }
     }
 
     const handleChange = (e) => {
@@ -67,13 +75,12 @@ function DonacionEnFilialPage() {
         verificaIngresoDatos(tempForm);
     }
 
-    const handleChangeDinero = (e) => {
+    const handleTipoDonacionChange = (e) => {
+        setTipoDonacion(e.target.value);
         let tempForm = {...form};
-        if (e.target.checked) {
-            setBoolCategoriaDescripcion(false);
+        if (e.target.value === "Efectivo") {
             tempForm = {...tempForm, id_categoria: idCategoriaOtros, descripcion_donacion: 'Dinero en efectivo', es_dinero: true};
         } else {
-            setBoolCategoriaDescripcion(true);
             tempForm = {...tempForm, id_categoria: 0, descripcion_donacion: '', es_dinero: false};
         }
         setForm(tempForm);
@@ -102,68 +109,92 @@ function DonacionEnFilialPage() {
                 </Grid>
                 <Grid item xs={1}/>
                 <Grid item container spacing={2} xs={10}>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}} value={form.dni_donante}
-                                    type="text" variant="outlined" id="dni_donante" 
-                                    inputProps={{
-                                        maxlength: "8",
-                                    }}
-                                    onInput={(event) => onlyNumbers(event) }
-                        />
-                        <FormHelperText id="dni-donante-text">Ingrese n° de documento sin puntos</FormHelperText>
-                    </FormControl>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}} value={form.nombre_completo_donante}
-                                    type="text" variant="outlined" id="nombre_completo_donante" 
-                                    inputProps={{
-                                        maxlength: "100",
-                                    }}
-                        />
-                        <FormHelperText id="nombre-completo-donante-text">Nombre y apellido</FormHelperText>
-                    </FormControl>
-                    <FormControl>
-                        <FormControlLabel
-                            control={
-                                <Checkbox onChange={(event)=> {handleChangeDinero(event)}} checked={form.es_dinero}
-                                            variant="outlined" id="es_dinero" />
-                            } label="¿Entrega dinero?"
-                        />
-                    </FormControl>
-                    <FormControl>
-                        <Select onChange={(event)=> {handleChange(event)}}  disabled={!boolCategoriaDescripcion}
-                                    value={form.id_categoria} name="id_categoria" variant="outlined"
+                    <FormControl fullWidth>
+                        <Select
+                            value={tipoDonacion}
+                            onChange={handleTipoDonacionChange}
+                            displayEmpty
+                            inputProps={{ 'aria-label': 'Seleccione tipo de donación' }}
                         >
-                            <MenuItem value={0} disabled>
-                                Seleccione una categoría
-                            </MenuItem>
-                            { categorias.map((categoria) => (
-                                <MenuItem key={categoria.id} value={categoria.id}>{categoria.nombre}</MenuItem>
-                            ))}
+                            <MenuItem value="" disabled>Seleccione tipo de donación</MenuItem>
+                            <MenuItem value="Efectivo">Efectivo</MenuItem>
+                            <MenuItem value="Alimento">Bien material</MenuItem>
                         </Select>
-                        <FormHelperText id="categoria-text">Seleccione la categoría del producto</FormHelperText>
+                        <FormHelperText>Seleccione el tipo de donación</FormHelperText>
                     </FormControl>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}} value={form.descripcion_donacion}
-                                    type="text" variant="outlined" id="descripcion_donacion" 
-                                    inputProps={{
-                                        maxlength: "100",
-                                    }} disabled={!boolCategoriaDescripcion}
-                        />
-                        <FormHelperText id="descripcion-donacion-text">Descripción del producto</FormHelperText>
-                    </FormControl>
-                    <FormControl>
-                        <TextField onChange={(event)=> {handleChange(event)}} value={form.cantidad}
-                                    type="text" variant="outlined" id="cantidad" 
-                                    inputProps={{
-                                        maxlength: "9",
-                                    }}
-                                    InputProps={{
-                                        startAdornment: <InputAdornment position="start">{boolCategoriaDescripcion ? '' : '$'}</InputAdornment>,
-                                    }}
-                                    onInput={(event) => onlyNumbers(event) }
-                        />
-                        <FormHelperText id="cantidad-text">{boolCategoriaDescripcion ? 'Cantidad' : 'Monto'}</FormHelperText>
-                    </FormControl>
+                    {tipoDonacion && (
+                        <>
+                            <FormControl>
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.dni_donante}
+                                            type="text" variant="outlined" id="dni_donante" 
+                                            inputProps={{
+                                                maxLength: "8",
+                                            }}
+                                            onInput={(event) => onlyNumbers(event) }
+                                />
+                                <FormHelperText id="dni-donante-text">Ingrese n° de documento sin puntos</FormHelperText>
+                            </FormControl>
+                            <FormControl>
+                                <TextField onChange={(event)=> {handleChange(event)}} value={form.nombre_completo_donante}
+                                            type="text" variant="outlined" id="nombre_completo_donante" 
+                                            inputProps={{
+                                                maxLength: "100",
+                                            }}
+                                />
+                                <FormHelperText id="nombre-completo-donante-text">Nombre y apellido</FormHelperText>
+                            </FormControl>
+                            {tipoDonacion === "Efectivo" ? (
+                                <FormControl>
+                                    <TextField onChange={(event)=> {handleChange(event)}} value={form.cantidad}
+                                                type="text" variant="outlined" id="cantidad" 
+                                                inputProps={{
+                                                    maxLength: "9",
+                                                }}
+                                                InputProps={{
+                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                                                }}
+                                                onInput={(event) => onlyNumbers(event) }
+                                    />
+                                    <FormHelperText id="cantidad-text">Monto</FormHelperText>
+                                </FormControl>
+                            ) : (
+                                <>
+                                    <FormControl>
+                                        <Select onChange={(event)=> {handleChange(event)}}
+                                                value={form.id_categoria} name="id_categoria" variant="outlined"
+                                        >
+                                            <MenuItem value={0} disabled>
+                                                Seleccione una categoría
+                                            </MenuItem>
+                                            { categorias.map((categoria) => (
+                                                <MenuItem key={categoria.id} value={categoria.id}>{categoria.nombre}</MenuItem>
+                                            ))}
+                                        </Select>
+                                        <FormHelperText id="categoria-text">Seleccione la categoría del producto</FormHelperText>
+                                    </FormControl>
+                                    <FormControl>
+                                        <TextField onChange={(event)=> {handleChange(event)}} value={form.descripcion_donacion}
+                                                    type="text" variant="outlined" id="descripcion_donacion" 
+                                                    inputProps={{
+                                                        maxLength: "100",
+                                                    }}
+                                        />
+                                        <FormHelperText id="descripcion-donacion-text">Descripción del producto</FormHelperText>
+                                    </FormControl>
+                                    <FormControl>
+                                        <TextField onChange={(event)=> {handleChange(event)}} value={form.cantidad}
+                                                    type="text" variant="outlined" id="cantidad" 
+                                                    inputProps={{
+                                                        maxLength: "9",
+                                                    }}
+                                                    onInput={(event) => onlyNumbers(event) }
+                                        />
+                                        <FormHelperText id="cantidad-text">Cantidad</FormHelperText>
+                                    </FormControl>
+                                </>
+                            )}
+                        </>
+                    )}
                 </Grid>
                 <Grid item xs={1}/>
                 <Grid item container spacing={2} xs={10}>
