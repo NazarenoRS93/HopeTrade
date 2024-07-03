@@ -84,10 +84,7 @@ function CardPaymentPage() {
         CardPaymentService.registrarPagoTarjeta(form)
             .then((response) => {
                 alert(response.data);
-                let ret = "/home";
-                let href = window.location.href;
-                href = href.substring(0, href.lastIndexOf('/'));
-                window.location.replace(href + ret);
+              
             })
             .catch((err) => {
                 alert(err.response.data);
