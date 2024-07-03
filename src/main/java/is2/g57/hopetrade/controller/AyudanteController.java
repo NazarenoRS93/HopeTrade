@@ -234,4 +234,15 @@ public class AyudanteController {
 		}
 	}
 
+	@GetMapping("/obtener-ayudante/{id}")
+	public ResponseEntity<String> obtenerNombreApellidoAyudante(@PathVariable(value = "id") Long id) {
+	    Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(id);
+	    if (ayudanteOp.isPresent()) {
+	        Ayudante ayudante = ayudanteOp.get();
+	        String nombreCompleto = ayudante.getNombre() + " " + ayudante.getApellido();
+	        return ResponseEntity.ok(nombreCompleto);
+	    } else {
+	        return ResponseEntity.notFound().build();
+	    }
+	}
 }

@@ -88,7 +88,7 @@ public class TarjetaController {
 		}
 	}
 	
-	@GetMapping("/tarjeta/all")
+	@GetMapping("/all")
     public ResponseEntity<?> obtenerTodasLasDonacionesTarjeta() {
         List<DonacionTarjeta> donaciones = this.donacionRepository.findAll();
         return new ResponseEntity<>(donaciones, HttpStatus.OK);

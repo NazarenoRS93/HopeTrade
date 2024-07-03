@@ -22,9 +22,9 @@ function MostrarDonacionesPage() {
     const fetchDonaciones = async () => {
         try {
             const enFilial = await DonacionesService.getDonacionesEnFilial();
-           // const tarjeta = await DonacionesService.getDonacionesTarjeta();
+            const tarjeta = await DonacionesService.getDonacionesTarjeta();
             setDonacionesEnFilial(enFilial);
-            //setDonacionesTarjeta(tarjeta);
+            setDonacionesTarjeta(tarjeta);
         } catch (error) {
             alert("Error fetching donations: " + error);
         }
