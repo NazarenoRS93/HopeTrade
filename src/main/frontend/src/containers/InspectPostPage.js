@@ -66,10 +66,10 @@ function InspectPostPage() {
         }
     }
 
-    const rechazarOferta = async (id) => {
+    const rechazarOferta = async (id, motivo) => {
         console.log("Rechazando oferta con ID:", id);
         const url = `http://localhost:8080/oferta/rechazar/${id}`;
-        let respuesta = "Rechazada porque pasaron cosas";
+        let respuesta = motivo;
         const params = { respuesta: respuesta };
 
         console.log("Request URL:", url);

@@ -1,13 +1,20 @@
-import React from "react";
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
 import {CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+
+import { React, useState, useEffect } from "react";
 import {DeleteRounded, RepeatRounded} from "@mui/icons-material";
+import Modal from '@mui/material/Modal';
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 function Oferta( props ) {
     const {id, publicacion, data, user, update, rechazar, aceptar} = props;
+
+    const [reason, setReason] = useState("");
+    const [open, setOpen] = useState(false);
 
     const nada = () => {
         console.log(data);
@@ -19,8 +26,16 @@ function Oferta( props ) {
     }
 
     const onRechazar = async () => {
-        rechazar(id);
+        rechazar(id, reason);
     }
+
+    const handleOpen = () => {
+        setOpen(true);
+      };
+      const handleClose = () => {
+        setOpen(false);
+        setReason("");
+      };
 
     return (
         <Card className="ItemGrid">
@@ -48,7 +63,7 @@ function Oferta( props ) {
                                     : null
                             }
                             { (publicacion.estado === "Disponible") ?
-                            <Button variant="contained" color="error" onClick={onRechazar}
+                            <Button variant="contained" color="error" onClick={handleOpen}
                                     startIcon={<DeleteRounded color="background2"/>}>
                                 <Typography variant="button2">Rechazar</Typography>
                             </Button>
@@ -56,6 +71,48 @@ function Oferta( props ) {
                             }
                         </Stack>
                     </Grid>
+    <Modal
+       open={open}
+       onClose={handleClose}
+     >
+       <Box sx={{
+         position: 'absolute',
+         top: '50%',
+         left: '50%',
+         transform: 'translate(-50%, -50%)',
+         width: 400,
+         backgroundColor: 'background.paper',
+         boxShadow: 24,
+         padding: 4,
+       }}>
+         <Typography variant="h6" gutterBottom>
+           Motivo del rechazo
+         </Typography>
+         <TextField
+           value={reason}
+           onChange={(e) => setReason(e.target.value)}
+           type="text"
+           variant="outlined"
+           id="reason"
+           label="Motivo"
+           fullWidth
+         />
+         <Box mt={2} display="flex" justifyContent="flex-end">
+           <Button onClick={handleClose} color="primary">
+             Cancelar
+           </Button>
+           <Button
+             onClick={onRechazar}
+             color="secondary"
+             variant="contained"
+             sx={{ ml: 2, backgroundColor: 'red' }}
+             disabled={reason.trim() === ""}
+           >
+             Rechazar
+           </Button>
+         </Box>
+       </Box>
+     </Modal>
                 </Grid>
             </CardContent>
         </Card>
