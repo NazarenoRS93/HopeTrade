@@ -82,7 +82,7 @@ function Post(props) {
                                     <Typography variant="button">Editar</Typography>
                                 </Button>
                             }
-                           {((user.tipoUser === 2 && !isCommentsPage )|| (user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage )) && 
+                           {((user.tipoUser >0 && !isCommentsPage) || (user.idUser === data.userID && data.estado === "Disponible" && !isCommentsPage  &&  user.tipoUser === 0)) && 
                                 <Link to={`/comentarios/${id}`}>
                                     <Button variant="contained" color="secondary"
                                         startIcon={<CommentRounded color="primary" />}>
@@ -106,7 +106,7 @@ function Post(props) {
                                     </Button>
                                 </Link>
                             }
-                            {(user.idUser === data.userID || user.tipoUser !== 0) && (data.estado === "Disponible") && (isCommentsPage ) &&
+                            {(user.idUser === data.userID && user.tipoUser === 0 || user.tipoUser === 2) && (data.estado === "Disponible") && (isCommentsPage ) &&
                                 <Button variant="contained" color="error" onClick={deletePost}
                                     startIcon={<DeleteRounded color="background2" />}>
                                     <Typography variant="button2">Eliminar</Typography>
