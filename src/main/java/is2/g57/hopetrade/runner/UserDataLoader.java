@@ -47,6 +47,7 @@ public class UserDataLoader implements ApplicationRunner {
             new String[]{"usuario1@caritas.com", "99999996", "12345", "Armando", "Testi", "1999-05-10"},
             new String[]{"usuario2@caritas.com", "99999995", "12345", "Jose", "Baneado", "1995-02-02"},
             new String[]{"lautyjaime09@gmail.com", "44785886", "1234", "Lautaro", "Jaime", "2003-04-04"},
+            new String[]{"facu.rojasberna@gmail.com ", "35797596", "1234", "Facundo", "Rojas", "1990-07-12"},
             new String[]{"matilozano96@hotmail.com", "19011452", "12345", "Matias", "Lozano", "1996-02-02"}
         );
 

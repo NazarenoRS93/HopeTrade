@@ -36,7 +36,10 @@ public class ComentarioLoader implements ApplicationRunner {
   public void run(ApplicationArguments args) throws Exception {
     List<String[]> comentarios = Arrays.asList(
       new String[] { "¿De que año es?", "3", "5" },
-      new String[] { "¿Es de una plaza o de dos?", "4", "2" }
+      new String[] { "¿Es de una plaza o de dos?", "5", "2" },
+      new String[] { "¿De verdad es rico?", "4", "1" },
+      new String[] { "Malisima la publicacion", "5", "1" },
+      new String[] { "¿Cual es la marca?", "3", "5" }
     );
 
     if (comentarioRepository.count() == 0) {
@@ -51,7 +54,8 @@ public class ComentarioLoader implements ApplicationRunner {
           Random random = new Random();
           int hora = random.nextInt(14) + 1;
           int minuto = random.nextInt(59) + 1;
-          comentario.setFechaComentario(LocalDateTime.of(2024, 06, 8, hora, minuto));
+          comentario.setFechaComentario(LocalDateTime.of(2024, 07, 7, hora, minuto));
+          
           comentarioRepository.save(comentario);
           System.out.println("Comentario guardado: " + comentario);
         } else {

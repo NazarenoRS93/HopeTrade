@@ -14,7 +14,7 @@ import is2.g57.hopetrade.entity.Tarjeta;
 import is2.g57.hopetrade.repository.TarjetaRepository;
 
 @Component
-@Order(7)
+@Order(8)
 public class TarjetaDataLoader implements ApplicationRunner {
     @Autowired 
     private TarjetaRepository tarjetaRepository;
