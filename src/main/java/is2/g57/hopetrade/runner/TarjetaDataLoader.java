@@ -7,12 +7,14 @@ import java.sql.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import is2.g57.hopetrade.entity.Tarjeta;
 import is2.g57.hopetrade.repository.TarjetaRepository;
 
 @Component
+@Order(7)
 public class TarjetaDataLoader implements ApplicationRunner {
     @Autowired 
     private TarjetaRepository tarjetaRepository;

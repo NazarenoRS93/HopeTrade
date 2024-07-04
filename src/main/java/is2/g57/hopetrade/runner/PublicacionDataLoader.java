@@ -15,6 +15,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import is2.g57.hopetrade.entity.Publicacion;
@@ -25,6 +26,7 @@ import is2.g57.hopetrade.services.ImageService;
 
 
 @Component
+@Order(5)
 public class PublicacionDataLoader implements ApplicationRunner{
 
     @Autowired

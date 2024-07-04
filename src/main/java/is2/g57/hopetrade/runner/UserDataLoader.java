@@ -10,6 +10,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 
@@ -22,6 +23,7 @@ import is2.g57.hopetrade.repository.UserRepository;
 
 
 @Component
+@Order(4)
 public class UserDataLoader implements ApplicationRunner {
 
     @Autowired
@@ -37,12 +39,14 @@ public class UserDataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         List<String[]> ayudantes = Arrays.asList(
             new String[]{"ayudante1@caritas.com", "99999998", "12345", "ayudante1", "ayudante1"},
-            new String[]{"ayudante2@caritas.com", "99999997", "12345", "ayudante2", "ayudante2"}
+            new String[]{"ayudante2@caritas.com", "99999997", "12345", "ayudante2", "ayudante2"},
+            new String[]{"lautyjaime09@gmail.com", "44785886", "1234", "Lautaro", "Jaime"}
         );
 
         List<String[]> usuarios = Arrays.asList( 
             new String[]{"usuario1@caritas.com", "99999996", "12345", "Armando", "Testi", "1999-05-10"},
             new String[]{"usuario2@caritas.com", "99999995", "12345", "Jose", "Baneado", "1995-02-02"},
+            new String[]{"lautyjaime09@gmail.com", "44785886", "1234", "Lautaro", "Jaime", "2003-04-04"},
             new String[]{"matilozano96@hotmail.com", "19011452", "12345", "Matias", "Lozano", "1996-02-02"}
         );
 

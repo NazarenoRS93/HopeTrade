@@ -6,12 +6,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import is2.g57.hopetrade.entity.Filial;
 import is2.g57.hopetrade.repository.FilialRepository;
 
 @Component
+@Order(1)
 public class FilialDataLoader implements ApplicationRunner {
     @Autowired 
     private FilialRepository filialRepository;
