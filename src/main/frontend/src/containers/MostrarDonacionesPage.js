@@ -17,8 +17,9 @@ function MostrarDonacionesPage() {
     const [donacionesTarjeta, setDonacionesTarjeta] = useState([]);
     const [ayudantes, setAyudantes] = useState({});
     const [categorias, setCategorias] = useState({});
-    const [userNames, setUserNames] = useState({}); // Estado para almacenar nombres de usuario
-
+    const [userNames, setUserNames] = useState({});
+    const [filiales, setFiliales] = useState({}); // Nuevo estado para almacenar las filiales
+	
     useEffect(() => {
         fetchDonaciones();
     }, []);
@@ -27,11 +28,13 @@ function MostrarDonacionesPage() {
         try {
             const enFilial = await DonacionesService.getDonacionesEnFilial();
             const tarjeta = await DonacionesService.getDonacionesTarjeta();
+			console.log("Donaciones en Filial:", enFilial);
             setDonacionesEnFilial(enFilial);
             setDonacionesTarjeta(tarjeta);
             fetchAyudantes(enFilial);
             fetchCategorias(enFilial);
-            fetchUserNames(tarjeta); // Llamar a la función para obtener nombres de usuario
+            fetchUserNames(tarjeta);
+            fetchFiliales(enFilial); // Llamar a la función para obtener nombres de filiales
         } catch (error) {
             alert("Error fetching donations: " + error);
         }
@@ -70,7 +73,7 @@ function MostrarDonacionesPage() {
     const fetchUserNames = async (donaciones) => {
         try {
             const userIds = donaciones.map(donacion => donacion.id_usuario);
-            const uniqueUserIds = [...new Set(userIds)]; // Filtrar IDs únicos
+            const uniqueUserIds = [...new Set(userIds)];
 
             const userNameMap = {};
             for (const userId of uniqueUserIds) {
@@ -83,6 +86,22 @@ function MostrarDonacionesPage() {
         }
     };
 
+	const fetchFiliales = async (donaciones) => {
+	    try {
+	        const filialesMap = {};
+	        for (const donacion of donaciones) {
+	            if (donacion.id_filial && !filialesMap[donacion.id_filial]) {
+	                const filial = await DonacionesService.getFilialById(donacion.id_filial); // Pass the ID directly
+	                console.log("Filial", filial);
+	                filialesMap[donacion.id_filial] = filial;
+	            }
+	        }
+	        setFiliales(filialesMap);
+	    } catch (error) {
+	        alert("Error fetching filiales: " + error);
+	    }
+	};
+
     const titleCellStyle = {
         backgroundColor: 'grey',
         color: 'white',
@@ -90,7 +109,7 @@ function MostrarDonacionesPage() {
     };
 
     const titleContainerStyle = {
-        marginBottom: '20px', // Espacio inferior para separar los títulos de las tablas
+        marginBottom: '20px',
     };
 
     return (
@@ -108,9 +127,11 @@ function MostrarDonacionesPage() {
                                         <TableCell style={titleCellStyle}>Nombre del Donante</TableCell>
                                         <TableCell style={titleCellStyle}>Nombre del Ayudante</TableCell>
                                         <TableCell style={titleCellStyle}>Categoría</TableCell>
+										<TableCell style={titleCellStyle}>Descripción</TableCell>
                                         <TableCell style={titleCellStyle}>Cantidad</TableCell>
                                         <TableCell style={titleCellStyle}>Fecha y Hora</TableCell>
                                         <TableCell style={titleCellStyle}>DNI del Donante</TableCell>
+                                        <TableCell style={titleCellStyle}>Filial</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -119,9 +140,11 @@ function MostrarDonacionesPage() {
                                             <TableCell>{donacion.nombre_apellido}</TableCell>
                                             <TableCell>{ayudantes[donacion.id_ayudante] || "Cargando..."}</TableCell>
                                             <TableCell>{donacion.id_categoria === 16 ? "Dinero" : (categorias[donacion.id_categoria] || "Cargando...")}</TableCell>
-                                            <TableCell>{donacion.cantidad}</TableCell>
+											<TableCell>{donacion.descripcion}</TableCell>
+											<TableCell>{donacion.cantidad}</TableCell>
                                             <TableCell>{format(new Date(donacion.fecha_hora), 'dd/MM/yyyy HH:mm:ss')}</TableCell>
                                             <TableCell>{donacion.dni}</TableCell>
+                                            <TableCell>{filiales[donacion.id_filial]?.nombre || "Cargando..."}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

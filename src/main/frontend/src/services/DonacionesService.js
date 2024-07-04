@@ -37,7 +37,7 @@ const DonacionesService = {
 			throw error;
 		}
 	},
-	
+
 	getAdministrativoById: async (id) => {
 		try {
 			const response = await axios.get(`/ayudante/${id}`);
@@ -47,13 +47,23 @@ const DonacionesService = {
 		}
 	},
 	getCategoriaById: async (id) => {
+		try {
+			const response = await axios.get(`/categoria/${id}`);
+			return response.data;
+		} catch (error) {
+			throw error;
+		}
+	},
+
+	getFilialById: async (id) => {
 			try {
-				const response = await axios.get(`/categoria/${id}`);
+				const response = await axios.get(FILIAL_BASE_REST_API_URL + `/filial/${id}`);
 				return response.data;
 			} catch (error) {
 				throw error;
 			}
 		},
+
 };
 
 export default DonacionesService;
