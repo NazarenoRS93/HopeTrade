@@ -1,6 +1,7 @@
 package is2.g57.hopetrade.services;
 
 import is2.g57.hopetrade.entity.Ayudante;
+import is2.g57.hopetrade.entity.Intercambio;
 import is2.g57.hopetrade.entity.Oferta;
 
 import is2.g57.hopetrade.entity.RespuestaComentario;
@@ -11,6 +12,7 @@ import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.repository.PublicacionRepository;
 import is2.g57.hopetrade.repository.UserRepository;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,7 @@ public class MailService {
 	@Autowired
 	private PublicacionRepository publicacionRepository;
 
+	@Async
 	public void sendEmail(Ayudante ayudante) {
 		String subject = "Registro Exitoso";
 		String text = "Hola " + ayudante.getNombre() + ",\n\n"
@@ -47,6 +50,7 @@ public class MailService {
 		mailSender.send(message);
 	}
 
+	@Async
 	public void sendEmailOfertaRecibida(Oferta oferta) {
 		Optional<User> userOp = this.userRepository.findById(oferta.getPublicacion().getUser().getId());
 		if (userOp.isPresent()) {
@@ -64,6 +68,7 @@ public class MailService {
 		}
 	}
 
+	@Async
 	public void sendEmailOfertaRechazada(Oferta oferta) {
 
 		String subject = "Oferta rechazada";
@@ -77,6 +82,7 @@ public class MailService {
 		mailSender.send(message);
 	}
 
+	@Async
 	public void sendEmailOfertaAceptada(Oferta oferta) {
 		String subject = "Oferta aceptada";
 		String text = "Hola " + oferta.getUser().getNombre() + ",\n\n"
@@ -92,6 +98,7 @@ public class MailService {
 		this.sendEmailOfertaAceptada2(oferta);
 	}
 
+	@Async
 	private void sendEmailOfertaAceptada2(Oferta oferta) {
 		Optional<User> userOp = userRepository.findById(oferta.getPublicacion().getUser().getId());
 		if (userOp.isPresent()) {
@@ -126,7 +133,33 @@ public class MailService {
 		}
 
 	}
+
+	@Async
+	public void sendEmailIntercambioCancelado(Intercambio intercambio, String motivo) {
+		String subject = "Intercambio cancelado";
+		User user1 = intercambio.getOferta().getUser();
+		User user2 = intercambio.getPublicacion().getUser();
+		String text = "Hola " + user1.getNombre() + ",\n\n"
+				+ "Te informamos que tu intercambio con el usuario: " + user2.getFullName() 
+				+ ", programado para el dia " + intercambio.getOferta().getFechaIntercambio().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+				+ " en la filial " + intercambio.getOferta().getFilial().getNombre()
+				+ ", fue cancelado."
+				+ "\n" + "Motivo: " + motivo
+				+ "\n\n" + "Saludos.";
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(user1.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+
+		message.setTo(user2.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+
+	}
 	
+	@Async
 	public void sendEmailAyudanteBaja (Ayudante ayudante) {
 		String subject = "Cuenta dada de baja";
 		String text = "Hola " + ayudante.getNombre() + ",\n\n"
@@ -140,6 +173,7 @@ public class MailService {
 		mailSender.send(message);
 	}
 
+	@Async
 	public void sendEmailUsuarioBaja(User user,String motivo) {
 		String subject = "Cuenta suspendida";
 		String text = "Hola " + user.getNombre() + ",\n\n"
@@ -153,7 +187,7 @@ public class MailService {
 		mailSender.send(message);
 	}
 
-
+	@Async
 	public void SentEmailRespuestaRecibida(RespuestaComentario nuevaRespuesta) {
 		String subject = "Respuesta recibida";
 		Optional<User> userOp = this.userRepository.findById(nuevaRespuesta.getComentario().getUserId());
@@ -174,7 +208,7 @@ public class MailService {
 		
 		
 	
-
+	@Async
 	public void sendEmailComentarioRecibido(User user, Publicacion publicacion) {
 		String subject = "Comentario recibido";
 		Optional<User> userOp = this.userRepository.findById(publicacion.getUser().getId());
@@ -191,6 +225,7 @@ public class MailService {
 		}
 	}
 
+	@Async
 	public void sendEmailAlta(Ayudante ayudante) {
 		String subject = "Cuenta dada de alta";
 		String text = "Hola " + ayudante.getNombre() + ",\n\n"
@@ -204,4 +239,34 @@ public class MailService {
 		mailSender.send(message);
 		
 	}
+
+	@Async
+	public void sendEmailPublicacionEliminada(Publicacion publicacion, String motivo) {
+		String subject = "Publicacion eliminada";
+		String text = "Hola " + publicacion.getUser().getNombre() + ",\n\n"
+				+ "Te informamos que tu publicacion fue eliminada" + ",\n"
+				+ "Motivo: " + motivo + ".\n\n"
+				+ "Saludos.";
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(publicacion.getUser().getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+	}
+
+	@Async
+	public void sendEmailPublicacionEliminada2(List<Oferta> ofertas) {
+		String subject = "Oferta rechazada";
+		for (Oferta of : ofertas) {
+			String text = "Hola " + of.getUser().getNombre() + ",\n\n"
+					+ "Te informamos que tu oferta fue rechazada automaticamente, debido a que la publicacion: "
+					+ of.getPublicacion().getTitulo() + " fue eliminada." + "\n\n" + "Saludos";
+			SimpleMailMessage message = new SimpleMailMessage();
+			message.setTo(of.getUser().getEmail());
+			message.setSubject(subject);
+			message.setText(text);
+			mailSender.send(message);
+		}
+	}
+	
 }

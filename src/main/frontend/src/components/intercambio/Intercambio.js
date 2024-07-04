@@ -1,14 +1,22 @@
-import React from "react";
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
 import {Avatar, CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {DeleteRounded, RepeatRounded} from "@mui/icons-material";
 import StarIcon from '@mui/icons-material/Star';
+
+import { React, useState, useEffect } from "react";
+import {DeleteRounded, RepeatRounded} from "@mui/icons-material";
+import Modal from '@mui/material/Modal';
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 function Intercambio( props ) {
     const {id, publicacion, oferta, user, data, confirmar, cancelar} = props;
+
+    const [reason, setReason] = useState("");
+    const [open, setOpen] = useState(false);
+
 
     const nada = () => {
         console.log(data);
@@ -20,8 +28,16 @@ function Intercambio( props ) {
     }
 
     const onCancel = async () => {
-        cancelar(id);
+        cancelar(id, reason);
     }
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+      const handleClose = () => {
+        setOpen(false);
+        setReason("");
+    };
 
     return (
         <Card className="ItemGrid">
@@ -62,7 +78,7 @@ function Intercambio( props ) {
                                     : null
                             }
                             { (data.estado == "PROGRAMADO" && user.tipoUser !== 0)? 
-                                    <Button variant="contained" color="error" onClick={onCancel}
+                                    <Button variant="contained" color="error" onClick={handleOpen}
                                         startIcon={<DeleteRounded color="background2"/>}>
                                     <Typography variant="button2"> Cancelar Intercambio </Typography>
                                     </Button>
@@ -99,6 +115,48 @@ function Intercambio( props ) {
                             }
                         </Stack>
                     </Grid>
+                    <Modal
+                        open={open}
+                        onClose={handleClose}
+                        >
+                        <Box sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            width: 400,
+                            backgroundColor: 'background.paper',
+                            boxShadow: 24,
+                            padding: 4,
+                        }}>
+                            <Typography variant="h6" gutterBottom>
+                            Motivo de cancelacion
+                            </Typography>
+                            <TextField
+                            value={reason}
+                            onChange={(e) => setReason(e.target.value)}
+                            type="text"
+                            variant="outlined"
+                            id="reason"
+                            label="Motivo"
+                            fullWidth
+                            />
+                            <Box mt={2} display="flex" justifyContent="flex-end">
+                            <Button onClick={handleClose} color="primary">
+                                Volver
+                            </Button>
+                            <Button
+                                onClick={onCancel}
+                                color="secondary"
+                                variant="contained"
+                                sx={{ ml: 2, backgroundColor: 'red' }}
+                                disabled={reason.trim() === ""}
+                            >
+                                Cancelar Intercambio
+                            </Button>
+                            </Box>
+                        </Box>
+                        </Modal>
                 </Grid>
             </CardContent>
         </Card>

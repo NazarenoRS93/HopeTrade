@@ -77,7 +77,7 @@ function InspectPostPage() {
 
         await axios.put(url, null, { params: params })
         .then(function (response) {
-            console.log(response.data);
+            alert("Oferta rechazada!");
         })
         .catch(function (error) {
             console.log("Error rechazando oferta: " + (error.response ? error.response.data : error.message));
@@ -90,7 +90,8 @@ function InspectPostPage() {
         console.log("Aceptando oferta con ID:", id);
         await axios.put("http://localhost:8080/oferta/aceptar/"+id)
         .then(function (response) {
-            console.log(response.data);
+            alert("Oferta Aceptada!");
+            window.location.href = "/app/home";
         })
         .catch(function (error) {
             console.log("Error aceptando oferta: "+error.response.data);

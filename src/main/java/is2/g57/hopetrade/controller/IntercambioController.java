@@ -109,7 +109,11 @@ public class IntercambioController {
     }
 
     @PutMapping("cancelar/{id}")
-    public ResponseEntity<?> cancelarIntercambio(@PathVariable String id) {
+    public ResponseEntity<?> cancelarIntercambio(@PathVariable String id, @RequestParam String respuesta) {
+
+        System.out.println("CANCELANDO INTERCAMBIO " + id);
+        System.out.println("RESPUESTA: " + respuesta);
+
         Intercambio intercambio = intercambioRepository.findById(Long.parseLong(id)).get();
         Publicacion publicacion = intercambio.getPublicacion();
         Oferta oferta = intercambio.getOferta();
@@ -122,6 +126,8 @@ public class IntercambioController {
 
         intercambio.cancelar();
         intercambioRepository.save(intercambio);
+
+        emailService.sendEmailIntercambioCancelado(intercambio, respuesta);
 
         return new ResponseEntity<>("Intercambio cancelado.", HttpStatus.OK);
     }

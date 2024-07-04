@@ -68,9 +68,12 @@ function ExchangeListPage() {
     const handleChange = (event) => {
     }
 
-    const cancelar = async (id) => {
-            let url = "http://localhost:8080/intercambio/cancelar/"+id;
-            await axios.put(url).then (function (response) {
+    const cancelar = async (id, motivo) => {
+            let url = `http://localhost:8080/intercambio/cancelar/${id}`;
+            let respuesta = motivo;
+            const params = { respuesta: respuesta };
+            await axios.put(url, null, { params: params })
+            .then (function (response) {
                 alert(response.data);
                 console.log(response);
             })

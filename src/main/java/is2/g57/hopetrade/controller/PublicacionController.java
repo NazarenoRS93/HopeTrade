@@ -27,6 +27,7 @@ import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.mapper.OfertaMapper;
 import is2.g57.hopetrade.mapper.PublicacionMapper;
+import is2.g57.hopetrade.services.MailService;
 
 import is2.g57.hopetrade.entity.state.*;
 
@@ -100,6 +101,9 @@ public class PublicacionController {
   
   @Autowired
   private OfertaMapper ofertaMapper;
+
+  @Autowired
+  private MailService emailService;
   
   private ResponseEntity<?> PublicacionTest(PublicacionDTO PublicacionDTO) {
     
@@ -245,7 +249,7 @@ public class PublicacionController {
   }
 
   @PutMapping("/eliminar/{id}")
-  public ResponseEntity<?> cancelarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
+  public ResponseEntity<?> cancelarPublicacion(@PathVariable(value = "id") Integer publicacionId, @RequestParam(required = false) String motivo) {
     Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
     if(!oPublicacion.isPresent()) {
       return ResponseEntity.notFound().build();
@@ -253,6 +257,17 @@ public class PublicacionController {
     Publicacion publicacion = oPublicacion.get();
     publicacion.eliminar();
     publicacionRepository.save(publicacion);
+
+    if (motivo != null && !motivo.isEmpty()) {
+      emailService.sendEmailPublicacionEliminada(publicacion, motivo);
+    }
+
+    List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(Long.valueOf(publicacionId));
+    if (!ofertas.isEmpty())
+    {
+      emailService.sendEmailPublicacionEliminada2(ofertas);
+    }
+
     return ResponseEntity.ok(publicacion);
   }
 
