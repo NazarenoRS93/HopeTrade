@@ -84,35 +84,59 @@ function Intercambio( props ) {
                                     </Button>
                                     : null
                             }
-                            { (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.idUser == publicacion.userID) && (data.puntajeOfertante == -1) && (user.tipoUser == 0) ?
+                            { (data.estado == "FINALIZADO") && (user.idUser == publicacion.userID) && (data.puntajeOfertante == -1) && (user.tipoUser == 0) ?
                                     <Button variant="contained" color="success" onClick={nada}
                                         startIcon={<StarIcon color="background"/>}>
                                     <Typography variant="button2"> Puntuar (O) </Typography>
                                     </Button>
                                     : null
                             }
-                            { (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.idUser == publicacion.userID) && (data.puntajeOfertante != -1)? 
+                            { (data.estado == "FINALIZADO") && (user.idUser == publicacion.userID) && (data.puntajeOfertante != -1)? 
                                     <Typography variant="h6">Puntaje: <b>{data.puntajeOfertante}</b> </Typography>
                                     : null
                             }
-                            { (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.idUser == oferta.userId) && (data.puntajePublicante == -1) && (user.tipoUser == 0) ?
+                            { (data.estado == "FINALIZADO") && (user.idUser == oferta.userId) && (data.puntajePublicante == -1) && (user.tipoUser == 0) ?
                                     <Button variant="contained" color="success" onClick={nada}
                                         startIcon={<StarIcon color="background"/>}>
                                     <Typography variant="button2"> Puntuar (P) </Typography>
                                     </Button>
                                     : null
                             }
-                            { (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.idUser == oferta.userID) && (data.puntajePublicante != -1) ? 
+                            { (data.estado == "FINALIZADO") && (user.idUser == oferta.userID) && (data.puntajePublicante != -1) ? 
                                     <Typography variant="h6">Puntaje: <b>{data.puntajePublicante}</b> </Typography>
+                                    : null
+                            }
+                            {
+                                (data.estado == "CANCELADO") && (user.tipoUser == 1 || user.tipoUser == 2) && (data.puntajePublicante == -1) ?
+                                <Button variant="contained" color="success" onClick={nada}
+                                    startIcon={<StarIcon color="background"/>}>
+                                <Typography variant="button2"> Puntuar Usuario Publicante </Typography>
+                                </Button>
+                                : null
+
+                            }
+                            {
+                                (data.estado == "CANCELADO") && (user.tipoUser == 1 || user.tipoUser == 2) && (data.puntajeOfertante == -1)?
+                                <Button variant="contained" color="success" onClick={nada}
+                                    startIcon={<StarIcon color="background"/>}>
+                                <Typography variant="button2"> Puntuar Usuario Ofertante </Typography>
+                                </Button>
+                                : null
+
+                            }
+
+                            {
+                                (data.estado == "FINALIZADO" || data.estado == "CANCELADO") && (user.tipoUser == 1 || user.tipoUser == 2) && (data.puntajePublicante != -1)?
+                                    <Typography variant="h6">Puntaje <b> {publicacion.userFullName}:  {data.puntajePublicante}</b> </Typography>
                                     : null
                             }
 
                             {
-                                (data.estado == "CANCELADO" || data.estado == "FINALIZADO") && (user.tipoUser == 1 || user.tipoUser == 2) ?
-                                    <Typography variant="h6">Puntajes: <b> {publicacion.userFullName}: 
-                                        {data.puntajePublicante} / {oferta.userFullName}: {data.puntajeOfertante} </b> </Typography>
+                                (data.estado == "FINALIZADO" || data.estado == "CANCELADO") && (user.tipoUser == 1 || user.tipoUser == 2) && (data.puntajePublicante != -1) ?
+                                    <Typography variant="h6">Puntaje <b> {oferta.userFullName}:  {data.puntajePublicante}</b> </Typography>
                                     : null
                             }
+
                         </Stack>
                     </Grid>
                     <Modal
