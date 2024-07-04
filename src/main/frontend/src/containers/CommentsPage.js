@@ -168,35 +168,37 @@ function CommentsPage() {
 	if (loading) {
 		return <Typography variant="body1">Cargando...</Typography>;
 	}
+	
+	 console.log("Datos de usuario:", user);
 
-	return (
-		<React.Fragment>
-			<PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPost} />
-
-			{/* Sección para comentarios */}
-			<Grid container spacing={2} style={{ marginTop: "20px" }}>
-				<Grid item xs={12}>
-					<TextField
-						fullWidth
-						multiline
-						rows={4}
-						variant="outlined"
-						label="Escribe tu comentario"
-						value={comentarioText}
-						onChange={handleComentarioChange}
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={guardarComentario}
-						disabled={disableComentar}
-					>
-						Comentar
-					</Button>
-				</Grid>
-			</Grid>
+	  return (
+        <React.Fragment>
+            <PostItem id={publicacion.id} data={publicacion} user={user} update={fetchPost}/>
+	    {((user.tipoUser === 0) && (publicacion.userID !== user.idUser)) && (
+        <Grid container spacing={2} style={{ marginTop: "20px" }}>
+            <Grid item xs={12}>
+                <TextField
+                    fullWidth
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    label="Escribe tu comentario"
+                    value={comentarioText}
+                    onChange={handleComentarioChange}
+                />
+            </Grid>
+            <Grid item xs={12}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={guardarComentario}
+                    disabled={disableComentar}
+                >
+                    Comentar
+                </Button>
+            </Grid>
+        </Grid>
+    )}
 
 			{/* Mostrar comentarios existentes */}
 			{comentarios.length > 0 ? (
@@ -214,7 +216,7 @@ function CommentsPage() {
 							>
 								<Typography variant="body2">
 									{comentario.nombre} {comentario.apellido} - {new Date(comentario.fechaComentario).toLocaleString()}
-									{(comentario.userId === user.idUser || user.tipoUser === 2) && !respuestas[comentario.idComentario] && (
+									{(comentario.userId === user.idUser && user.tipoUser === 0 || user.tipoUser === 2) && !respuestas[comentario.idComentario] && (
 										<Button
 											variant="contained"
 											color="error"
@@ -229,7 +231,7 @@ function CommentsPage() {
 											Eliminar
 										</Button>
 									)}
-									{publicacion.userID === user.idUser && !respuestas[comentario.idComentario] && (
+									{publicacion.userID === user.idUser && !respuestas[comentario.idComentario] && user.tipoUser === 0 && (
 										<Button
 											variant="contained"
 											color="primary"
