@@ -38,9 +38,10 @@ public class UserDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         List<String[]> ayudantes = Arrays.asList(
-            new String[]{"ayudante1@caritas.com", "99999998", "12345", "ayudante1", "ayudante1"},
-            new String[]{"ayudante2@caritas.com", "99999997", "12345", "ayudante2", "ayudante2"},
-            new String[]{"lautyjaime09@gmail.com", "44785886", "1234", "Lautaro", "Jaime"}
+            new String[]{"ayudante1@caritas.com", "99999998", "1234", "Fernando", "Nori"},
+            new String[]{"ayudante2@caritas.com", "99999997", "1234", "Matias", "Lozano"},
+            new String[]{"lautyjaime09@gmail.com", "44785886", "1234", "Lautaro", "Jaime"},
+            new String[]{"facu.rojasberna@gmail.com ", "35797596", "1234", "Facundo", "Rojas"}
         );
 
         List<String[]> usuarios = Arrays.asList( 
