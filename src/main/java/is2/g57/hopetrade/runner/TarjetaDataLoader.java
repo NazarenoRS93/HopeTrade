@@ -22,14 +22,14 @@ public class TarjetaDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         List<String[]> tarjetas = Arrays.asList(
-            new String[]{"4390093380084444", "Santos Carlos", "2025-08-01", "24555666", "112", "1000000", "1"},
-            new String[]{"4390094682283333", "Sarasa Robert", "2027-04-01", "35678987", "221", "50000", "1"},
-            new String[]{"4390095984482222", "Medina Cristian", "2027-10-01", "36302331", "444", "100000", "0"},
-            new String[]{"4390097286681111", "Brey Leandro", "2024-05-01", "44788555", "555", "15000", "1"},
-            new String[]{"4567668080800000", "Zeballos Exequiel", "2029-12-01", "44222331", "213", "200000", "1"},
-            new String[]{"4567669382289999", "Donante Usuario", "2026-10-01", "38888654", "876", "10000", "1"},
-            new String[]{"4567669382288888", "Aguirre Brian", "2026-09-01", "36777888", "765", "11000", "1"},
-            new String[]{"4567669382287777", "Zenón Kevin", "2026-12-01", "35666777", "324", "12000", "1"}
+            new String[]{"1111111111111111", "Lautaro Jaime", "2025-08-01", "44785886", "111", "100000", "1"},
+            new String[]{"1111111111111110", "Facundo Rojas", "2027-04-01", "35797596", "112", "50000", "1"},
+            new String[]{"1111111111111112", "Medina Cristian", "2027-10-01", "36302331", "444", "100000", "0"},
+            new String[]{"1111111111111113", "Brey Leandro", "2024-05-01", "44788555", "555", "15000", "1"},
+            new String[]{"1111111111111114", "Zeballos Exequiel", "2029-12-01", "44222331", "213", "200000", "1"},
+            new String[]{"1111111111111115", "Donante Usuario", "2026-10-01", "38888654", "876", "10000", "1"},
+            new String[]{"1111111111111116", "Aguirre Brian", "2026-09-01", "36777888", "765", "11000", "1"},
+            new String[]{"1111111111111117", "Zenón Kevin", "2026-12-01", "35666777", "324", "12000", "1"}
         );
 
         System.out.println("---------     Intentando cargar tarjetas       --------");
