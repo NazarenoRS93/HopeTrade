@@ -44,7 +44,7 @@ public class DonacionTarjetaLoader implements ApplicationRunner{
 				Random random = new Random();
 				int mes = random.nextInt(6) + 1;
 				int dia = random.nextInt(27) + 1;
-				int hora = random.nextInt(24) + 1;
+				int hora = random.nextInt(23) + 1;
 				int minuto = random.nextInt(59) + 1;
 				DonacionTarjeta donacion = new DonacionTarjeta(LocalDateTime.of(2024, mes, dia, hora, minuto),
 						Long.parseLong(don[1]),
