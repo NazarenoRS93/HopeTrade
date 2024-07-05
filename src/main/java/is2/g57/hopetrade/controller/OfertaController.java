@@ -136,6 +136,17 @@ public class OfertaController {
 
 			System.out.println("ENVIANDO CORREO");
 		    emailService.sendEmailOfertaAceptada(oferta);
+
+			System.out.println("ELIMINANDO OFERTAS RESTANTES");
+			List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(oferta.getPublicacion().getId());
+			ofertas.remove(oferta);
+			for (Oferta o : ofertas) {
+				o.rechazar();
+				o.setRespuesta("Otra oferta fue aceptada.");
+				emailService.sendEmailOfertaRechazada(o);
+				this.ofertaRepository.save(o);
+			}
+
 			return new ResponseEntity<>("Oferta aceptada.", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
