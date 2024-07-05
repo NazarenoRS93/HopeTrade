@@ -1,6 +1,6 @@
 import Card from "@mui/material/Card";
 import PropTypes from "prop-types";
-import {CardContent, Grid, Stack} from "@mui/material";
+import {Avatar, CardContent, Grid, Stack} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
@@ -50,9 +50,9 @@ function Oferta( props ) {
                         <Typography variant="h6">en <b>{data.filialNombre}</b> </Typography> 
                         <Typography variant="h6"> Fecha propuesta: {data.fechaIntercambio} </Typography>
                     </Grid>
-                    {/*<Grid item xs={3}>
-                        <Avatar src={data.imagenUrl} variant="rounded" sx={{ width:"150px",height:"150px"}} />
-                    </Grid> */}
+                    <Grid item xs={3}>
+                        <Avatar src={data.imagenUrl} variant="rounded" sx={{ width: "150px", height: "150px" }} />
+                    </Grid>
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
                             { (publicacion.estado === "Disponible" && user.idUser === publicacion.userID && user.tipoUser === 0) ?

@@ -2,6 +2,8 @@ package is2.g57.hopetrade.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
+import javax.persistence.ManyToMany;
+
 @Entity
 @Table(name = "intercambio", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class Intercambio implements Serializable {
@@ -12,7 +14,7 @@ public class Intercambio implements Serializable {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "id_publicacion", unique = true)
+    @JoinColumn(name = "id_publicacion", unique = false)
     private Publicacion publicacion;
 
     @OneToOne(cascade = CascadeType.ALL)
