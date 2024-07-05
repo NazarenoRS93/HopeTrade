@@ -145,7 +145,7 @@ function DonacionEnFilialPage() {
                                             }}
                                             onInput={(event) => onlyNumbers(event) }
                                 />
-                                <FormHelperText id="dni-donante-text">Ingrese n° de documento sin puntos</FormHelperText>
+                                <FormHelperText id="dni-donante-text">Ingrese n° de documento</FormHelperText>
                             </FormControl>
                             <FormControl>
                                 <TextField onChange={(event)=> {handleChange(event)}} value={form.nombre_completo_donante}
@@ -183,7 +183,7 @@ function DonacionEnFilialPage() {
                                                 <MenuItem key={categoria.id} value={categoria.id}>{categoria.nombre}</MenuItem>
                                             ))}
                                         </Select>
-                                        <FormHelperText id="categoria-text">Seleccione la categoría del producto</FormHelperText>
+                                        <FormHelperText id="categoria-text"> </FormHelperText>
                                     </FormControl>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.descripcion_donacion}
@@ -192,7 +192,7 @@ function DonacionEnFilialPage() {
                                                         maxLength: "100",
                                                     }}
                                         />
-                                        <FormHelperText id="descripcion-donacion-text">Descripción del producto</FormHelperText>
+                                        <FormHelperText id="descripcion-donacion-text">Descripción</FormHelperText>
                                     </FormControl>
                                     <FormControl>
                                         <TextField onChange={(event)=> {handleChange(event)}} value={form.cantidad}

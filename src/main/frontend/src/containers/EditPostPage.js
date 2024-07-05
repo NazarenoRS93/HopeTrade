@@ -132,7 +132,7 @@ function EditPostPage() {
                             <TextField onChange={(event)=> {handleChange(event)}}
                                        multiline={true} rows={4} type="text" variant="outlined" name="descripcion"
                             />
-                            <FormHelperText id="descripcion-text">Describa el producto publicado</FormHelperText>
+                            <FormHelperText id="descripcion-text">Descripción</FormHelperText>
                         </FormControl>
                     </Stack>
                 </Grid>

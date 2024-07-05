@@ -76,6 +76,13 @@ function AddPostPage() {
     validar(tempForm);
   };
 
+  const handleFileSelectClick = (e) => {
+    e.target.value = null; // Restablecer el valor del input de archivo a null
+    if (!btnDisabled) {
+      setBtnDisabled(true);
+    }
+  };
+
   const fileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -148,14 +155,14 @@ function AddPostPage() {
                   Seleccione una categoría
                 </MenuItem>
                 {categorias.map((categoria) => (
-                  <MenuItem value={categoria.id}>{categoria.nombre}</MenuItem>
+                  <MenuItem key={categoria.id} value={categoria.id}>{categoria.nombre}</MenuItem>
                 ))}
               </Select>
               <FormHelperText id="categoria-text">Seleccione la categoría del producto publicado</FormHelperText>
             </FormControl>
             <FormControl>
               <TextField onChange={(event) => { handleChange(event) }}
-                type="file" variant="outlined" name="imagen"
+                type="file" variant="outlined" name="imagen" onClick={handleFileSelectClick}
               />
               {error && <FormHelperText error>{error}</FormHelperText>}
               <FormHelperText id="descripcion-text">Agregue una foto del producto publicado</FormHelperText>
