@@ -50,7 +50,7 @@ function Oferta( props ) {
                         <Typography variant="h6">en <b>{data.filialNombre}</b> </Typography> 
                         <Typography variant="h6"> Fecha propuesta: {data.fechaIntercambio} </Typography>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={3}>
                         <Avatar src={data.imagenUrl} variant="rounded" sx={{ width: "150px", height: "150px" }} />
                     </Grid>
                     <Grid item xs={12}>
