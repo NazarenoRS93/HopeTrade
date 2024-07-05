@@ -49,7 +49,7 @@ function AddPostPage() {
 
     switch (e.target.name) {
       case "titulo":
-        tempForm = { ...tempForm, titulo: e.target.value };
+        tempForm = { ...tempForm, titulo: e.target.value.trim() };
         break;
       case "descripcion":
         tempForm = { ...tempForm, desc: e.target.value };
