@@ -83,6 +83,19 @@ public class Publicacion implements Serializable{
     }
 
     // Metodos varios
+
+    public Publicacion clonar(){
+        Publicacion p = new Publicacion();
+        p.titulo = this.titulo;
+        p.descripcion = this.descripcion;
+        p.user = this.user;
+        p.categoria = this.categoria;
+        p.imagenUrl = this.imagenUrl;
+        p.fechaHoraCreacion = this.fechaHoraCreacion;
+        p.ultimaModificacion = this.ultimaModificacion;
+        p.state = new PublicacionStateEliminado();
+        return p;
+    }
     
     @Override
     public boolean equals(Object o) {

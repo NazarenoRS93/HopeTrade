@@ -121,10 +121,12 @@ public class IntercambioController {
         oferta.archivar();
         ofertaRepository.save(oferta);
 
+        Publicacion newPub = publicacion.clonar();
         publicacion.publicar();
-        publicacionRepository.save(publicacion);
+        publicacionRepository.save(newPub);
 
         intercambio.cancelar();
+        intercambio.setPublicacion(newPub);
         intercambioRepository.save(intercambio);
 
         emailService.sendEmailIntercambioCancelado(intercambio, respuesta);
