@@ -53,8 +53,13 @@ function InspectPostPage() {
             let id = params.id;
             let url = "http://localhost:8080/publicacion/"+id+"/ofertas";
             const response = await axios.get(url);
-            let data = response.data;
-            console.log(data);
+            let data = response.data.map(publicacion => {
+                return {
+                    ...publicacion,
+                    imagenUrl: `data:image/jpeg;base64,${publicacion.imagen}`
+                };
+
+            });
             data.filter(function (oferta) {
                 return oferta.estado == "ACTIVA";
             });

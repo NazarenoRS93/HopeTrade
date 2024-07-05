@@ -43,7 +43,8 @@ function ExchangeListPageByUser() {
             let data = response.data.map(intercambio => {
                 return {
                     ...intercambio,
-                    imagenUrl: `data:image/jpeg;base64,${intercambio.publicacion.imagen}`
+                    imagenUrl: `data:image/jpeg;base64,${intercambio.publicacion.imagen}`,
+                    imagenUrl2: `data:image/jpeg;base64,${intercambio.oferta.imagen}`
                 };
 
             });

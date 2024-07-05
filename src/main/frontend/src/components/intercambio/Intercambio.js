@@ -65,9 +65,9 @@ function Intercambio( props ) {
                         { (data.estado == "FINALIZADO")? <Typography variant="h6">El intercambio se realizó: {oferta.fechaIntercambio}</Typography> : null}
                         { (data.estado == "CANCELADO")? <Typography variant="h6">El intercambio se canceló </Typography> : null}
                     </Grid>
-                    {/*<Grid item xs={3}>
-                        <Avatar src={data.imagenUrl} variant="rounded" sx={{ width:"150px",height:"150px"}} />
-                    </Grid> */}
+                    <Grid item xs={4}>
+                        <Avatar src={data.imagenUrl2} variant="rounded" sx={{ width: "150px", height: "150px" }} />
+                    </Grid>
                     <Grid item xs={12}>
                         <Stack spacing={2} direction="row">
                             { (user.tipoUser !== 0) && (data.estado == "PROGRAMADO")?
