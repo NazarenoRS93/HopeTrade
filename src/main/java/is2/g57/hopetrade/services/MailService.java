@@ -111,7 +111,7 @@ public class MailService {
 		if (userOp.isPresent()) {
 			User user = userOp.get();
 			String subject = "Intercambio programado";
-			String text = "Hola " + user.getNombre() + ",\n\n" + "Te informamos que los detalles del intercambio:"
+			String text = "Hola " + user.getNombre() + ",\n\n" + "Te informamos los detalles del intercambio:"
 					+ "\n" + "Horario: " + fechaIntercambioFormatted + "\n" + "Filial: "
 					+ oferta.getFilial().getNombre() + "\n" + "Direccion: " + oferta.getFilial().getDireccion() + "\n\n"
 					+ "Saludos";
