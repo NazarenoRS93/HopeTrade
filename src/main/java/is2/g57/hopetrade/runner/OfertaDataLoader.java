@@ -41,25 +41,30 @@ public class OfertaDataLoader implements ApplicationRunner {
             new String[]{"4", "Arroz", "Paquete de arroz de 1kg", "1", "3", "ACEPTADA", "biju.jpg"}
         );
 
-        if (ofertaRepository.count() == 0) {
-            System.out.println("Cargando ofertas de ejemplo...");
-            for (String[] o: ofertas) {
-                OfertaDTO dto = new OfertaDTO();
-                dto.setUserId(Long.parseLong(o[0]));
-                dto.setTitulo(o[1]);
-                dto.setDescripcion(o[2]);
-                dto.setPublicacionId(Long.parseLong(o[3]));  // Assuming Publicacion ID
-                dto.setFilialId(Long.parseLong(o[4]));  // Assuming Filial ID
-                dto.setEstado(o[5]);
-                dto.setImagen(imageService.loadSampleBase64(o[6]));
-                dto.setFechaCreacion(LocalDateTime.now());
-                int dia = LocalDateTime.now().getDayOfMonth();
-                Random random = new Random();
-                int hora = random.nextInt(4) + 16; 
-                dto.setFechaIntercambio(LocalDateTime.of(2024, 7, dia, hora, 30));  // Set a default exchange date
-                Oferta oferta = ofertaMapper.map(dto);
-                ofertaRepository.save(oferta);
-            }
-        }
-    }
+		if (ofertaRepository.count() == 0) {
+			System.out.println("Cargando ofertas de ejemplo...");
+			int cant = 0;
+			for (String[] o : ofertas) {
+				cant++;
+				OfertaDTO dto = new OfertaDTO();
+				dto.setUserId(Long.parseLong(o[0]));
+				dto.setTitulo(o[1]);
+				dto.setDescripcion(o[2]);
+				dto.setPublicacionId(Long.parseLong(o[3]));
+				dto.setFilialId(Long.parseLong(o[4]));
+				dto.setEstado(o[5]);
+				dto.setImagen(imageService.loadSampleBase64(o[6]));
+				dto.setFechaCreacion(LocalDateTime.now());
+				int dia = LocalDateTime.now().getDayOfMonth();
+				if (cant == 2) {
+					dia = 5;
+				}
+				Random random = new Random();
+				int hora = random.nextInt(4) + 16;
+				dto.setFechaIntercambio(LocalDateTime.of(2024, 7, dia, hora, 30));
+				Oferta oferta = ofertaMapper.map(dto);
+				ofertaRepository.save(oferta);
+			}
+		}
+	}
 }
