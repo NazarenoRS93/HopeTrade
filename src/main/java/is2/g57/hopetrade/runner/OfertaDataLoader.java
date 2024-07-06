@@ -36,9 +36,10 @@ public class OfertaDataLoader implements ApplicationRunner {
 
         List<String[]> ofertas = Arrays.asList(
             new String[]{"4", "Manzana", "Una manzana fresca y jugosa, llena de vitaminas y perfecta como merienda saludable.", "1", "1", "ACEPTADA", "manzana.jpg"},
-            new String[]{"4", "Lavarropas", "Un lavarropas eficiente que facilita la limpieza de tu ropa con tecnología moderna.", "6", "2", "ACEPTADA", "lavarropas.jpg"},
+            new String[]{"4", "Lavarropas", "Un lavarropas eficiente que facilita la limpieza de tu ropa con tecnología moderna.", "7", "2", "ACEPTADA", "lavarropas.jpg"},
             new String[]{"4", "Fideos", "Paquete de fideos tallarines", "1", "1", "ACEPTADA", "tallirin.jpg"},
-            new String[]{"4", "Arroz", "Paquete de arroz de 1kg", "1", "3", "ACEPTADA", "biju.jpg"}
+            new String[]{"4", "Arroz", "Paquete de arroz de 1kg", "1", "3", "ACEPTADA", "biju.jpg"},
+            new String[]{"4", "Play2", "La mejor consola de todos los tiempos", "6", "1", "ACEPTADA", "playstationdos.jpg"}
         );
 
 		if (ofertaRepository.count() == 0) {

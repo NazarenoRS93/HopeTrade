@@ -45,15 +45,15 @@ public class OfertaController {
 
 	@Autowired
 	private ImageService imageService;
-	
-	@Autowired 
+
+	@Autowired
 	private IntercambioRepository intercambioRepository;
 
 	@Autowired
 	private PublicacionRepository publicacionRepository;
-	
+
 	@Autowired
-    private MailService emailService;
+	private MailService emailService;
 
 	@PostMapping("/guardar")
 	public ResponseEntity<?> guardarOferta(@RequestBody OfertaDTO ofertaDTO) {
@@ -95,7 +95,7 @@ public class OfertaController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorUserId(@PathVariable ("userId") Long userId) {
+	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorUserId(@PathVariable("userId") Long userId) {
 		List<OfertaDTO> oferta = ofertaRepository.findAllByUserId(userId).stream().map(ofertaMapper::map).toList();
 		return oferta;
 	}
@@ -107,8 +107,10 @@ public class OfertaController {
 	}
 
 	@GetMapping("/publicacion/{publicacionId}")
-	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorPublicacionId(@PathVariable("publicacionId") Long publicacionId) {
-		List<OfertaDTO> oferta = ofertaRepository.findAllByPublicacionId(publicacionId).stream().map(ofertaMapper::map).toList();
+	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorPublicacionId(
+			@PathVariable("publicacionId") Long publicacionId) {
+		List<OfertaDTO> oferta = ofertaRepository.findAllByPublicacionId(publicacionId).stream().map(ofertaMapper::map)
+				.toList();
 		return oferta;
 	}
 
@@ -121,7 +123,7 @@ public class OfertaController {
 			oferta.aceptar();
 
 			System.out.println("UPDATING OFERTA");
-		    this.ofertaRepository.save(oferta);
+			this.ofertaRepository.save(oferta);
 
 			System.out.println("RESERVANDO PUBLICACION");
 			Publicacion publicacion = oferta.getPublicacion();
@@ -132,10 +134,10 @@ public class OfertaController {
 			Intercambio intercambio = new Intercambio();
 			intercambio.setPublicacion(publicacion);
 			intercambio.setOferta(oferta);
-		    this.intercambioRepository.save(intercambio);
+			this.intercambioRepository.save(intercambio);
 
 			System.out.println("ENVIANDO CORREO");
-		    emailService.sendEmailOfertaAceptada(oferta);
+			emailService.sendEmailOfertaAceptada(oferta);
 
 			System.out.println("ELIMINANDO OFERTAS RESTANTES");
 			List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(oferta.getPublicacion().getId());
@@ -165,8 +167,7 @@ public class OfertaController {
 			oferta.rechazar();
 			if (respuesta != null) {
 				oferta.setRespuesta(respuesta);
-			}
-			else {
+			} else {
 				oferta.setRespuesta("[PLACEHOLDER]");
 			}
 
@@ -188,6 +189,46 @@ public class OfertaController {
 		}
 		this.ofertaRepository.deleteById(ofertaId);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	public ResponseEntity<?> aceptarOferta2(Long ofertaId) {
+		System.out.println("ACEPTANDING");
+		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
+		if (ofertaOp.isPresent()) {
+			Oferta oferta = ofertaOp.get();
+			oferta.aceptar();
+
+			System.out.println("UPDATING OFERTA");
+			this.ofertaRepository.save(oferta);
+
+			System.out.println("RESERVANDO PUBLICACION");
+			Publicacion publicacion = oferta.getPublicacion();
+			publicacion.reservar();
+			this.publicacionRepository.save(publicacion);
+
+			System.out.println("CREANDO INTERCAMBIO");
+			Intercambio intercambio = new Intercambio();
+			intercambio.setPublicacion(publicacion);
+			intercambio.setOferta(oferta);
+			this.intercambioRepository.save(intercambio);
+
+			System.out.println("ENVIANDO CORREO");
+			// emailService.sendEmailOfertaAceptada(oferta);
+
+			System.out.println("ELIMINANDO OFERTAS RESTANTES");
+			List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(oferta.getPublicacion().getId());
+			ofertas.remove(oferta);
+			for (Oferta o : ofertas) {
+				o.rechazar();
+				o.setRespuesta("Otra oferta fue aceptada.");
+				// emailService.sendEmailOfertaRechazada(o);
+				this.ofertaRepository.save(o);
+			}
+
+			return new ResponseEntity<>("Oferta aceptada.", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
+		}
 	}
 
 }

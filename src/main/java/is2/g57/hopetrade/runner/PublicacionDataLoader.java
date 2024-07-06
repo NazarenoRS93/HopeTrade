@@ -47,6 +47,7 @@ public class PublicacionDataLoader implements ApplicationRunner{
         		new String[]{"3", "Mochila", "Una mochila espaciosa y resistente, ideal para llevar tus pertenencias con comodidad.", "9", "mochila.jpg"},
         		new String[]{"1", "Manzana", "Una manzana fresca y jugosa, llena de vitaminas y perfecta como merienda saludable.", "6", "manzana.jpg"},
         		new String[]{"4", "Lavarropas", "Un lavarropas eficiente que facilita la limpieza de tu ropa con tecnología moderna.", "2", "lavarropas.jpg"},
+        		new String[]{"3", "PlayStation 4", "Consola de videojuegos PlayStation 4, usada en buen estado.", "1", "playstationcuatro.jpg"},
         		new String[]{"3", "PlayStation 4", "Consola de videojuegos PlayStation 4, usada en buen estado.", "1", "playstationcuatro.jpg"}
         );
         if (publicacionRepository.count() == 0) {
