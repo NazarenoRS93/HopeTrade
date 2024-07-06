@@ -134,7 +134,7 @@ function ExchangeListPage() {
             <Grid item xs={12}>
                 { !hayIntercambios ?
                     <div style={{textAlign: "center", paddingTop: "30px", paddingBottom: "50px"}}>
-                        <Typography variant="h1">No se encontraron intercambios programados.</Typography>
+                        <Typography variant="h1">No se encontraron intercambios programados para el dia de la fecha.</Typography>
                     </div>
                     : null
                 }
