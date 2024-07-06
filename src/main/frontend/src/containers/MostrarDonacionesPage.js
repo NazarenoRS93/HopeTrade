@@ -159,7 +159,7 @@ function MostrarDonacionesPage() {
 
                 <Grid item xs={12}>
                     <div style={titleContainerStyle}>
-                        <Typography variant="h4">Donaciones por Tarjeta</Typography>
+                        <Typography variant="h4">Donaciones con Tarjeta</Typography>
                     </div>
                     {donacionesTarjeta.length > 0 ? (
                         <TableContainer component={Paper}>
