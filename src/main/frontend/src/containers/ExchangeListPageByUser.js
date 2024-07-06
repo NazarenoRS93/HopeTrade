@@ -28,7 +28,7 @@ function ExchangeListPageByUser() {
     const [user, setUser] = useState({});
     const [intercambios, setIntercambio] = useState([]);
     const [states, setStates] = useState([]);
-    const [selectedState, setSelectedState] = useState("PROGRAMADO");
+    const [selectedState, setSelectedState] = useState("Todos");
     const [hayIntercambios, setHayIntercambios] = useState(false);
 
     useEffect(() => {

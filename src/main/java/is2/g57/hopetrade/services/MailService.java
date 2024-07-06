@@ -276,7 +276,7 @@ public class MailService {
 		String text = "Hola " + user1.getNombre() + ",\n\n" + "Te informamos que el intercambio de '"
 				+ intercambio.getPublicacion().getTitulo() + "' por '" + intercambio.getOferta().getTitulo()
 				+ "' que realizaste fue confirmado por nuestro equipo." + ",\n"
-				+ "A partir de ahora vas a poder puntuar al propietario de la publicacion en nuestro sitio." + "\n\n"
+				+ "A partir de ahora vas a poder puntuar al propietario de la publicacion en nuestro sitio, ingresando en \"Ver intercambios\"." + "\n\n"
 				+ "Saludos, el equipo de Hopetrade.";
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(user1.getEmail());
@@ -288,7 +288,7 @@ public class MailService {
 		text = "Hola " + user2.getNombre() + ",\n\n" + "Te informamos que el intercambio de '"
 				+ intercambio.getPublicacion().getTitulo() + "' por '" + intercambio.getOferta().getTitulo()
 				+ "' que realizaste fue confirmado por nuestro equipo." + ",\n"
-				+ "A partir de ahora vas a poder puntuar al usuario que hizo la oferta en nuestro sitio." + "\n\n"
+				+ "A partir de ahora vas a poder puntuar al usuario que hizo la oferta en nuestro sitio, ingresando en \"Ver intercambios\"." + "\n\n"
 				+ "Saludos, el equipo de Hopetrade.";
 		message = new SimpleMailMessage();
 		message.setTo(user2.getEmail());
