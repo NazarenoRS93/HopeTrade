@@ -3,6 +3,7 @@ package is2.g57.hopetrade.runner;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -53,7 +54,9 @@ public class OfertaDataLoader implements ApplicationRunner {
                 dto.setImagen(imageService.loadSampleBase64(o[6]));
                 dto.setFechaCreacion(LocalDateTime.now());
                 int dia = LocalDateTime.now().getDayOfMonth();
-                dto.setFechaIntercambio(LocalDateTime.of(2024, 7, dia, 15, 30));  // Set a default exchange date
+                Random random = new Random();
+                int hora = random.nextInt(4) + 16; 
+                dto.setFechaIntercambio(LocalDateTime.of(2024, 7, dia, hora, 30));  // Set a default exchange date
                 Oferta oferta = ofertaMapper.map(dto);
                 ofertaRepository.save(oferta);
             }
