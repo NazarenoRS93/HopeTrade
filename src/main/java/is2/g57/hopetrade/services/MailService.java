@@ -268,5 +268,34 @@ public class MailService {
 			mailSender.send(message);
 		}
 	}
+
+    public void sendEmailIntercambioRealizado(Intercambio intercambio) {
+        User user1 = intercambio.getOferta().getUser();
+		User user2 = intercambio.getPublicacion().getUser();
+
+		String subject = "Intercambio realizado";
+		String text = "Hola " + user1.getNombre() + ",\n\n"
+				+ "Te informamos que el intercambio de '" + intercambio.getPublicacion().getTitulo() + "' por '" + intercambio.getOferta().getTitulo() 
+				+ "' que realizaste fue confirmado por nuestro equipo." + ",\n"
+				+ "A partir de ahora vas a poder puntuar al propietario de la publicacion en nuestro sitio." + "\n\n"
+				+ "Saludos, el equipo de Hopetrade.";
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(user1.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+
+		subject = "Intercambio realizado";
+		text = "Hola " + user2.getNombre() + ",\n\n"
+				+ "Te informamos que el intercambio de '" + intercambio.getPublicacion().getTitulo() + "' por '" + intercambio.getOferta().getTitulo() 
+				+ "' que realizaste fue confirmado por nuestro equipo." + ",\n"
+				+ "A partir de ahora vas a poder puntuar al usuario que hizo la oferta en nuestro sitio." + "\n\n"
+				+ "Saludos, el equipo de Hopetrade.";
+		message = new SimpleMailMessage();
+		message.setTo(user2.getEmail());
+		message.setSubject(subject);
+		message.setText(text);
+		mailSender.send(message);
+    }
 	
 }

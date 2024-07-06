@@ -16,6 +16,15 @@ function Intercambio( props ) {
 
     const [reason, setReason] = useState("");
     const [open, setOpen] = useState(false);
+    const [dateString, setDateString] = useState();
+
+    useEffect(() => {
+        let newDate = new Date(oferta.fechaIntercambio);
+        // set to format dd/mm/yyyy hh:mm
+        let newDateString = newDate.getDate() + "/" + (newDate.getMonth() + 1) + "/" + newDate.getFullYear() + " " + newDate.getHours() + ":" + newDate.getMinutes().toFixed(0).padStart(2, '0');
+        setDateString(newDateString);
+        console.log(dateString);
+    }, [oferta, dateString]);
 
 
     const nada = () => {
@@ -61,8 +70,8 @@ function Intercambio( props ) {
                         <Typography variant="h2">{oferta.descripcion}</Typography>
                         <hr/>
                         <Typography variant="h6">en <b>{oferta.filialNombre}</b> </Typography> 
-                        { (data.estado == "PROGRAMADO")? <Typography variant="h6">Fecha propuesta: {oferta.fechaIntercambio}</Typography> : null}
-                        { (data.estado == "FINALIZADO")? <Typography variant="h6">El intercambio se realizó: {oferta.fechaIntercambio}</Typography> : null}
+                        { (data.estado == "PROGRAMADO")? <Typography variant="h6">Fecha propuesta: {dateString}</Typography> : null}
+                        { (data.estado == "FINALIZADO")? <Typography variant="h6">El intercambio se realizó: {dateString}</Typography> : null}
                         { (data.estado == "CANCELADO")? <Typography variant="h6">El intercambio se canceló </Typography> : null}
                     </Grid>
                     <Grid item xs={3}>

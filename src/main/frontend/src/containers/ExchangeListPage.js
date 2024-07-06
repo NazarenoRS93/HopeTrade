@@ -12,6 +12,7 @@ import Grid from "@mui/material/Grid";
 import Typography from '@mui/material/Typography';
 
 function ExchangeListPage() {
+    const [verHoy, setVerHoy] = useState(true);
     // Render on start
     useEffect(() => {
         const cookie = window.localStorage.getItem("user");
@@ -25,11 +26,11 @@ function ExchangeListPage() {
     const [user, setUser] = useState({});
     const [intercambios, setIntercambio] = useState([]);
     const [states, setStates] = useState([]);
-    const [hayIntercambios, setHayIntercambios] = useState(false);
+    const [hayIntercambios, setHayIntercambios] = useState(true);
 
     useEffect(() => {
         fetchIntercambios();
-    }, [user]);
+    }, [user, verHoy]);
 
     const fetchIntercambios = async () => {
         try {
@@ -56,6 +57,15 @@ function ExchangeListPage() {
             data.sort(function (a, b) {
                 return new Date(b.oferta.fechaIntercambio) - new Date(a.oferta.fechaIntercambio);
             });
+            if (verHoy) {
+                console.log("Ver intercambios de hoy");
+                data = data.filter(function (intercambio) {
+                    return new Date(intercambio.oferta.fechaIntercambio).getDay() == new Date().getDay();
+                });
+            }
+            else {
+                console.log("Ver todos los intercambios");
+            }
             setHayIntercambios(data.length > 0);
             setIntercambio(data);
         } catch (error) {
@@ -66,7 +76,10 @@ function ExchangeListPage() {
     const onUpdate = () => {
     }
 
-    const handleChange = (event) => {
+    const handleSelect = (event) => {
+        console.log(event.target.value);
+        setVerHoy(event.target.value);
+        fetchIntercambios();
     }
 
     const cancelar = async (id, motivo) => {
@@ -99,6 +112,20 @@ function ExchangeListPage() {
     return (
         
         <React.Fragment>
+                <FormControl>
+                    <Select
+                        value={verHoy}
+                        onChange={handleSelect}
+                        sx={{ minWidth: 250 }}
+                        >
+                        <MenuItem value={false}>
+                            Todos
+                        </MenuItem>
+                        <MenuItem value={true}>
+                            Hoy
+                        </MenuItem>
+                    </Select>
+            </FormControl>             
             <PostGrid>
             {  intercambios?.map((intercambio) => (
                 <IntercambioItem id={intercambio.id} data={intercambio} publicacion={intercambio.publicacion} oferta={intercambio.oferta} user={user} cancelar={cancelar} confirmar={confirmar}/>

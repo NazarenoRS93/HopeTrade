@@ -15,11 +15,15 @@ function Oferta( props ) {
 
     const [reason, setReason] = useState("");
     const [open, setOpen] = useState(false);
+    const [dateString, setDateString] = useState();
 
-    const nada = () => {
-        console.log(data);
-        console.log(publicacion);
-    };
+    useEffect(() => {
+        let newDate = new Date(data.fechaIntercambio);
+        // set to format dd/mm/yyyy hh:mm
+        let newDateString = newDate.getDate() + "/" + (newDate.getMonth() + 1) + "/" + newDate.getFullYear() + " " + newDate.getHours() + ":" + newDate.getMinutes().toFixed(0).padStart(2, '0');
+        setDateString(newDateString);
+        console.log(dateString);
+    }, [data]);
 
     const onAccept = async () => {
         aceptar(id);
@@ -48,7 +52,7 @@ function Oferta( props ) {
                         <Typography variant="h2">{data.descripcion}</Typography>
                         <hr/>
                         <Typography variant="h6">en <b>{data.filialNombre}</b> </Typography> 
-                        <Typography variant="h6"> Fecha propuesta: {data.fechaIntercambio} </Typography>
+                        <Typography variant="h6"> Fecha propuesta: {dateString} </Typography>
                     </Grid>
                     <Grid item xs={3}>
                         <Avatar src={data.imagenUrl} variant="rounded" sx={{ width: "150px", height: "150px" }} />

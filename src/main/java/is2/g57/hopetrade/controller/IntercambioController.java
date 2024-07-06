@@ -104,6 +104,7 @@ public class IntercambioController {
         }
         
         intercambioRepository.save(intercambio);
+        emailService.sendEmailIntercambioRealizado(intercambio);
         return new ResponseEntity<>("Intercambio confirmado.", HttpStatus.OK);
 
     }
