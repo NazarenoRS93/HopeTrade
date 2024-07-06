@@ -36,7 +36,8 @@ public class OfertaDataLoader implements ApplicationRunner {
         List<String[]> ofertas = Arrays.asList(
             new String[]{"4", "Manzana", "Una manzana fresca y jugosa, llena de vitaminas y perfecta como merienda saludable.", "1", "1", "ACEPTADA", "manzana.jpg"},
             new String[]{"4", "Lavarropas", "Un lavarropas eficiente que facilita la limpieza de tu ropa con tecnología moderna.", "6", "2", "ACEPTADA", "lavarropas.jpg"},
-            new String[]{"4", "Fideos", "Paquete de fideos tallarines", "1", "1", "ACEPTADA", "tallirin.jpg"}
+            new String[]{"4", "Fideos", "Paquete de fideos tallarines", "1", "1", "ACEPTADA", "tallirin.jpg"},
+            new String[]{"4", "Arroz", "Paquete de arroz de 1kg", "1", "3", "ACEPTADA", "biju.jpg"}
         );
 
         if (ofertaRepository.count() == 0) {
@@ -51,7 +52,8 @@ public class OfertaDataLoader implements ApplicationRunner {
                 dto.setEstado(o[5]);
                 dto.setImagen(imageService.loadSampleBase64(o[6]));
                 dto.setFechaCreacion(LocalDateTime.now());
-                dto.setFechaIntercambio(LocalDateTime.now().plusDays(30));  // Set a default exchange date
+                int dia = LocalDateTime.now().getDayOfMonth();
+                dto.setFechaIntercambio(LocalDateTime.of(2024, 7, dia, 15, 30));  // Set a default exchange date
                 Oferta oferta = ofertaMapper.map(dto);
                 ofertaRepository.save(oferta);
             }
