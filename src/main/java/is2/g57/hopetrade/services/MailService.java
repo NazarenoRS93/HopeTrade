@@ -31,7 +31,7 @@ public class MailService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private PublicacionRepository publicacionRepository;
 
@@ -72,8 +72,11 @@ public class MailService {
 	public void sendEmailOfertaRechazada(Oferta oferta) {
 
 		String subject = "Oferta rechazada";
-		String text = "Hola " + oferta.getUser().getNombre() + ",\n\n" + "Te informamos que tu oferta " + "\"" + oferta.getTitulo() +  "\"" + " para la publicacion " + "\"" + oferta.getPublicacion().getTitulo() + "\"" + " de: " + oferta.getPublicacion().getUser().getNombre() + " " +oferta.getPublicacion().getUser().getApellido() + "," + " fue rechazada"
-				+ "\n" + "Motivo: " + oferta.getRespuesta() + "\n\n" + "Saludos";
+		String text = "Hola " + oferta.getUser().getNombre() + ",\n\n" + "Te informamos que tu oferta " + "\""
+				+ oferta.getTitulo() + "\"" + " para la publicacion " + "\"" + oferta.getPublicacion().getTitulo()
+				+ "\"" + " de: " + oferta.getPublicacion().getUser().getNombre() + " "
+				+ oferta.getPublicacion().getUser().getApellido() + "," + " fue rechazada" + "\n" + "Motivo: "
+				+ oferta.getRespuesta() + "\n\n" + "Saludos";
 
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(oferta.getUser().getEmail());
@@ -85,9 +88,13 @@ public class MailService {
 	@Async
 	public void sendEmailOfertaAceptada(Oferta oferta) {
 		String subject = "Oferta aceptada";
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+		String fechaIntercambioFormatted = oferta.getFechaIntercambio().format(formatter);
+
 		String text = "Hola " + oferta.getUser().getNombre() + ",\n\n"
 				+ "Te informamos que tu oferta fue aceptada, a continacion esta el detalle del intercambio" + "\n"
-				+ "Horario: " + oferta.getFechaIntercambio() + "\n" + "Filial: " + oferta.getFilial().getNombre() + "\n"
+				+ "Horario: " + fechaIntercambioFormatted + "\n" + "Filial: " + oferta.getFilial().getNombre() + "\n"
 				+ "Direccion: " + oferta.getFilial().getDireccion() + "\n\n" + "Saludos";
 
 		SimpleMailMessage message = new SimpleMailMessage();
@@ -95,17 +102,17 @@ public class MailService {
 		message.setSubject(subject);
 		message.setText(text);
 		mailSender.send(message);
-		this.sendEmailOfertaAceptada2(oferta);
+		this.sendEmailOfertaAceptada2(oferta, fechaIntercambioFormatted);
 	}
 
 	@Async
-	private void sendEmailOfertaAceptada2(Oferta oferta) {
+	private void sendEmailOfertaAceptada2(Oferta oferta, String fechaIntercambioFormatted) {
 		Optional<User> userOp = userRepository.findById(oferta.getPublicacion().getUser().getId());
 		if (userOp.isPresent()) {
 			User user = userOp.get();
 			String subject = "Intercambio programado";
 			String text = "Hola " + user.getNombre() + ",\n\n" + "Te informamos que los detalles del intercambio:"
-					+ "\n" + "Horario: " + oferta.getFechaIntercambio() + "\n" + "Filial: "
+					+ "\n" + "Horario: " + fechaIntercambioFormatted + "\n" + "Filial: "
 					+ oferta.getFilial().getNombre() + "\n" + "Direccion: " + oferta.getFilial().getDireccion() + "\n\n"
 					+ "Saludos";
 
@@ -139,13 +146,12 @@ public class MailService {
 		String subject = "Intercambio cancelado";
 		User user1 = intercambio.getOferta().getUser();
 		User user2 = intercambio.getPublicacion().getUser();
-		String text = "Hola " + user1.getNombre() + ",\n\n"
-				+ "Te informamos que tu intercambio con el usuario: " + user2.getFullName() 
-				+ ", programado para el dia " + intercambio.getOferta().getFechaIntercambio().toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-				+ " en la filial " + intercambio.getOferta().getFilial().getNombre()
-				+ ", fue cancelado."
-				+ "\n" + "Motivo: " + motivo
-				+ "\n\n" + "Saludos.";
+		String text = "Hola " + user1.getNombre() + ",\n\n" + "Te informamos que tu intercambio con el usuario: "
+				+ user2.getFullName() + ", programado para el dia "
+				+ intercambio.getOferta().getFechaIntercambio().toLocalDate()
+						.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+				+ " en la filial " + intercambio.getOferta().getFilial().getNombre() + ", fue cancelado." + "\n"
+				+ "Motivo: " + motivo + "\n\n" + "Saludos.";
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(user1.getEmail());
 		message.setSubject(subject);
@@ -158,14 +164,13 @@ public class MailService {
 		mailSender.send(message);
 
 	}
-	
+
 	@Async
-	public void sendEmailAyudanteBaja (Ayudante ayudante) {
+	public void sendEmailAyudanteBaja(Ayudante ayudante) {
 		String subject = "Cuenta dada de baja";
 		String text = "Hola " + ayudante.getNombre() + ",\n\n"
 				+ "Te informamos que tu cuenta de ayudante fue dada de baja" + ",\n"
-				+ "gracias por colaborar con el equipo de hopetrade" + ",\n\n"
-				+ "Saludos.";
+				+ "gracias por colaborar con el equipo de hopetrade" + ",\n\n" + "Saludos.";
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(ayudante.getEmail());
 		message.setSubject(subject);
@@ -174,12 +179,10 @@ public class MailService {
 	}
 
 	@Async
-	public void sendEmailUsuarioBaja(User user,String motivo) {
+	public void sendEmailUsuarioBaja(User user, String motivo) {
 		String subject = "Cuenta suspendida";
-		String text = "Hola " + user.getNombre() + ",\n\n"
-				+ "Te informamos que tu cuenta fue suspendida" + ",\n"
-				+ "Motivo: " + motivo + ".\n\n"
-				+ "Saludos.";
+		String text = "Hola " + user.getNombre() + ",\n\n" + "Te informamos que tu cuenta fue suspendida" + ",\n"
+				+ "Motivo: " + motivo + ".\n\n" + "Saludos.";
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(user.getEmail());
 		message.setSubject(subject);
@@ -191,7 +194,8 @@ public class MailService {
 	public void SentEmailRespuestaRecibida(RespuestaComentario nuevaRespuesta) {
 		String subject = "Respuesta recibida";
 		Optional<User> userOp = this.userRepository.findById(nuevaRespuesta.getComentario().getUserId());
-		Optional<Publicacion> publicacionOp = this.publicacionRepository.findById(nuevaRespuesta.getComentario().getPublicacion().getId());
+		Optional<Publicacion> publicacionOp = this.publicacionRepository
+				.findById(nuevaRespuesta.getComentario().getPublicacion().getId());
 		if (userOp.isPresent() && publicacionOp.isPresent()) {
 			Publicacion publicacion = publicacionOp.get();
 			User comentarioOriginalUser = userOp.get();
@@ -205,23 +209,21 @@ public class MailService {
 			mailSender.send(message);
 		}
 	}
-		
-		
-	
+
 	@Async
 	public void sendEmailComentarioRecibido(User user, Publicacion publicacion) {
 		String subject = "Comentario recibido";
 		Optional<User> userOp = this.userRepository.findById(publicacion.getUser().getId());
 		if (userOp.isPresent()) {
 			User publicacionUser = userOp.get();
-		String text = "Hola " + publicacionUser.getNombre()  + ",\n\n"
-				+ "Te informamos que recibiste un comentario de " + user.getFullName()  + ",\n"
-				+ "Para tu publicacion " + publicacion.getTitulo();
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(publicacionUser.getEmail());
-		message.setSubject(subject);
-		message.setText(text);
-		mailSender.send(message);
+			String text = "Hola " + publicacionUser.getNombre() + ",\n\n"
+					+ "Te informamos que recibiste un comentario de " + user.getFullName() + ",\n"
+					+ "Para tu publicacion " + publicacion.getTitulo();
+			SimpleMailMessage message = new SimpleMailMessage();
+			message.setTo(publicacionUser.getEmail());
+			message.setSubject(subject);
+			message.setText(text);
+			mailSender.send(message);
 		}
 	}
 
@@ -230,23 +232,20 @@ public class MailService {
 		String subject = "Cuenta dada de alta";
 		String text = "Hola " + ayudante.getNombre() + ",\n\n"
 				+ "Te informamos que tu cuenta de ayudante fue dada de alta" + ",\n"
-				+ "Bienvenido nuevamente al equipo de hopetrade" + ",\n\n"
-				+ "Saludos.";
+				+ "Bienvenido nuevamente al equipo de hopetrade" + ",\n\n" + "Saludos.";
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(ayudante.getEmail());
 		message.setSubject(subject);
 		message.setText(text);
 		mailSender.send(message);
-		
+
 	}
 
 	@Async
 	public void sendEmailPublicacionEliminada(Publicacion publicacion, String motivo) {
 		String subject = "Publicacion eliminada";
 		String text = "Hola " + publicacion.getUser().getNombre() + ",\n\n"
-				+ "Te informamos que tu publicacion fue eliminada" + ",\n"
-				+ "Motivo: " + motivo + ".\n\n"
-				+ "Saludos.";
+				+ "Te informamos que tu publicacion fue eliminada" + ",\n" + "Motivo: " + motivo + ".\n\n" + "Saludos.";
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(publicacion.getUser().getEmail());
 		message.setSubject(subject);
@@ -269,13 +268,13 @@ public class MailService {
 		}
 	}
 
-    public void sendEmailIntercambioRealizado(Intercambio intercambio) {
-        User user1 = intercambio.getOferta().getUser();
+	public void sendEmailIntercambioRealizado(Intercambio intercambio) {
+		User user1 = intercambio.getOferta().getUser();
 		User user2 = intercambio.getPublicacion().getUser();
 
 		String subject = "Intercambio realizado";
-		String text = "Hola " + user1.getNombre() + ",\n\n"
-				+ "Te informamos que el intercambio de '" + intercambio.getPublicacion().getTitulo() + "' por '" + intercambio.getOferta().getTitulo() 
+		String text = "Hola " + user1.getNombre() + ",\n\n" + "Te informamos que el intercambio de '"
+				+ intercambio.getPublicacion().getTitulo() + "' por '" + intercambio.getOferta().getTitulo()
 				+ "' que realizaste fue confirmado por nuestro equipo." + ",\n"
 				+ "A partir de ahora vas a poder puntuar al propietario de la publicacion en nuestro sitio." + "\n\n"
 				+ "Saludos, el equipo de Hopetrade.";
@@ -286,8 +285,8 @@ public class MailService {
 		mailSender.send(message);
 
 		subject = "Intercambio realizado";
-		text = "Hola " + user2.getNombre() + ",\n\n"
-				+ "Te informamos que el intercambio de '" + intercambio.getPublicacion().getTitulo() + "' por '" + intercambio.getOferta().getTitulo() 
+		text = "Hola " + user2.getNombre() + ",\n\n" + "Te informamos que el intercambio de '"
+				+ intercambio.getPublicacion().getTitulo() + "' por '" + intercambio.getOferta().getTitulo()
 				+ "' que realizaste fue confirmado por nuestro equipo." + ",\n"
 				+ "A partir de ahora vas a poder puntuar al usuario que hizo la oferta en nuestro sitio." + "\n\n"
 				+ "Saludos, el equipo de Hopetrade.";
@@ -296,6 +295,6 @@ public class MailService {
 		message.setSubject(subject);
 		message.setText(text);
 		mailSender.send(message);
-    }
-	
+	}
+
 }
