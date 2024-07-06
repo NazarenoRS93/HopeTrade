@@ -27,10 +27,12 @@ function MostrarDonacionesPage() {
     const fetchDonaciones = async () => {
         try {
             const enFilial = await DonacionesService.getDonacionesEnFilial();
+			const enFilialOrdenadas = enFilial.sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora)); // Ordenar por fecha más reciente
             const tarjeta = await DonacionesService.getDonacionesTarjeta();
+			const tarjetaOrdenadas = tarjeta.sort((a, b) => new Date(b.fecha_hora) - new Date(a.fecha_hora)); // Ordenar por fecha más reciente
 			console.log("Donaciones en Filial:", enFilial);
-            setDonacionesEnFilial(enFilial);
-            setDonacionesTarjeta(tarjeta);
+            setDonacionesEnFilial(enFilialOrdenadas);
+            setDonacionesTarjeta(tarjetaOrdenadas);
             fetchAyudantes(enFilial);
             fetchCategorias(enFilial);
             fetchUserNames(tarjeta);
@@ -142,7 +144,7 @@ function MostrarDonacionesPage() {
                                             <TableCell>{donacion.id_categoria === 16 ? "Dinero" : (categorias[donacion.id_categoria] || "Cargando...")}</TableCell>
 											<TableCell>{donacion.descripcion}</TableCell>
 											<TableCell>{donacion.cantidad}</TableCell>
-                                            <TableCell>{format(new Date(donacion.fecha_hora), 'dd/MM/yyyy HH:mm:ss')}</TableCell>
+                                            <TableCell>{format(new Date(donacion.fecha_hora), 'dd/MM/yyyy HH:mm')}</TableCell>
                                             <TableCell>{donacion.dni}</TableCell>
                                             <TableCell>{filiales[donacion.id_filial]?.nombre || "Cargando..."}</TableCell>
                                         </TableRow>
@@ -174,9 +176,9 @@ function MostrarDonacionesPage() {
                                     {donacionesTarjeta.map((donacion) => (
                                         <TableRow key={donacion.id}>
                                             <TableCell>{userNames[donacion.id_usuario] || "Cargando..."}</TableCell>
-                                            <TableCell>{format(new Date(donacion.fecha_hora), 'dd/MM/yyyy HH:mm:ss')}</TableCell>
+                                            <TableCell>{format(new Date(donacion.fecha_hora), 'dd/MM/yyyy HH:mm')}</TableCell>
                                             <TableCell>{donacion.monto}</TableCell>
-                                            <TableCell>{donacion.numero_tarjeta}</TableCell>
+                                            <TableCell>  {donacion.numero_tarjeta.slice(0, -4).replace(/./g, '*') + donacion.numero_tarjeta.slice(-4)}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
