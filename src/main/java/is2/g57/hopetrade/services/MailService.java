@@ -200,7 +200,7 @@ public class MailService {
 			Publicacion publicacion = publicacionOp.get();
 			User comentarioOriginalUser = userOp.get();
 			String text = "Hola " + comentarioOriginalUser.getNombre() + ",\n\n"
-					+ "Te informamos que tu comentario en la publicacion " + publicacion.getTitulo() + ",\n\n"
+					+ "Te informamos que tu comentario en la publicacion " + publicacion.getTitulo() + " de " + publicacion.getUser().getNombre() + " " + publicacion.getUser().getApellido() + ",\n\n"
 					+ "Recibio una respuesta del propietario";
 			SimpleMailMessage message = new SimpleMailMessage();
 			message.setTo(comentarioOriginalUser.getEmail());
@@ -245,7 +245,7 @@ public class MailService {
 	public void sendEmailPublicacionEliminada(Publicacion publicacion, String motivo) {
 		String subject = "Publicacion eliminada";
 		String text = "Hola " + publicacion.getUser().getNombre() + ",\n\n"
-				+ "Te informamos que tu publicacion fue eliminada" + ",\n" + "Motivo: " + motivo + ".\n\n" + "Saludos.";
+				+ "Te informamos que tu publicacion " + "\"" + publicacion.getTitulo()+ "\""  + " fue eliminada" + ",\n" + "Motivo: " + motivo + ".\n\n" + "Saludos.";
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setTo(publicacion.getUser().getEmail());
 		message.setSubject(subject);

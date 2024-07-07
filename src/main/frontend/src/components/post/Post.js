@@ -143,7 +143,7 @@ function Post(props) {
                                     <Typography variant="button2">Eliminar</Typography>
                                 </Button>
                             }
-                            {( user.tipoUser === 1 || user.tipoUser === 2) && (data.estado === "Disponible") && (isCommentsPage) &&
+                            {(  user.tipoUser === 2) && (data.estado === "Disponible") && (isCommentsPage) &&
                                 <Button variant="contained" color="error" onClick={handleOpen}
                                     startIcon={<DeleteRounded color="background2" />}>
                                     <Typography variant="button2">Eliminar</Typography>

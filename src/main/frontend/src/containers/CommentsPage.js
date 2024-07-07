@@ -216,7 +216,7 @@ function CommentsPage() {
 							>
 								<Typography variant="body2">
 									{comentario.nombre} {comentario.apellido} - {new Date(comentario.fechaComentario).toLocaleString()}
-									{(comentario.userId === user.idUser && user.tipoUser === 0 || user.tipoUser === 2) && !respuestas[comentario.idComentario] && (
+									{(comentario.userId === user.idUser && user.tipoUser === 0 ) && !respuestas[comentario.idComentario] && (
 										<Button
 											variant="contained"
 											color="error"

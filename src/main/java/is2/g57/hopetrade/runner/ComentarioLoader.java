@@ -39,7 +39,9 @@ public class ComentarioLoader implements ApplicationRunner {
       new String[] { "¿Es de una plaza o de dos?", "5", "2" },
       new String[] { "¿De verdad es rico?", "4", "1" },
       new String[] { "Malisima la publicacion", "5", "1" },
-      new String[] { "¿Cual es la marca?", "3", "5" }
+      new String[] { "¿De que talle es la remera?", "3", "5" },
+      new String[] { "¿Sirve para llevar notebook?", "5", "3" },
+      new String[] { "¿Cuanto uso tiene?", "5", "5" }
     );
 
     if (comentarioRepository.count() == 0) {
