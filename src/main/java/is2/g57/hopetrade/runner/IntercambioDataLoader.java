@@ -29,53 +29,30 @@ import jakarta.transaction.Transactional;
 public class IntercambioDataLoader implements ApplicationRunner {
 
 	@Autowired
-	PublicacionController publicacionController;
-
-	@Autowired
 	OfertaController ofertaController;
 
 	@Autowired
 	private OfertaRepository ofertaRepository;
 
-	@Autowired
-	private PublicacionRepository publicacionRepository;
-
-	@Autowired
-	private IntercambioRepository intercambioRepository;
-
-	@Autowired
-	private ImageService imageService;
-
-	@Autowired
-	private OfertaMapper ofertaMapper;
-
-	@Autowired
-	private PublicacionMapper publicacionMapper;
-
-	@Autowired
-	private UserRepository userRepository;
-
 	@Override
 	@Transactional
 	public void run(ApplicationArguments args) throws Exception {
-	    System.out.println("Empezando a cargar intercambio");
-	    try {
-	        Long ofertaId = (long) 5;
-	        Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
+		System.out.println("Empezando a cargar intercambio");
+		try {
+			Long ofertaId = (long) 5;
+			Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
 
-	        if (ofertaOp.isPresent()) {
-	            Oferta oferta = ofertaOp.get();
+			if (ofertaOp.isPresent()) {
+				Oferta oferta = ofertaOp.get();
 
-	            // Assuming aceptarOferta method should update oferta
-	            ofertaController.aceptarOferta2(oferta.getId());
-	            System.out.println("Oferta aceptada correctamente");
-	        } else {
-	            System.out.println("Oferta no encontrada");
-	        }
+				ofertaController.aceptarOferta2(oferta.getId());
+				System.out.println("Oferta aceptada correctamente");
+			} else {
+				System.out.println("Oferta no encontrada");
+			}
 
-	    } catch (Exception e) {
-	        throw new Exception("Error en intercambio: ", e);
-	    }
+		} catch (Exception e) {
+			throw new Exception("Error en intercambio: ", e);
+		}
 	}
 }
-
