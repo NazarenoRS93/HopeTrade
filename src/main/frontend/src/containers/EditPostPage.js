@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -7,9 +7,9 @@ import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import FormHelperText from "@mui/material/FormHelperText";
 import PostAddRoundedIcon from '@mui/icons-material/PostAddRounded';
-import {MenuItem, Select, Stack} from "@mui/material";
+import { Stack } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import {defaultFormAddPost} from "../utils/utilConstants";
+import { defaultFormAddPost } from "../utils/utilConstants";
 
 function EditPostPage() {
     // Render on start
@@ -17,18 +17,27 @@ function EditPostPage() {
         fetchCategorias();
         fetchPost();
         const cookie = window.localStorage.getItem("user");
-        if(cookie) {
+        if (cookie) {
             let user = JSON.parse(cookie);
             setUser(user);
         };
     }, []);
-    const [form, setForm] = useState(defaultFormAddPost);
-    const [categorias, setCategorias] = useState([])
-    const [post, setPost] = useState({});
-    const reader = new FileReader();
 
+    const [form, setForm] = useState(defaultFormAddPost);
+    const [categorias, setCategorias] = useState([]);
+    const [post, setPost] = useState({});
     const [user, setUser] = useState({});
     const [btnDisabled, setBtnDisabled] = useState(true);
+
+    useEffect(() => {
+        if (post.descripcion) {
+            setForm((prevForm) => ({
+                ...prevForm,
+                desc: post.descripcion
+            }));
+            validar({ ...form, desc: post.descripcion }, post.descripcion);
+        }
+    }, [post]);
 
     const fetchCategorias = async () => {
         try {
@@ -36,54 +45,44 @@ function EditPostPage() {
             const data = response.data;
             setCategorias(data);
         } catch (error) {
-            alert("Error obteniendo categorías: "+error);
+            alert("Error obteniendo categorías: " + error);
         }
-    }
+    };
 
-    const validar = (form) => {
-        if(form.desc.trim()!=="") {
+    const validar = (form, originalDesc) => {
+        if (form.desc.trim() !== "" && form.desc.length <= 250 && form.desc !== originalDesc) {
             setBtnDisabled(false);
-        } else setBtnDisabled(true);
-    }
+        } else {
+            setBtnDisabled(true);
+        }
+    };
+
     const handleChange = async (e) => {
         let tempForm = form;
         switch (e.target.name) {
-            case "titulo": tempForm = {...tempForm, titulo: e.target.value}; break;
-            case "descripcion": tempForm = {...tempForm, desc: e.target.value}; break;
-            case "categoria": tempForm = {...tempForm, cat: e.target.value}; break;
-            case "imagen": tempForm = {...tempForm, image: e.target.files[0]}; break;
+            case "titulo": tempForm = { ...tempForm, titulo: e.target.value }; break;
+            case "descripcion": tempForm = { ...tempForm, desc: e.target.value }; break;
+            case "categoria": tempForm = { ...tempForm, cat: e.target.value }; break;
+            case "imagen": tempForm = { ...tempForm, image: e.target.files[0] }; break;
             default: break;
         }
         setForm(tempForm);
-        validar(tempForm);
-    }
-    const fileToBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64String = reader.result.split(',')[1];
-                resolve(base64String);
-            };
-            reader.onerror = (error) => {
-                reject(error);
-            };
-            reader.readAsDataURL(file);
-        });
+        validar(tempForm, post.descripcion);
     };
 
     const fetchPost = async () => {
         try {
             let id = window.localStorage.getItem("pubId");
-            let url = "http://localhost:8080/publicacion/"+id;
+            let url = "http://localhost:8080/publicacion/" + id;
             const response = await axios.get(url);
             const data = response.data;
-            data.imagenUrl = `data:image/jpeg;base64,${data.imagen}`
+            data.imagenUrl = `data:image/jpeg;base64,${data.imagen}`;
             setPost(data);
             console.log(data);
         } catch (error) {
-            alert("Error obteniendo publicacion: "+error);
+            alert("Error obteniendo publicacion: " + error);
         }
-    }   
+    };
 
     const editPost = async (event) => {
         event.preventDefault();
@@ -105,13 +104,13 @@ function EditPostPage() {
                 alert(response.data);
                 let href = window.location.href;
                 href = href.substring(0, href.lastIndexOf('/'));
-                window.location.replace(href+"/home");
+                window.location.replace(href + "/home");
             })
             .catch(function (error) {
                 console.log(error.response.data);
                 alert(error.response.data);
             });
-    }
+    };
 
     return (
         <React.Fragment>
@@ -123,14 +122,15 @@ function EditPostPage() {
                     <Stack spacing={2} direction="column">
                         <FormControl>
                             <TextField value={post.titulo}
-                                            type="text" variant="outlined" id="apellido"
-                                            InputLabelProps={{ shrink: true }} label="Titulo" InputProps={{ readOnly: true }}
-                                        />
-                                        <FormHelperText id="titulo-text"></FormHelperText>
+                                type="text" variant="outlined" id="titulo"
+                                InputLabelProps={{ shrink: true }} label="Titulo" InputProps={{ readOnly: true }}
+                            />
+                            <FormHelperText id="titulo-text"></FormHelperText>
                         </FormControl>
                         <FormControl>
-                            <TextField onChange={(event)=> {handleChange(event)}}
-                                       multiline={true} rows={4} type="text" variant="outlined" name="descripcion"
+                            <TextField value={form.desc}
+                                onChange={(event) => { handleChange(event) }}
+                                multiline={true} rows={4} type="text" variant="outlined" name="descripcion"
                             />
                             <FormHelperText id="descripcion-text">Descripción</FormHelperText>
                         </FormControl>
@@ -138,15 +138,15 @@ function EditPostPage() {
                 </Grid>
                 <Grid item xs={4}>
                     <Stack spacing={2} direction="column">
-                    <FormControl>
+                        <FormControl>
                             <TextField value={post.categoria_Nombre}
-                                            type="text" variant="outlined" id="apellido"
-                                            InputLabelProps={{ shrink: true }} label="Categoria" InputProps={{ readOnly: true }}
-                                        />
-                                        <FormHelperText id="categoria-text"></FormHelperText>
+                                type="text" variant="outlined" id="categoria"
+                                InputLabelProps={{ shrink: true }} label="Categoria" InputProps={{ readOnly: true }}
+                            />
+                            <FormHelperText id="categoria-text"></FormHelperText>
                         </FormControl>
-                        <Button startIcon={<PostAddRoundedIcon color="primary"/>} disabled={btnDisabled}
-                                variant="contained" color="success" onClick={editPost}>
+                        <Button startIcon={<PostAddRoundedIcon color="primary" />} disabled={btnDisabled}
+                            variant="contained" color="success" onClick={editPost}>
                             <Typography variant="button">Editar</Typography>
                         </Button>
                     </Stack>
