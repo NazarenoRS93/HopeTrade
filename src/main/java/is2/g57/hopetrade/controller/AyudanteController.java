@@ -32,10 +32,9 @@ public class AyudanteController {
 
 	@Autowired
 	private AyudanteRepository ayudanteRepository;
-	
+
 	@Autowired
-    private MailService emailService;
-	
+	private MailService emailService;
 
 	@GetMapping("/listar-ayudantes")
 	public @ResponseBody Iterable<Ayudante> getAllAyudantes() {
@@ -142,7 +141,7 @@ public class AyudanteController {
 
 			return new ResponseEntity<>("¡Ayudante registrado exitosamente!", HttpStatus.CREATED);
 		} catch (Exception e) {
-	            return new ResponseEntity<>("Ocurrió un error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Ocurrió un error: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -170,38 +169,80 @@ public class AyudanteController {
 
 	@PostMapping("/updatepassword")
 	public ResponseEntity<?> updatePass(@RequestBody CambiarContraseniaRequest cambiarContraseniaRequest) {
-	    Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(cambiarContraseniaRequest.getId());
-	    
-	    if (!ayudanteOp.isPresent()) {
-	        return new ResponseEntity<>("Usuario no encontrado", HttpStatus.BAD_REQUEST);
-	    }
+		Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(cambiarContraseniaRequest.getId());
 
-	    Ayudante ayudante = ayudanteOp.get();
-	    String currentPassword = ayudante.getPass();
-	    String oldPassword = cambiarContraseniaRequest.getAntiguaContrasenia();
-	    String newPassword = cambiarContraseniaRequest.getNuevaContrasenia();
+		if (!ayudanteOp.isPresent()) {
+			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.BAD_REQUEST);
+		}
 
-	    ResponseEntity<?> validationResponse = validatePasswords(currentPassword, oldPassword, newPassword);
-	    if (validationResponse != null) {
-	        return validationResponse;
-	    }
+		Ayudante ayudante = ayudanteOp.get();
+		String currentPassword = ayudante.getPass();
+		String oldPassword = cambiarContraseniaRequest.getAntiguaContrasenia();
+		String newPassword = cambiarContraseniaRequest.getNuevaContrasenia();
 
-	    ayudante.setPass(newPassword);
-	    ayudanteRepository.save(ayudante);
-	    return new ResponseEntity<>("Cambios guardados", HttpStatus.OK);
+		ResponseEntity<?> validationResponse = validatePasswords(currentPassword, oldPassword, newPassword);
+		if (validationResponse != null) {
+			return validationResponse;
+		}
+
+		ayudante.setPass(newPassword);
+		ayudanteRepository.save(ayudante);
+		return new ResponseEntity<>("Cambios guardados", HttpStatus.OK);
 	}
 
 	private ResponseEntity<?> validatePasswords(String currentPassword, String oldPassword, String newPassword) {
-		 if (newPassword.equals("") || currentPassword.equals("") ) {
-		        return new ResponseEntity<>("Debes llenar todos los campos", HttpStatus.BAD_REQUEST);
-		 }
-	    if (!currentPassword.equals(oldPassword)) {
-	        return new ResponseEntity<>("La contraseña antigua no coincide.", HttpStatus.BAD_REQUEST);
+		if (newPassword.equals("") || currentPassword.equals("")) {
+			return new ResponseEntity<>("Debes llenar todos los campos", HttpStatus.BAD_REQUEST);
+		}
+		if (!currentPassword.equals(oldPassword)) {
+			return new ResponseEntity<>("La contraseña antigua no coincide.", HttpStatus.BAD_REQUEST);
+		}
+
+		if (currentPassword.equals(newPassword)) {
+			return new ResponseEntity<>("Debes ingresar una contraseña diferente a la actual.", HttpStatus.BAD_REQUEST);
+		}
+		return null;
+	}
+
+	@PostMapping("/deleteayudante/{id}")
+	public ResponseEntity<?> deleteAyudante(@PathVariable(value = "id") Long Id) {
+		Optional<Ayudante> ayudanteOp = ayudanteRepository.findAyudanteById(Id);
+		if (ayudanteOp.isPresent()) {
+			Ayudante ayudante = ayudanteOp.get();
+			ayudante.setActivo(false);
+			ayudante.setFilial(null);
+			ayudanteRepository.save(ayudante);
+			emailService.sendEmailAyudanteBaja(ayudante);
+			return new ResponseEntity<>("Ayudante dado de baja satisfactoriamente", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Ocurrio un error", HttpStatus.BAD_REQUEST);
+		}
+
+	}
+	
+	@PostMapping("/dar-de-alta-suspendido/{id}")
+	public ResponseEntity<?> daraltaSuspendido(@PathVariable(value = "id") Long id){
+		Optional<Ayudante> ayudanteOp = this.ayudanteRepository.findAyudanteById(id);
+		if (ayudanteOp.isPresent()) {
+			Ayudante ayudante = ayudanteOp.get();
+			ayudante.setActivo(true);
+			this.ayudanteRepository.save(ayudante);
+			emailService.sendEmailAlta(ayudante);
+			return new ResponseEntity<>("Ayudante dado de alta satisfactoriamente",HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("Ocurrio un error",HttpStatus.BAD_GATEWAY);
+		}
+	}
+
+	@GetMapping("/obtener-ayudante/{id}")
+	public ResponseEntity<String> obtenerNombreApellidoAyudante(@PathVariable(value = "id") Long id) {
+	    Optional<Ayudante> ayudanteOp = ayudanteRepository.findById(id);
+	    if (ayudanteOp.isPresent()) {
+	        Ayudante ayudante = ayudanteOp.get();
+	        String nombreCompleto = ayudante.getNombre() + " " + ayudante.getApellido();
+	        return ResponseEntity.ok(nombreCompleto);
+	    } else {
+	        return ResponseEntity.notFound().build();
 	    }
-	   
-	    if (currentPassword.equals(newPassword)) {
-	        return new ResponseEntity<>("Debes ingresar una contraseña diferente a la actual.", HttpStatus.BAD_REQUEST);
-	    }
-	    return null;
 	}
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.repository.UserRepository;
+import is2.g57.hopetrade.services.MailService;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -28,6 +29,9 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	public static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	
+	@Autowired
+	private MailService emailService;
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> ObtenerUsuarioPorId(@PathVariable Long id) {
@@ -154,6 +158,20 @@ public class UserController {
 	        return new ResponseEntity<>("Debes ingresar una contraseña diferente a la actual.", HttpStatus.BAD_REQUEST);
 	    }
 	    return null;
+	}
+	
+	@PostMapping("/deleteusuario/{id}")
+	  public ResponseEntity<?> deleteUsuario(@PathVariable(value = "id") Long id, @RequestParam(value = "motivo") String motivo) {
+		Optional<User> userOp = userRepository.findById(id);
+		if (userOp.isPresent()) {
+			User user = userOp.get();
+			user.setActivo(false);
+			userRepository.save(user);
+			emailService.sendEmailUsuarioBaja(user,motivo);
+			return new ResponseEntity<>("Usuario dado de baja con exito", HttpStatus.OK);
+		} else { 
+			return new ResponseEntity<>("Error al dar de baja al usuario",HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 

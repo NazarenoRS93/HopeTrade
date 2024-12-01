@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import '../App.css';
 import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import VpnKeyRoundedIcon from "@mui/icons-material/VpnKeyRounded";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -10,21 +10,12 @@ import FormHelperText from "@mui/material/FormHelperText";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-import Item from "../utils/Item";
 import FormControl from "@mui/material/FormControl";
-import {colors} from "../utils/colors";
 import {baseUser, defaultFormLoginAdmin} from "../utils/utilConstants";
 import LoginService from "../services/LoginService";
-import { useNavigate } from "react-router-dom";
+import Grid from "@mui/material/Grid";
 
 function LoginAdminPage(props) {
-    const {
-        dialog,
-        setDialog
-    } = props;
-    
-     const navigate = useNavigate();
-    
     const [showPassword, setShowPassword] = useState(false);
     const [form, setForm] = useState(defaultFormLoginAdmin);
     const [btnDisabled, setBtnDisabled] = useState(true);
@@ -72,62 +63,41 @@ function LoginAdminPage(props) {
 
     return (
         <React.Fragment>
-            <Box
-                sx={{
-                    backgroundColor: colors.background,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    display: "flex",
-                    width: "100%"
-                }}
-            >
-                <Item>
-                    <Box
-                        sx={{
-                            backgroundColor: colors.background,
-                            flexDirection: "column",
-                            alignItems: "center",
-                            display: "flex"
-                        }}
-                    >
-                        <Item>
-                            <Typography variant="subtitle1">Ingresar como Ayudante / Administrador</Typography>
-                        </Item>
-                        <Item>
-                            <FormControl>
-                                <TextField onChange={(event)=> {handleChange(event)}} value={form.email}
-                                           placeholder="Email" type="email" variant="outlined" id="email"
-                                />
-                                <FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
-                            </FormControl>
-                        </Item>
-                        <Item>
-                            <FormControl>
-                                <TextField onChange={(event)=> {handleChange(event)}} value={form.pass}
-                                           placeholder="Contraseña" variant="outlined" id="pass"
-                                           type={showPassword ? "text" : "password"}
-                                           InputProps={{
-                                               endAdornment: (
-                                                   <InputAdornment position="end">
-                                                       <IconButton onClick={handleShowPassword}>
-                                                    {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                                       </IconButton>
-                                                   </InputAdornment>
-                                               )
-                                           }}
-                                />
-                                <FormHelperText id="pass-text">Ingrese su contraseña</FormHelperText>
-                            </FormControl>
-                        </Item>
-                        <Item>
-                            <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}
+            <Grid container spacing={2} className="FullWidthPage">
+                <Grid item xs={12}>
+                    <Typography variant="subtitle1">Ingresar como Ayudante / Administrador</Typography>
+                </Grid>
+                <Grid item xs={3}>
+                    <Stack spacing={2} direction="column">
+                        <FormControl>
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       value={form.email} type="email" variant="outlined" id="email"
+                            />
+                            <FormHelperText id="email-text">Ingrese su e-mail</FormHelperText>
+                        </FormControl>
+                        <FormControl>
+                            <TextField onChange={(event)=> {handleChange(event)}}
+                                       value={form.pass} variant="outlined" id="pass"
+                                       type={showPassword ? "text" : "password"}
+                                       InputProps={{
+                                           endAdornment: (
+                                               <InputAdornment position="end">
+                                                   <IconButton onClick={handleShowPassword}>
+                                                       {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                                   </IconButton>
+                                               </InputAdornment>
+                                           )
+                                       }}
+                            />
+                            <FormHelperText id="pass-text">Ingrese su contraseña</FormHelperText>
+                        </FormControl>
+                        <Button variant="contained" color="success" startIcon={<VpnKeyRoundedIcon color="primary"/>}
                                 onClick={login} disabled={btnDisabled}>
-                                <Typography variant="button">Ingresar</Typography>
-                            </Button>
-                        </Item>
-                    </Box>
-                </Item>
-            </Box>
+                            <Typography variant="button">Ingresar</Typography>
+                        </Button>
+                    </Stack>
+                </Grid>
+            </Grid>
         </React.Fragment>
     )
 }

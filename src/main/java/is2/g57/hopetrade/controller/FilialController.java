@@ -102,5 +102,15 @@ public class FilialController {
 			return new ResponseEntity<>("No se encontró la filial", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> obtenerFilialPorId(@PathVariable Long id) {
+		Optional<Filial> filialOp = filialRepository.findById(id);
+		if (filialOp.isPresent()) {
+			return new ResponseEntity<>(filialOp.get(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("No se encontro la filial", HttpStatus.NOT_FOUND);
+		}
+	}
 
 }

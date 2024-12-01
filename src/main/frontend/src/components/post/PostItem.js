@@ -1,7 +1,6 @@
 import {Grid} from "@mui/material";
 import React from "react";
 import "../../App.css";
-import {Link} from "react-router-dom";
 import Post from "./Post";
 
 function PostItem(props) {

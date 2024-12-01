@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import is2.g57.hopetrade.dto.PublicacionDTO;
@@ -34,8 +35,10 @@ public class Publicacion implements Serializable{
 
     // Referencia al usuario creador
     
-    @Column(name="userid")
-    private Long userID;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
+    private User user;
 
     @ManyToOne (cascade = CascadeType.DETACH)
     @JoinColumn(name = "ID_CATEGORIA")
@@ -58,6 +61,12 @@ public class Publicacion implements Serializable{
   	 @JsonManagedReference
   	   private List<Oferta> ofertas;
     
+    @OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+  	 @JsonManagedReference
+  	   private List<Comentario> comentario;
+    
+   
+    
     
     // Constructores
     public Publicacion() {
@@ -66,7 +75,6 @@ public class Publicacion implements Serializable{
     }
 
     public Publicacion(PublicacionDTO publicacionDTO) {
-        this.userID = publicacionDTO.getUserID();
         this.titulo = publicacionDTO.getTitulo();
         this.descripcion = publicacionDTO.getDescripcion();
         this.fechaHoraCreacion = java.time.LocalDateTime.now();
@@ -75,6 +83,19 @@ public class Publicacion implements Serializable{
     }
 
     // Metodos varios
+
+    public Publicacion clonar(){
+        Publicacion p = new Publicacion();
+        p.titulo = this.titulo;
+        p.descripcion = this.descripcion;
+        p.user = this.user;
+        p.categoria = this.categoria;
+        p.imagenUrl = this.imagenUrl;
+        p.fechaHoraCreacion = this.fechaHoraCreacion;
+        p.ultimaModificacion = this.ultimaModificacion;
+        p.state = new PublicacionStateEliminado();
+        return p;
+    }
     
     @Override
     public boolean equals(Object o) {
@@ -83,12 +104,12 @@ public class Publicacion implements Serializable{
         Publicacion that = (Publicacion) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(titulo, that.titulo) &&
-                Objects.equals(userID, that.userID);
+                Objects.equals(user.getId(), that.user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, titulo, descripcion, userID, categoria, imagenUrl, fechaHoraCreacion, ultimaModificacion);
+        return Objects.hash(id, titulo, descripcion, user, categoria, imagenUrl, fechaHoraCreacion, ultimaModificacion);
     }
 
     public void update(PublicacionDTO publicacionDTO) {
@@ -144,8 +165,8 @@ public class Publicacion implements Serializable{
         this.descripcion = descripcion;
     }
 
-    public Long getUserID() {
-        return userID;
+    public User getUser() {
+        return user;
     }
 
     public LocalDateTime getFechaHoraCreacion() {
@@ -172,8 +193,8 @@ public class Publicacion implements Serializable{
         return false;
     }
 
-    public void setUserID(long i) {
-        this.userID = i;
+    public void setUser(User u) {
+        this.user = u;
     }
 
     public Categoria getCategoria() {

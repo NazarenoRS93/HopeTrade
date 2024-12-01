@@ -24,6 +24,8 @@ public class PublicacionMapper {
     private OfertaRepository ofertaRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ComentarioRepository comentarioRepository;
 
     public PublicacionDTO map(Publicacion publicacion) {
         PublicacionDTO dto = new PublicacionDTO();
@@ -33,20 +35,22 @@ public class PublicacionMapper {
         dto.setFechaHoraCreacion(publicacion.getFechaHoraCreacion());
         dto.setUltimaModificacion(publicacion.getUltimaModificacion());
         dto.setActive(publicacion.isActivo());
-        dto.setUserID(publicacion.getUserID());
-        dto.setUserFullName(userRepository.findUserById(publicacion.getUserID()).get().getFullName());
+        dto.setUserID(publicacion.getUser().getId());
+        dto.setUserFullName(publicacion.getUser().getFullName());
         // Convert URL to Base 64 image
         dto.setImagen(imageService.loadBase64(publicacion.getImagenUrl()));
         dto.setCategoria_Nombre(publicacion.getCategoria().getNombre());
         dto.setCategoria_ID(publicacion.getCategoria().getId());
         dto.setEstado(publicacion.getState().getNombre());
         dto.setEstadoID(publicacion.getState().getId());
-        dto.setOfertas(ofertaRepository.countByPublicacionId(publicacion.getId()));
+        dto.setOfertas(ofertaRepository.countByPublicacionIdAndEstado(publicacion.getId(), "ACTIVA"));
+        dto.setComentarios(comentarioRepository.countByPublicacionId(publicacion.getId()));
         return dto;
     }
 
     public Publicacion toNewPublicacion(PublicacionDTO publicacionDTO) {
         Publicacion p = new Publicacion(publicacionDTO);
+        p.setUser(userRepository.findById(publicacionDTO.getUserID()).get());
 
         // Convert Base 64 image to URL
         p.setImagenUrl(imageService.saveUnique(publicacionDTO.getImagen()));

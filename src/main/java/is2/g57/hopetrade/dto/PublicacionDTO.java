@@ -17,6 +17,7 @@ public class PublicacionDTO {
     private Long estadoID;
     private Integer ofertas;
     private String userFullName;
+    private Integer comentarios;
 
     public boolean getActive() { return active; }
     public LocalDateTime getFechaHoraCreacion() {
@@ -103,4 +104,12 @@ public class PublicacionDTO {
     public void setUserFullName(String userFullName) {
         this.userFullName = userFullName;
     }
+	public Integer getComentarios() {
+		return comentarios;
+	}
+	public void setComentarios(Integer comentarios) {
+		this.comentarios = comentarios;
+	}
+    
+    
 }

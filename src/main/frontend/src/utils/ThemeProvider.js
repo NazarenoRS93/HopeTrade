@@ -31,7 +31,8 @@ export const themeV5 = createThemeV5({
         subtitle1: {
             fontSize: 24,
             color: colors.darkBlue,
-            fontWeight: "bold"
+            fontWeight: "bold",
+            textAlign: "center"
         },
         subtitle2: {
             fontSize: 20,
@@ -64,6 +65,10 @@ export const themeV5 = createThemeV5({
         },
         h6: {
             fontSize: 14,
+            color: colors.darkBlue
+        },
+        footer: {
+            fontSize: 13,
             color: colors.darkBlue
         },
     },

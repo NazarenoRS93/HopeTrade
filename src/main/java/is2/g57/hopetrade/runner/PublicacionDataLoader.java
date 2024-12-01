@@ -15,6 +15,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import is2.g57.hopetrade.entity.Publicacion;
@@ -25,6 +26,7 @@ import is2.g57.hopetrade.services.ImageService;
 
 
 @Component
+@Order(5)
 public class PublicacionDataLoader implements ApplicationRunner{
 
     @Autowired
@@ -40,11 +42,13 @@ public class PublicacionDataLoader implements ApplicationRunner{
     public void run(ApplicationArguments args) throws Exception {
 
         List<String[]> publicaciones = Arrays.asList(
-            new String[]{"1", "Lata de Atún", "Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto.", "6", "atun.jpg"},
-            new String[]{"1", "Colchón", "Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500,", "4", "colchon.jpg"},
-            new String[]{"1", "Mochila", "cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen.", "9", "mochila.jpg"},
-            new String[]{"1", "Manzana", "No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original.", "6", "manzana.jpg"},
-            new String[]{"1", "Lavarropas", "Fue popularizado en los 60s con la creación de las hojas \"Letraset\", las cuales contenian pasajes de Lorem Ipsum", "2", "lavarropas.jpg"}
+        		new String[]{"3", "Lata de Atún", "Una lata de atún de alta calidad, perfecta para tus recetas favoritas de cocina.", "6", "atun.jpg"},
+        		new String[]{"4", "Colchón", "Un colchón cómodo y duradero para un descanso óptimo durante la noche.", "4", "colchon.jpg"},
+        		new String[]{"3", "Mochila", "Una mochila espaciosa y resistente, ideal para llevar tus pertenencias con comodidad.", "9", "mochila.jpg"},
+        		new String[]{"1", "Manzana", "Una manzana fresca y jugosa, llena de vitaminas y perfecta como merienda saludable.", "6", "manzana.jpg"},
+        		new String[]{"4", "Lavarropas", "Un lavarropas eficiente que facilita la limpieza de tu ropa con tecnología moderna.", "2", "lavarropas.jpg"},
+        		new String[]{"3", "PlayStation 4", "Consola de videojuegos PlayStation 4, usada en buen estado.", "1", "playstationcuatro.jpg"},
+        		new String[]{"3", "PlayStation 4 Vendo", "No anda, la quiero vender, no me interesa intercambiar, solo efectivo", "1", "playstationcuatro.jpg"}
         );
         if (publicacionRepository.count() == 0) {
             System.out.println("Cargando publicaciones de ejemplo...");

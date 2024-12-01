@@ -1,27 +1,56 @@
 export const viewPostsInfo = {
-    title: "Ver publicaciones",
-    description: "Busque aquello que necesita."
+	title: "Ver publicaciones",
+	description: "Busque aquello que necesita."
 }
 export const editProfileInfo = {
-    title: "Editar perfil",
-    description: "Revise y edite sus datos."
+	title: "Editar perfil",
+	description: "Revise y edite sus datos."
 }
 export const myPostsInfo = {
-    title: "Mis publicaciones",
-    description: "Revise sus publicaciones."
+	title: "Mis publicaciones",
+	description: "Revise sus publicaciones."
 }
 export const addPostInfo = {
-    title: "Crear publicación",
-    description: "Comparta aquello que tiene y no necesita, y ayude a alguien que sí le sea útil."
+	title: "Crear publicación",
+	description: "Comparta aquello que tiene y no necesita, y ayude a alguien que sí le sea útil."
 }
 
 export const listUsersInfo = {
-    title: "Listar usuarios",
-    description: "Vea y administre los usuarios del sistema."
+	title: "Listar usuarios",
+	description: "Vea y administre los usuarios del sistema."
 }
 
 export const listExchangesInfo = {
-    title: "Listar intercambios ",
-    description: "Vea y administre los intercambios pendientes del sistema."
+	title: "Listar intercambios ",
+	description: "Vea y administre los intercambios pendientes del sistema."
 }
 
+export const listExchangesUserInfo = {
+	title: "Ver intercambios ",
+	description: "Vea sus intercambios."
+}
+
+export const profileUserInfo = {
+	title: "Ver Perfil",
+	description: "Vea los datos de su perfil."
+}
+
+export const listAdminInfo = {
+	title: "Listar Ayudantes",
+	description: "Vea y administre los ayudantes del sistema."
+}
+
+export const donarConTarjetaInfo = {
+	title: "¡Donar ahora!",
+	description: "Con tarjeta de crédito de cualquier banco."
+}
+
+export const registrarDonacionEnFilialInfo = {
+	title: "Registrar donaciones",
+	description: "Registre las donaciones que recibe en su filial."
+}
+
+export const verInventario = {
+	title: "Ver inventario",
+	description: "Vea las donaciones realizadas en todas las filiales."
+}

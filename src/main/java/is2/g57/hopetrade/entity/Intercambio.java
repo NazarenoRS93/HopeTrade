@@ -2,6 +2,8 @@ package is2.g57.hopetrade.entity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
+import javax.persistence.ManyToMany;
+
 @Entity
 @Table(name = "intercambio", uniqueConstraints = {@UniqueConstraint(columnNames = {"id"})})
 public class Intercambio implements Serializable {
@@ -12,7 +14,7 @@ public class Intercambio implements Serializable {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "id_publicacion", unique = true)
+    @JoinColumn(name = "id_publicacion", unique = false)
     private Publicacion publicacion;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -22,20 +24,31 @@ public class Intercambio implements Serializable {
     @Column(name="observacion")
     private String observacion;
 
+    @Column(name="estado")
+    private String estado;
+    
+    @Column(name="puntaje_ofertante")
+    private Integer puntajeOfertante = -1;
+
+    @Column(name="puntaje_publicante")
+    private Integer puntajePublicante = -1;
+
 //     @ManyToOne (cascade = CascadeType.DETACH)
 //     @JoinColumn(name = "ID_ESTADO")
 //    IntercambioState estado;
 //     ESTADOS POSIBLES: PROGRAMADO, FINALIZADO, CANCELADO
 //     Hay que pensar si hace falta implementar state para esto o con un String alcanza
 
-    public Intercambio() {}
+    public Intercambio() {
+        this.estado = "PROGRAMADO";
+    }
     
     
 
-    public Intercambio(Publicacion publicacion, Oferta oferta, String observacion) {
+    public Intercambio(Publicacion publicacion, Oferta oferta) {
 		this.publicacion = publicacion;
 		this.oferta = oferta;
-		this.observacion = observacion;
+		this.estado = "PROGRAMADO";
 	}
 
 
@@ -68,11 +81,35 @@ public class Intercambio implements Serializable {
         return id;
     }
 
+    public void setEstado(String estado) {
+        this.estado = estado;  
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
     public void confirmar() {
-        // Estado interno
+        this.estado = "FINALIZADO";
     }
 
     public void cancelar() {
-        // Estado interno
+        this.estado = "CANCELADO";
+    }
+
+    public void setPuntajeOfertante(Integer puntajeOfertante) {
+        this.puntajeOfertante = puntajeOfertante;
+    }
+
+    public void setPuntajePublicante(Integer puntajePublicante) {
+        this.puntajePublicante = puntajePublicante;
+    }
+
+    public Integer getPuntajeOfertante() {
+        return puntajeOfertante;
+    }
+
+    public Integer getPuntajePublicante() {
+        return puntajePublicante;
     }
 }

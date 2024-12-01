@@ -43,6 +43,15 @@ public class User {
 	 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	 @JsonManagedReference
 	  private List<Oferta> ofertas;
+	 
+	 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	 @JsonManagedReference
+	  private List<Comentario> comentarios;
+	 
+	 @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	 @JsonManagedReference
+	  private List<RespuestaComentario> respuestasComentarios;
+	
 	
 	public User(Long id, String email, String dni, String pass, String nombre, String apellido, Date fecha_nacimiento) {
 		this.id = id;

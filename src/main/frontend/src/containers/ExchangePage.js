@@ -1,9 +1,8 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import '../App.css';
 import axios from "axios";
 import IntercambioItem from "../components/intercambio/IntercambioItem";
-import PostItem from "../components/post/PostItem";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 // import SessionContext from "../context/context";
 // import AddOfferModal from "../components/offer/AddOfferModal";
 
@@ -68,6 +67,7 @@ function Exchange() {
             let url = "http://localhost:8080/intercambio/publicacion/"+id;
             const response = await axios.get(url);
             let data = response.data;
+            data.imagenUrl = `data:image/jpeg;base64,${data.publicacion.imagen}`
             setIntercambio(response.data);
             setOferta(response.data.oferta);
         } catch (error) {

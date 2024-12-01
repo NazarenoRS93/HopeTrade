@@ -3,6 +3,7 @@ package is2.g57.hopetrade.controller;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,15 +45,15 @@ public class OfertaController {
 
 	@Autowired
 	private ImageService imageService;
-	
-	@Autowired 
+
+	@Autowired
 	private IntercambioRepository intercambioRepository;
 
 	@Autowired
 	private PublicacionRepository publicacionRepository;
-	
+
 	@Autowired
-    private MailService emailService;
+	private MailService emailService;
 
 	@PostMapping("/guardar")
 	public ResponseEntity<?> guardarOferta(@RequestBody OfertaDTO ofertaDTO) {
@@ -93,7 +95,7 @@ public class OfertaController {
 	}
 
 	@GetMapping("/user/{userId}")
-	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorUserId(@PathVariable ("userId") Long userId) {
+	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorUserId(@PathVariable("userId") Long userId) {
 		List<OfertaDTO> oferta = ofertaRepository.findAllByUserId(userId).stream().map(ofertaMapper::map).toList();
 		return oferta;
 	}
@@ -105,8 +107,10 @@ public class OfertaController {
 	}
 
 	@GetMapping("/publicacion/{publicacionId}")
-	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorPublicacionId(@PathVariable("publicacionId") Long publicacionId) {
-		List<OfertaDTO> oferta = ofertaRepository.findAllByPublicacionId(publicacionId).stream().map(ofertaMapper::map).toList();
+	public @ResponseBody Iterable<OfertaDTO> buscarOfertaPorPublicacionId(
+			@PathVariable("publicacionId") Long publicacionId) {
+		List<OfertaDTO> oferta = ofertaRepository.findAllByPublicacionId(publicacionId).stream().map(ofertaMapper::map)
+				.toList();
 		return oferta;
 	}
 
@@ -116,35 +120,60 @@ public class OfertaController {
 		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
-			oferta.setEstado(true);
-		    this.ofertaRepository.save(oferta);
-		    Intercambio intercambio = new Intercambio(oferta.getPublicacion(), oferta, "Pendiente");
-		    this.intercambioRepository.save(intercambio);
-		    emailService.sendEmailOfertaAceptada(oferta);
-			Publicacion publicacion = publicacionRepository.findById(oferta.getPublicacion().getId()).get();
+			oferta.aceptar();
+
+			System.out.println("UPDATING OFERTA");
+			this.ofertaRepository.save(oferta);
+
+			System.out.println("RESERVANDO PUBLICACION");
+			Publicacion publicacion = oferta.getPublicacion();
 			publicacion.reservar();
-			publicacionRepository.save(publicacion);
-			return new ResponseEntity<>(HttpStatus.OK);
+			this.publicacionRepository.save(publicacion);
+
+			System.out.println("CREANDO INTERCAMBIO");
+			Intercambio intercambio = new Intercambio();
+			intercambio.setPublicacion(publicacion);
+			intercambio.setOferta(oferta);
+			this.intercambioRepository.save(intercambio);
+
+			System.out.println("ENVIANDO CORREO");
+			emailService.sendEmailOfertaAceptada(oferta);
+
+			System.out.println("ELIMINANDO OFERTAS RESTANTES");
+			List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(oferta.getPublicacion().getId());
+			ofertas.remove(oferta);
+			for (Oferta o : ofertas) {
+				o.rechazar();
+				o.setRespuesta("Otra oferta fue aceptada.");
+				emailService.sendEmailOfertaRechazada(o);
+				this.ofertaRepository.save(o);
+			}
+
+			return new ResponseEntity<>("Oferta aceptada.", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
 		}
 	}
 
-	@PostMapping("/rechazar/{id}")
-	public ResponseEntity<?> rechazarOferta(@PathVariable("id") Long ofertaId, @RequestBody String respuesta) {
-		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
+	@PutMapping("/rechazar/{id}")
+	public ResponseEntity<?> rechazarOferta(@PathVariable Long id, @RequestParam String respuesta) {
+
+		System.out.println("RECHAZANDO");
+		System.out.println("RESPUESTA: " + respuesta);
+
+		Optional<Oferta> ofertaOp = ofertaRepository.findById(id);
 		if (ofertaOp.isPresent()) {
 			Oferta oferta = ofertaOp.get();
-			oferta.setEstado(false);
+			oferta.rechazar();
 			if (respuesta != null) {
 				oferta.setRespuesta(respuesta);
-			}
-			else {
+			} else {
 				oferta.setRespuesta("[PLACEHOLDER]");
 			}
+
 			this.ofertaRepository.save(oferta);
 			emailService.sendEmailOfertaRechazada(oferta);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>("Oferta rechazada.", HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
 		}
@@ -160,6 +189,46 @@ public class OfertaController {
 		}
 		this.ofertaRepository.deleteById(ofertaId);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	public ResponseEntity<?> aceptarOferta2(Long ofertaId) {
+		System.out.println("ACEPTANDING");
+		Optional<Oferta> ofertaOp = ofertaRepository.findById(ofertaId);
+		if (ofertaOp.isPresent()) {
+			Oferta oferta = ofertaOp.get();
+			oferta.aceptar();
+
+			System.out.println("UPDATING OFERTA");
+			this.ofertaRepository.save(oferta);
+
+			System.out.println("RESERVANDO PUBLICACION");
+			Publicacion publicacion = oferta.getPublicacion();
+			publicacion.reservar();
+			this.publicacionRepository.save(publicacion);
+
+			System.out.println("CREANDO INTERCAMBIO");
+			Intercambio intercambio = new Intercambio();
+			intercambio.setPublicacion(publicacion);
+			intercambio.setOferta(oferta);
+			this.intercambioRepository.save(intercambio);
+
+			System.out.println("ENVIANDO CORREO");
+			// emailService.sendEmailOfertaAceptada(oferta);
+
+			System.out.println("ELIMINANDO OFERTAS RESTANTES");
+			List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(oferta.getPublicacion().getId());
+			ofertas.remove(oferta);
+			for (Oferta o : ofertas) {
+				o.rechazar();
+				o.setRespuesta("Otra oferta fue aceptada.");
+				// emailService.sendEmailOfertaRechazada(o);
+				this.ofertaRepository.save(o);
+			}
+
+			return new ResponseEntity<>("Oferta aceptada.", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("No se encontro la oferta", HttpStatus.NOT_FOUND);
+		}
 	}
 
 }

@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const defaultGateway = "http://localhost:8080";
 export const defaultFormLogin = {
     dni: '',
@@ -15,23 +17,6 @@ export const defaultFormRegister = {
     fecha_nacimiento: '',
     email: '',
     pass: ''
-};
-export const defaultFormAddPost = {
-    id: null,
-    titulo: '',
-    descripcion: '',
-    userID: 0,
-    imagen: '',
-    catID: 0,
-    catName: '',
-    active: '',
-    fechaHoraCreacion: '',
-    ultimaModificacion: ''
-};
-export const defaultDialogData = {
-    open: false,
-    msg: '',
-    path: ''
 };
 export const defaultBaseName = "localhost:3000/app";
 
@@ -52,3 +37,40 @@ export const baseUser = {
     filial: "",
     desc_filial: ""
 }
+
+export const nextDay = dayjs().day() > 4 ? dayjs().endOf("week").add(2,"days") : dayjs().add(1,"day");
+export const nextMonth = dayjs().add(1,"month");
+export const startTime = dayjs().set("hour",8).startOf("hour");
+export const endTime = dayjs().set("hour",19).set("minute",30);
+
+export const defDateTime = nextDay.set("hour",12).startOf("hour");
+export const defaultFormAddOferta = {
+    image: null,
+    titulo: "",
+    desc: "",
+    cat: 0,
+    fil: 0,
+    fecha: defDateTime
+};
+export const defaultFormAddPost = {
+    image: null,
+    titulo: '',
+    desc: '',
+    cat: 0,
+};
+export const defaultFormPayment = {
+    numero: '',
+    nombre_titular: '',
+    fecha_vencimiento: '',
+    dni_titular: '',
+    codigo: '',
+    monto: ''
+};
+export const defaultFormDonacion = {
+    dni_donante: '',
+    nombre_completo_donante: '',
+    id_categoria: 0,
+    descripcion_donacion: '',
+    cantidad: '',
+    es_dinero: false
+};

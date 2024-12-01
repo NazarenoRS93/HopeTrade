@@ -15,7 +15,7 @@ public class OfertaDTO {
 	private LocalDateTime fechaModificacion;
 	private String respuesta;
 	private LocalDateTime fechaIntercambio;
-	private boolean estado;
+	private String estado;
 	private String imagen;
 	private Long publicacionId;
 	private Long filialId;
@@ -79,11 +79,11 @@ public class OfertaDTO {
 		this.fechaIntercambio = fechaIntercambio;
 	}
 
-	public boolean isEstado() {
+	public String isEstado() {
 		return estado;
 	}
 
-	public void setEstado(boolean estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 

@@ -22,10 +22,12 @@ import is2.g57.hopetrade.repository.PublicacionStateRepository;
 import is2.g57.hopetrade.services.ImageService;
 import is2.g57.hopetrade.dto.OfertaDTO;
 import is2.g57.hopetrade.dto.PublicacionDTO;
+import is2.g57.hopetrade.entity.Oferta;
 import is2.g57.hopetrade.entity.Publicacion;
 import is2.g57.hopetrade.entity.User;
 import is2.g57.hopetrade.mapper.OfertaMapper;
 import is2.g57.hopetrade.mapper.PublicacionMapper;
+import is2.g57.hopetrade.services.MailService;
 
 import is2.g57.hopetrade.entity.state.*;
 
@@ -99,6 +101,9 @@ public class PublicacionController {
   
   @Autowired
   private OfertaMapper ofertaMapper;
+
+  @Autowired
+  private MailService emailService;
   
   private ResponseEntity<?> PublicacionTest(PublicacionDTO PublicacionDTO) {
     
@@ -216,7 +221,7 @@ public class PublicacionController {
 
     // Check que no exista pub activa con el mismo titulo
     try {
-      Iterable<Publicacion> publicaciones = publicacionRepository.findAllByUserID(publicacion.getUserID());
+      Iterable<Publicacion> publicaciones = publicacionRepository.findAllByUserID(publicacion.getUser().getId());
       for (Publicacion p : publicaciones) {
         if (p.getTitulo().equals(publicacion.getTitulo()) && p.isActivo() && p.getId() != publicacion.getId()) {
           return new ResponseEntity<>("Ya hay una publicacion activa con ese titulo", HttpStatus.BAD_REQUEST);
@@ -244,7 +249,7 @@ public class PublicacionController {
   }
 
   @PutMapping("/eliminar/{id}")
-  public ResponseEntity<?> cancelarPublicacion(@PathVariable(value = "id") Integer publicacionId) {
+  public ResponseEntity<?> cancelarPublicacion(@PathVariable(value = "id") Integer publicacionId, @RequestParam(required = false) String motivo) {
     Optional<Publicacion> oPublicacion = publicacionRepository.findById(publicacionId);
     if(!oPublicacion.isPresent()) {
       return ResponseEntity.notFound().build();
@@ -252,6 +257,17 @@ public class PublicacionController {
     Publicacion publicacion = oPublicacion.get();
     publicacion.eliminar();
     publicacionRepository.save(publicacion);
+
+    if (motivo != null && !motivo.isEmpty()) {
+      emailService.sendEmailPublicacionEliminada(publicacion, motivo);
+    }
+
+    List<Oferta> ofertas = ofertaRepository.findAllByPublicacionId(Long.valueOf(publicacionId));
+    if (!ofertas.isEmpty())
+    {
+      emailService.sendEmailPublicacionEliminada2(ofertas);
+    }
+
     return ResponseEntity.ok(publicacion);
   }
 
@@ -278,7 +294,8 @@ public class PublicacionController {
 
   @GetMapping("/{id}/ofertas")
   public @ResponseBody Iterable<OfertaDTO> buscarOfertasPorPublicacionId(@PathVariable Long id) {
-    return ofertaRepository.findAllByPublicacionId(id).stream().map(ofertaMapper::map).collect(Collectors.toList());
+    List<Oferta> ofertas = ofertaRepository.findAllByPublicacionIdAndEstado(id, "ACTIVA");
+    return ofertas.stream().map(ofertaMapper::map).collect(Collectors.toList());
   }
 
   @GetMapping("/user/{userID}")
